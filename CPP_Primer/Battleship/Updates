@@ -1,0 +1,9 @@
+//Future program updates
+
+- Fix bugs:
+  1. Can't shoot interior points of last ship in fleet
+    a. Could be that ship doesn't contain these points
+    b. Could be that member function of ship isn't properly tracking shots fired at these points
+    c. Could be that member function of board isn't properly tracking shots fired at these points
+- Replace pointers of dynamically allocated objects w/ smart pointers
+
