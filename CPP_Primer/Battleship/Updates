@@ -6,4 +6,6 @@
     b. Could be that member function of ship isn't properly tracking shots fired at these points
     c. Could be that member function of board isn't properly tracking shots fired at these points
 - Replace pointers of dynamically allocated objects w/ smart pointers
-
+- Include header files: time.h, stdio.h, stdlib.h, time.h
+- Change final ship length to 2, to reflect ship lengths in requirements
+- Dynamically allocate memory for e_fleet in board class definition
