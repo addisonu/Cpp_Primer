@@ -1,11 +1,40 @@
 //Log of bugs and future updates
 
-- Fix bugs:
++ Fix bug:
   1. Can't shoot interior points of last ship in fleet
-    a. Could be that ship doesn't contain these points
-    b. Could be that member function of ship isn't properly tracking shots fired at these points
-    c. Could be that member function of board isn't properly tracking shots fired at these points
+    a. Loop was only iterating the number times equal to enemy ships unsunk. Ships aren't destroyed in sequence, so existing ships might not be iterated over
+
++ Add player ships to sea
+
+- Make methods more general. Currently e_fleet is hard coded into a number of methods. Replace these occurences with fleet, and add fleet as a parameter
+- Add opponent response
+
 - Replace pointers of dynamically allocated objects w/ smart pointers
-- Include header files: time.h, stdio.h, stdlib.h, time.h
-- Change final ship length to 2, to reflect ship lengths in requirements
+
++ Include header files: time.h, stdio.h, stdlib.h
+
++ Change final ship length to 2, to reflect ship lengths in requirements
+
 - Dynamically allocate memory for e_fleet in board class definition
+
+- Add method to board class that plays one game
+
+- Add additional comments to code
+
++ Make functions more general. Remove any e_fleet hardcoding from functions that should also work onu_fleet
+  +display
+  +game
+  +fleet_collides
+  +unsunkShipCount
+  +fireShot
+
++ Add a method to play a single game. Remove code for playing a game from the main function
+
++ When generating enemy fleet. Check that it doesn't collide with any user ships which are generated first. Then check to see that it doesn't collide with any existing enemy ships.
+
++ Make fleet_collides return a bool, remove the code that actually adds a ship to the fleet and move it to the board constructor
+
+- Add Prompt to user when they try to deploy overlaping ships
+
+- Prompt user if they try to fire at a point that intesects with a ship in their own fleet
+
