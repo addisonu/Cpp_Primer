@@ -1,13 +1,27 @@
 //Log of bugs and future updates
 
-+ Fix bug:
-  1. Can't shoot interior points of last ship in fleet
+- Fix bug:
+    +1. Can't shoot interior points of last ship in fleet
     a. Loop was only iterating the number times equal to enemy ships unsunk. Ships aren't destroyed in sequence, so existing ships might not be iterated over
+    +2. Enemy fire isn't adding new, random point to shots
+
++ Add greeting to user upon starting game
+
++ Allow user and enemy to only fire as many times as they have ships
+
+- Prevent ships from having points beyond sea boundary
+
++ Add message telling user of game outcome
+
+- Add code to prevent user firing beyond "sea"
 
 + Add player ships to sea
 
-- Make methods more general. Currently e_fleet is hard coded into a number of methods. Replace these occurences with fleet, and add fleet as a parameter
-- Add opponent response
++ Put bounds on the length of a ship
+
+- Add error handling code: prompts for user and messages for error that occur
+
++ Add opponent response
 
 - Replace pointers of dynamically allocated objects w/ smart pointers
 
@@ -17,11 +31,11 @@
 
 - Dynamically allocate memory for e_fleet in board class definition
 
-- Add method to board class that plays one game
++ Add method to board class that plays one game
 
-- Add additional comments to code
++ Add additional comments to code
 
-+ Make functions more general. Remove any e_fleet hardcoding from functions that should also work onu_fleet
++ Make functions more general. Remove any occurences of e_fleet hard coded into functions that should also work on u_fleet
   +display
   +game
   +fleet_collides
@@ -34,7 +48,8 @@
 
 + Make fleet_collides return a bool, remove the code that actually adds a ship to the fleet and move it to the board constructor
 
-- Add Prompt to user when they try to deploy overlaping ships
++ Add Prompt to user when they try to deploy overlaping ships
 
-- Prompt user if they try to fire at a point that intesects with a ship in their own fleet
++ Prompt user if they try to fire at a point that intesects with a ship in their own fleet
 
++Prevent enemy from firing at own fleet

@@ -37,6 +37,9 @@ Ship* Board::generateShipWithLength(int ship_len)
 
 Board::Board()
 {
+//Greet user
+        std::cout << "\n\t\t\t\t\t\t!! Welcome to battleship (~_~) !!\n" << std::endl;
+
 //seed rand() for generateShipWithLength(int ship_len)
         srand(time(NULL));
         Ship *pnt_ship = (Ship*)::operator new(sizeof(Ship));
@@ -60,9 +63,12 @@ Board::Board()
             std::cin >> u_choice;
             u_orient = (u_choice == 'h') ? HORIZONTAL : VERTICAL;
 
-            std::cout << "What is the length of your ship?\n";
+            std::cout << "What is the length of your ship? Enter an integer from 1 to 5\n";
             std::cin >> u_len;
-
+            while(!(u_len < 6 && u_len > 0)){
+                std::cout << "You've entered a ship length that is not in the range 1 - 5. Please re-enter a ship length within the specified range.\n";
+                std::cin >> u_len;
+            }
             pnt_ship = new Ship(u_origin, u_orient, u_len);
 
 //Check to see if new user ship collides with any ship currently deployed in user fleet
@@ -70,7 +76,7 @@ Board::Board()
                 u_fleet[u] =  pnt_ship;
             }
             else{
-                std::cout << "The ship you've tried to deploy collides with ships already in your fleet." << std::endl;
+                std::cout << "The ship you've tried to deploy collides with one or more ships already in your fleet. Enter new information for your ship." << std::endl;
                 u--;
             }
         }
@@ -84,7 +90,7 @@ Board::Board()
 
 //new ship generated, will be added to fleet if it doesn't collide with any fleet ships
                 pnt_ship = generateShipWithLength(e_ship_len[n]);
-//Check if a new potential enemy ship collides with user fleet, if it doesn't check that it doesn't collide with any ships in eneny fleet
+
                 if(!fleet_collides(n, pnt_ship, u_fleet)){
                     if(!fleet_collides(n, pnt_ship, e_fleet)){
                          e_fleet[n] =  pnt_ship;
@@ -97,6 +103,7 @@ Board::Board()
                     n--;
                 }
 	}
+        display();
 }
 
 bool Board::fireShot(int x, int y, Ship *fleet[])
@@ -107,10 +114,16 @@ bool Board::fireShot(int x, int y, Ship *fleet[])
 //Will fire a shot and check if the shot hit any sailing ship in enemy fleet
 //User must enter a unique point
         while(shots.contains(shot)){
-            std::cout << "You've already fired at (" << x << ", " << y << "). Enter a new point.\n";
+            if(fleet == e_fleet){
+            std::cout << "(" << x << ", " << y << ") has already been fired at. Enter a new point.\n";
             std::cin >> x >> y;
             shot.setX(x);
             shot.setY(y);
+            }
+            else{
+                shot.setX(rand()%10);
+                shot.setY(rand()%10);
+            }
             std::cout << std::endl;
         }
 //As soon as a user fires a shot it is recorded in shots whether or not it is a hit
@@ -157,11 +170,11 @@ void Board::display()
 				for(int n = 0; n < fleet_sz; n++){
 					if(e_fleet[n]->isHitAtPoint(x_y)){
 					      e_cnt++;
-                    }
+                                        }
                                         if(u_fleet[n]->isHitAtPoint(x_y)){
                                               u_cnt++;
                                         }
-                }
+                                }
 //"X" will denote a successful hit on an enemy ship, "U" will denote a successful hit on an user ship
 //"!" represents a shot that didn't hit a ship
                                 if(e_cnt != 0){std::cout << " X ";}
@@ -205,7 +218,6 @@ bool Board::fleet_collides(int current_ship, Ship *pnt_ship, Ship *fleet[])
     if(cnt == 0){
         return false;
     }
-
     return true;
 }
 
@@ -213,8 +225,9 @@ void Board::game()
 {
 //Plays the game as long as the user has ships remaining
     int u_ships_sailing;
+    int e_ships_sailing;
 
-    while((u_ships_sailing = unsunkShipCount(u_fleet))){
+    while((u_ships_sailing = unsunkShipCount(u_fleet)) && (e_ships_sailing = unsunkShipCount(e_fleet))){
 
 //Calculates the number of ships the enemy fleet has remaining
         int e_ships_sailing = unsunkShipCount(e_fleet);
@@ -222,21 +235,80 @@ void Board::game()
 
 //Allows the user to fire a shot from each ship in the their fleet
         int x(0), y(0);
+        point fired(0, 0);
+        bool misfire(0);
+
         for(int n = 0; n < u_ships_sailing; n++){
             std::cout << "Enter the x and y coordinates for the shot you want to fire. Enter an integer for x, followed by a single space and the integer for y.\n" << std::endl;
             std::cin >> x >> y;
+//Checks if user has fired at a ship in their own fleet
+            fired.setX(x);
+            fired.setY(y);
+            int cnt(0);
+            misfire = 0;
+
+            do {
+            for(int s = 0; s < fleet_sz; s++){
+                if(u_fleet[s]->containsPoint(fired)){
+                    cnt++;
+                }
+            }
+                if(cnt == 1){
+                    misfire = true;
+
+                    std::cout << "You've fired at your own fleet, mate!! Fire at the enemy!! Enter a new shot.\n";
+                    std::cin >> x >> y;
+                    fired.setX(x);
+                    fired.setY(y);
+                }
+                else{
+                    misfire = false;
+                }
+                cnt = 0;
+
+            } while(misfire);
+
             fireShot(x, y, e_fleet);
         }
-//Reset cin flags if user accidentally enters more shots than the number of ships remaining in their fleet
+//Clears the stream if user accidentally enters more shots than the number of ships remaining in their fleet
                 std::cin.clear();
 
 //Update number of ships in enemy fleet after a round of shots fired by user
         e_ships_sailing = unsunkShipCount(e_fleet);
+
         for(int m = 0; m < e_ships_sailing; m++){
+            std::cout << "The enemy's preparing to fire!! Get DOWN!!!\n" << std::endl;
+
 //Generate random point for enemy fleet to shoot at
-            fireShot((rand()%10), (rand()%10), u_fleet);
+            fired.setX(x = rand()%10);
+            fired.setY(y = rand()%10);
+            misfire = 0;
+            int cnt(0);
+
+//Prevent enemy from firing at own fleet
+            do {
+                for(int s = 0; s < fleet_sz; s++){
+                    if(e_fleet[s]->containsPoint(fired)){
+                        cnt++;
+                    }
+                }
+                if(cnt == 1){
+                    misfire = true;
+
+                    fired.setX(x = rand()%10);
+                    fired.setY(y = rand()%10);
+                }
+                else if(cnt == 0){
+                        misfire = false;
+                }
+                cnt = 0;
+
+            } while(misfire);
+
+            fireShot(x, y, u_fleet);
         }
 //Will display the "sea" after the round of shots fired in the above code
         display();
     }
+    std::cout << "Great game mate!! " << ((u_ships_sailing) ? "You've won!! Your obviously El Capitan ;)" : "You lost. How convenient. I needed a couple of deck swabbers.") << std::endl;
 }
