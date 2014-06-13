@@ -20,15 +20,19 @@ private:
 
 //Starting number of ships in all fleets
 
-int fleet_sz = 5;
+int fleet_sz = 1;
+
+//X and y upper limits for "sea" dimensions
+
+int b_wdth = 10, b_hght = 10;
 
 //User fleet
 
-Ship *u_fleet[5];
+Ship *u_fleet[1];
 
 //Enemy fleet
 
-Ship *e_fleet[5];
+Ship *e_fleet[1];
 
 //All shots fired
 

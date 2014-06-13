@@ -5,11 +5,25 @@
     a. Loop was only iterating the number times equal to enemy ships unsunk. Ships aren't destroyed in sequence, so existing ships might not be iterated over
     +2. Enemy fire isn't adding new, random point to shots
 
+- Add makefile
+
+- Change all of cin occurences to getline
+
++ Tell the user how many ships they can deploy
+
 + Add greeting to user upon starting game
 
 + Allow user and enemy to only fire as many times as they have ships
 
+- Add b_wdth and b_hght to board.h private members
+
++ Clear cin after every input. Use cin.clear(), consider using cin.ignore()
+
 - Prevent ships from having points beyond sea boundary
+
+- Add border around "sea"
+
+- convert cin to getline
 
 + Add message telling user of game outcome
 

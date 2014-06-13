@@ -15,7 +15,7 @@
 Ship* Board::generateShipWithLength(int ship_len)
 {
 	direction orientation = HORIZONTAL;
-	int x_cor(0), y_cor(0), b_hght(10), b_wdth(10);
+	int x_cor(0), y_cor(0);
 
 //Generates the orientation of ship with HORIZONTAL = 0, and VERTICAL = 1
 	orientation = (rand()% 2) ? VERTICAL : HORIZONTAL;
@@ -46,7 +46,7 @@ Board::Board()
 
 //Generate user fleet with specified ships in specified locations
 
-        std::cout << "It's time to create your fleet." << std::endl;
+        std::cout << "It's time to create your fleet. You will need to deploy " << fleet_sz << " ships."  << std::endl;
         for(int u = 0; u < fleet_sz; u++){
 
             std::cout << "What is the origin point for ship #" << u << "? Enter an integer for the x coordinate followed by an integer for the y coordinate." << std::endl;
@@ -56,18 +56,22 @@ Board::Board()
             direction u_orient;
 
             std::cin >> u_x >> u_y;
+            std::cin.clear();
             point u_origin(u_x, u_y);
 
             std::cout << "What is the orientation for your ship? Enter 'h' for horizontal and 'v' for veritical.\n";
 
             std::cin >> u_choice;
+            std::cin.clear();
             u_orient = (u_choice == 'h') ? HORIZONTAL : VERTICAL;
 
             std::cout << "What is the length of your ship? Enter an integer from 1 to 5\n";
             std::cin >> u_len;
+            std::cin.clear();
             while(!(u_len < 6 && u_len > 0)){
                 std::cout << "You've entered a ship length that is not in the range 1 - 5. Please re-enter a ship length within the specified range.\n";
                 std::cin >> u_len;
+                std::cin.clear();
             }
             pnt_ship = new Ship(u_origin, u_orient, u_len);
 
@@ -117,8 +121,14 @@ bool Board::fireShot(int x, int y, Ship *fleet[])
             if(fleet == e_fleet){
             std::cout << "(" << x << ", " << y << ") has already been fired at. Enter a new point.\n";
             std::cin >> x >> y;
+            std::cin.clear();
+            if((x >= 0 && x < b_wdth) && (y >= 0 && y < b_hght)){
             shot.setX(x);
             shot.setY(y);
+            }
+            else{
+                std::cout << "Your shot is outside of the battle region. Choose an x coordinate between 0 and " << b_wdth << " . And a y coordinate between 0 and " << b_hght << " ." << std::endl;
+            }
             }
             else{
                 shot.setX(rand()%10);
@@ -241,6 +251,8 @@ void Board::game()
         for(int n = 0; n < u_ships_sailing; n++){
             std::cout << "Enter the x and y coordinates for the shot you want to fire. Enter an integer for x, followed by a single space and the integer for y.\n" << std::endl;
             std::cin >> x >> y;
+            std::cin.clear();
+
 //Checks if user has fired at a ship in their own fleet
             fired.setX(x);
             fired.setY(y);
@@ -258,6 +270,8 @@ void Board::game()
 
                     std::cout << "You've fired at your own fleet, mate!! Fire at the enemy!! Enter a new shot.\n";
                     std::cin >> x >> y;
+                    std::cin.clear();
+
                     fired.setX(x);
                     fired.setY(y);
                 }
