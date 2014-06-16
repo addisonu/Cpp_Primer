@@ -4,6 +4,8 @@
 //
 
 #include <iostream>
+#include <string>
+#include <sstream>
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
@@ -52,27 +54,58 @@ Board::Board()
             std::cout << "What is the origin point for ship #" << u << "? Enter an integer for the x coordinate followed by an integer for the y coordinate." << std::endl;
 
             int u_x(0), u_y(0), u_len(0);
-            char u_choice;
+            char u_choice(0);
             direction u_orient;
 
-            std::cin >> u_x >> u_y;
-            std::cin.clear();
+//Generic variables to get input with getline function
+           std::string input = "";
+
+           while(true){
+               std::getline(std::cin, input);
+               std::cin.clear();
+               std::string inputx = input.substr(0, 1);
+               std::string inputy = input.substr(2, 1);
+
+//Streams to validate user input for ship coordinates
+               std::stringstream xSS(inputx);
+               std::stringstream ySS(inputy);
+   
+               if((xSS >> u_x) && (ySS >> u_y) && (u_x >= 0 && u_x < b_wdth) && (u_y >= 0 && u_y < b_hght)){
+                   break;
+               }
+               std::cout << "You've entered invalid values for x and y. Re-enter the x and y cooridates for your ship's position, by entering an integer for the x coordinate followed by an integer for the y coordinate." << std::endl;
+          }
             point u_origin(u_x, u_y);
+    
+            std::cout << "What is the orientation for your ship? Enter 'h' for horizontal and 'v' for vertical.\n";
 
-            std::cout << "What is the orientation for your ship? Enter 'h' for horizontal and 'v' for veritical.\n";
+    while(true){
 
-            std::cin >> u_choice;
-            std::cin.clear();
+        std::getline(std::cin, input);
+        std::cin.clear();
+        u_choice = input[0];
+
+        if(u_choice == 'h' || u_choice == 'v'){
+            break;
+        }
+        std::cout << "You've entered an invalid value for your ship's orientation. Enter 'h' for horizontal and 'v' for vertical." << std::endl;
+        }
             u_orient = (u_choice == 'h') ? HORIZONTAL : VERTICAL;
 
             std::cout << "What is the length of your ship? Enter an integer from 1 to 5\n";
-            std::cin >> u_len;
+
+        while(true){
+         
+            std::getline(std::cin, input);
             std::cin.clear();
-            while(!(u_len < 6 && u_len > 0)){
-                std::cout << "You've entered a ship length that is not in the range 1 - 5. Please re-enter a ship length within the specified range.\n";
-                std::cin >> u_len;
-                std::cin.clear();
+
+//Stream to validate user input for ship length
+            std::stringstream lenSS(input);
+            if(lenSS >> u_len && (u_len < 6) && (u_len > 0)){
+                break;
             }
+                std::cout << "You've entered a ship length that is not in the range 1 - 5. Please re-enter a ship length within the specified range.\n";
+        }
             pnt_ship = new Ship(u_origin, u_orient, u_len);
 
 //Check to see if new user ship collides with any ship currently deployed in user fleet
@@ -120,16 +153,30 @@ bool Board::fireShot(int x, int y, Ship *fleet[])
         while(shots.contains(shot)){
             if(fleet == e_fleet){
             std::cout << "(" << x << ", " << y << ") has already been fired at. Enter a new point.\n";
-            std::cin >> x >> y;
-            std::cin.clear();
-            if((x >= 0 && x < b_wdth) && (y >= 0 && y < b_hght)){
-            shot.setX(x);
-            shot.setY(y);
-            }
-            else{
+            
+//Generic variables to validate user input
+            std::string input = "";
+
+            while(true){
+                    
+                std::getline(std::cin, input);
+                std::cin.clear();
+
+                std::string inputx = input.substr(0, 1);
+                std::string inputy = input.substr(input.find_first_of(" "), 1);
+
+                std::stringstream xSS(inputx);
+                std::stringstream ySS(inputy);
+
+                if((xSS >> x) && (ySS >> y) && (x >= 0 && x < b_wdth) && (y >= 0 && y < b_hght)){
+                    shot.setX(x);
+                    shot.setY(y);
+
+                    break;
+                }
                 std::cout << "Your shot is outside of the battle region. Choose an x coordinate between 0 and " << b_wdth << " . And a y coordinate between 0 and " << b_hght << " ." << std::endl;
             }
-            }
+        }
             else{
                 shot.setX(rand()%10);
                 shot.setY(rand()%10);
@@ -250,9 +297,27 @@ void Board::game()
 
         for(int n = 0; n < u_ships_sailing; n++){
             std::cout << "Enter the x and y coordinates for the shot you want to fire. Enter an integer for x, followed by a single space and the integer for y.\n" << std::endl;
-            std::cin >> x >> y;
-            std::cin.clear();
 
+//Generic variables to validate user input
+            std::string input = "";
+
+            while(true){
+            
+                std::getline(std::cin, input);
+                std::cin.clear();
+
+                std::string inputx = input.substr(0, 1);
+                std::string inputy = input.substr(input.find_first_of(" "), 1);
+
+                std::stringstream xSS(inputx);
+                std::stringstream ySS(inputy);
+
+                    if((xSS >> x) && (ySS >> y) && (x >= 0 && x < b_wdth) && (y >= 0 && y < b_hght)){
+                        break;
+                    }
+                std::cout << "You've entered invalid values for x and y. Re-enter the x and y cooridates for your ship's position, by entering an integer for the x coordinate followed by an integer for the y coordinate." << std::endl;
+            }
+        }
 //Checks if user has fired at a ship in their own fleet
             fired.setX(x);
             fired.setY(y);
@@ -269,9 +334,24 @@ void Board::game()
                     misfire = true;
 
                     std::cout << "You've fired at your own fleet, mate!! Fire at the enemy!! Enter a new shot.\n";
-                    std::cin >> x >> y;
+                    
+//Generic variables to validate user input 
+                std::string input = "";
+
+                while(true){
+                    std::getline(std::cin, input);
                     std::cin.clear();
 
+                    std::string inputx = input.substr(0, 1);
+                    std::string inputy = input.substr(input.find_first_of(" "), 1);
+
+                    std::stringstream xSS(inputx);
+                    std::stringstream ySS(inputy);
+
+                    if((xSS >> x) && (ySS >> y) && (x >= 0 && x < b_wdth) && (y >= 0 && y < b_hght)){
+                    break;
+                    }
+                }
                     fired.setX(x);
                     fired.setY(y);
                 }
@@ -283,10 +363,10 @@ void Board::game()
             } while(misfire);
 
             fireShot(x, y, e_fleet);
-        }
+
 //Clears the stream if user accidentally enters more shots than the number of ships remaining in their fleet
                 std::cin.clear();
-
+                std::cin.ignore(1000, EOF);
 //Update number of ships in enemy fleet after a round of shots fired by user
         e_ships_sailing = unsunkShipCount(e_fleet);
 

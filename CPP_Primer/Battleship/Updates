@@ -5,9 +5,9 @@
     a. Loop was only iterating the number times equal to enemy ships unsunk. Ships aren't destroyed in sequence, so existing ships might not be iterated over
     +2. Enemy fire isn't adding new, random point to shots
 
-- Add makefile
++ Add makefile
 
-- Change all of cin occurences to getline
++ Change all of cin occurences to getline
 
 + Tell the user how many ships they can deploy
 
@@ -22,8 +22,6 @@
 - Prevent ships from having points beyond sea boundary
 
 - Add border around "sea"
-
-- convert cin to getline
 
 + Add message telling user of game outcome
 
