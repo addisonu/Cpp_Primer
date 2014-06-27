@@ -213,7 +213,7 @@ int Board::unsunkShipCount(Ship *fleet[])
 void Board::display()
 {
 //Arbitrary dimensions of the "sea". b_hght represents the y-axis range, b_wdth represents the x-axis range
-    int b_wdth(10), b_hght(10);
+   // int b_wdth(10), b_hght(10);
 
 	for(int y = b_hght - 1; y >= 0 ; y--){
 //This statement will print y-axis values the length of the left side of the grid

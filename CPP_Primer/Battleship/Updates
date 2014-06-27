@@ -15,7 +15,7 @@
 
 + Allow user and enemy to only fire as many times as they have ships
 
-- Add b_wdth and b_hght to board.h private members
++ Add b_wdth and b_hght to board.h private members
 
 + Clear cin after every input. Use cin.clear(), consider using cin.ignore()
 
