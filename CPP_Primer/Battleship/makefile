@@ -25,9 +25,6 @@ ${TMP_DIR}ship.o: ship.cpp ship.h pointCollection.h point.h
 ${TMP_DIR}pointcollection.o: pointcollection.cpp pointCollection.h point.h
 	${CC} ${CFLAGS} pointcollection.cpp -o $(TMP_DIR)pointcollection.o
 
-#folder:
-#	mkdir ${TMP_DIR}
-
 clean:
 	\rm -r ${TMP_DIR} *.o *~ *.ghc battle
 
