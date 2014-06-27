@@ -4,7 +4,7 @@
     +1. Can't shoot interior points of last ship in fleet
     a. Loop was only iterating the number times equal to enemy ships unsunk. Ships aren't destroyed in sequence, so existing ships might not be iterated over
     +2. Enemy fire isn't adding new, random point to shots
-
+    +3. Validating input to fire shot, rejects any shot entered
 + Add makefile
 
 + Change all of cin occurences to getline
@@ -19,23 +19,27 @@
 
 + Clear cin after every input. Use cin.clear(), consider using cin.ignore()
 
-- Prevent ships from having points beyond sea boundary
++ Prevent ships from having points beyond sea boundary
 
-- Add border around "sea"
++ Add border around "sea"
 
 + Add message telling user of game outcome
 
-- Add code to prevent user firing beyond "sea"
++ Clear screen before game begins
+
++ Add code to prevent user firing beyond "sea"
 
 + Add player ships to sea
 
 + Put bounds on the length of a ship
 
-- Add error handling code: prompts for user and messages for error that occur
+- Add error handling code: prompts for user and messages for errors that occur
 
 + Add opponent response
 
 - Replace pointers of dynamically allocated objects w/ smart pointers
+
+- Add unit tests
 
 + Include header files: time.h, stdio.h, stdlib.h
 

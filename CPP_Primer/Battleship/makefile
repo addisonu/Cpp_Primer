@@ -5,10 +5,10 @@ CFLAGS = -c ${DEBUG}
 LFLAGS = ${DEBUG}
 TMP_DIR  = battle_tmp/
 
-all: folder battle
+#all: folder battle
 
-folder:
-	mkdir ${TMP_DIR}
+#folder:
+#	mkdir ${TMP_DIR}
 
 battle : ${OBJS}
 	${CC} ${LFLAGS} ${OBJS} -o $(TMP_DIR)battle

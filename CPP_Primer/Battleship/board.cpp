@@ -40,8 +40,9 @@ Ship* Board::generateShipWithLength(int ship_len)
 Board::Board()
 {
 //Greet user
+        std::cout << std::string(15, '\n');
         std::cout << "\n\t\t\t\t\t\t!! Welcome to battleship (~_~) !!\n" << std::endl;
-
+        std::cout << std::string(12, '\n');
 //seed rand() for generateShipWithLength(int ship_len)
         srand(time(NULL));
         Ship *pnt_ship = (Ship*)::operator new(sizeof(Ship));
@@ -49,6 +50,7 @@ Board::Board()
 //Generate user fleet with specified ships in specified locations
 
         std::cout << "It's time to create your fleet. You will need to deploy " << fleet_sz << " ships."  << std::endl;
+        std::cout << std::string(2, '\n');
         for(int u = 0; u < fleet_sz; u++){
 
             std::cout << "What is the origin point for ship #" << u << "? Enter an integer for the x coordinate followed by an integer for the y coordinate." << std::endl;
@@ -108,12 +110,39 @@ Board::Board()
         }
             pnt_ship = new Ship(u_origin, u_orient, u_len);
 
+//Checks to see if prospective ship is within battle region
+
+        bool beyond_border(true);
+
+        if( u_orient ==  HORIZONTAL){
+
+            int u_end = u_x + u_len - 1;
+
+            if(u_end < b_wdth){
+                beyond_border = false;
+            }
+            else{
+                beyond_border = true;
+            }
+        }
+        else if(u_orient == VERTICAL){
+
+            int u_end = u_y + u_len - 1;
+            
+            if(u_end < b_hght){
+                beyond_border = false;
+            }
+            else{
+                beyond_border = true;
+            }
+        }
+
 //Check to see if new user ship collides with any ship currently deployed in user fleet
-            if(!fleet_collides(u, pnt_ship, u_fleet)){
+            if(!fleet_collides(u, pnt_ship, u_fleet) && !beyond_border){
                 u_fleet[u] =  pnt_ship;
             }
             else{
-                std::cout << "The ship you've tried to deploy collides with one or more ships already in your fleet. Enter new information for your ship." << std::endl;
+                std::cout << "The ship you've tried to deploy collides with one or more ships already in your fleet or contains points beyond the battle region. Enter new information for your ship.\n" << std::endl;
                 u--;
             }
         }
@@ -213,11 +242,20 @@ int Board::unsunkShipCount(Ship *fleet[])
 void Board::display()
 {
 //Arbitrary dimensions of the "sea". b_hght represents the y-axis range, b_wdth represents the x-axis range
-   // int b_wdth(10), b_hght(10);
+
+//This code will print the top of the sea border
+        std::cout << "  ";
+
+        for(int i = 0; i < b_wdth; i++){
+            std::cout << "---";
+        }
+        std::cout << std::endl;
+
+//This code begins the display grid loop
 
 	for(int y = b_hght - 1; y >= 0 ; y--){
 //This statement will print y-axis values the length of the left side of the grid
-                std::cout << y;
+                std::cout << y << "|";
 		for(int x = 0; x < b_wdth; x++){
                         point x_y(x, y);
 //Check if a point has been fired at, to filter to only points that shots were fired at and ships have been hit at
@@ -250,8 +288,16 @@ void Board::display()
                             std::cout << ((dsply_cnt == 1) ? " @ " : " ~ ");
 			}
 		}
-                std::cout << std::endl;
+                std::cout << "|" << std::endl;
 	}
+            std::cout << "  ";
+
+//This code will print the bottom side of the sea border
+            for(int i = 0; i < b_wdth; i++){
+                std::cout << "---";
+            }
+            std::cout << std::endl;
+
 //This code will print x-axis values along the length of the bottom of the grid
             std::cout << " ";
             for(int i = 0; i < b_wdth; i++){
@@ -302,12 +348,12 @@ void Board::game()
             std::string input = "";
 
             while(true){
-            
-                std::getline(std::cin, input);
+           
                 std::cin.clear();
+                std::getline(std::cin, input);
 
                 std::string inputx = input.substr(0, 1);
-                std::string inputy = input.substr(input.find_first_of(" "), 1);
+                std::string inputy = input.substr(input.find_first_of(" ") + 1, 1);
 
                 std::stringstream xSS(inputx);
                 std::stringstream ySS(inputy);
@@ -339,11 +385,12 @@ void Board::game()
                 std::string input = "";
 
                 while(true){
-                    std::getline(std::cin, input);
+
                     std::cin.clear();
+                    std::getline(std::cin, input);
 
                     std::string inputx = input.substr(0, 1);
-                    std::string inputy = input.substr(input.find_first_of(" "), 1);
+                    std::string inputy = input.substr(input.find_first_of(" ") + 1, 1);
 
                     std::stringstream xSS(inputx);
                     std::stringstream ySS(inputy);
@@ -364,9 +411,6 @@ void Board::game()
 
             fireShot(x, y, e_fleet);
 
-//Clears the stream if user accidentally enters more shots than the number of ships remaining in their fleet
-                std::cin.clear();
-                std::cin.ignore(1000, EOF);
 //Update number of ships in enemy fleet after a round of shots fired by user
         e_ships_sailing = unsunkShipCount(e_fleet);
 
