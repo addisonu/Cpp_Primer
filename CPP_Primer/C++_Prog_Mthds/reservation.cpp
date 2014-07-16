@@ -95,7 +95,6 @@ while(choice != 0){
 
         case 3:
             getSeatNo(value);
-            validSeatNum(plane_size, value);
 
             if(validSeatNum(plane_size, value) && seatVacant(seats, value)){
                 reserveSeat(seats, value);
@@ -129,7 +128,6 @@ while(choice != 0){
 
         case 6:
             getSeatNo(value);
-            validSeatNum(plane_size, value);
 
             if(validSeatNum(plane_size, value) && !seatVacant(seats, value)){
                 cancelSeat(seats, value);
