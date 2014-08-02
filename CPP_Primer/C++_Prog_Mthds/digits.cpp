@@ -19,7 +19,7 @@ int main()
     bool valid(false);
 
 //Will hold validated user input
-    int num_arr[5] = {0, 0, 0, 0, 0};;
+    int num_arr[5] = {0, 0, 0, 0, 0};
     int num(0);
 
 //User can input multiple values
