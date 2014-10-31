@@ -1,0 +1,71 @@
+//Log of bugs and future updates
+
+- Fix bug:
+    +1. Can't shoot interior points of last ship in fleet
+    a. Loop was only iterating the number times equal to enemy ships unsunk. Ships aren't destroyed in sequence, so existing ships might not be iterated over
+    +2. Enemy fire isn't adding new, random point to shots
+    +3. Validating input to fire shot, rejects any shot entered
++ Add makefile
+
++ Change all of cin occurences to getline
+
++ Tell the user how many ships they can deploy
+
++ Add greeting to user upon starting game
+
++ Allow user and enemy to only fire as many times as they have ships
+
++ Add b_wdth and b_hght to board.h private members
+
++ Clear cin after every input. Use cin.clear(), consider using cin.ignore()
+
++ Prevent ships from having points beyond sea boundary
+
++ Add border around "sea"
+
++ Add message telling user of game outcome
+
++ Clear screen before game begins
+
++ Add code to prevent user firing beyond "sea"
+
++ Add player ships to sea
+
++ Put bounds on the length of a ship
+
+- Add error handling code: prompts for user and messages for errors that occur
+
++ Add opponent response
+
+- Replace pointers of dynamically allocated objects w/ smart pointers
+
+- Add unit tests
+
++ Include header files: time.h, stdio.h, stdlib.h
+
++ Change final ship length to 2, to reflect ship lengths in requirements
+
+- Dynamically allocate memory for e_fleet in board class definition
+
++ Add method to board class that plays one game
+
++ Add additional comments to code
+
++ Make functions more general. Remove any occurences of e_fleet hard coded into functions that should also work on u_fleet
+  +display
+  +game
+  +fleet_collides
+  +unsunkShipCount
+  +fireShot
+
++ Add a method to play a single game. Remove code for playing a game from the main function
+
++ When generating enemy fleet. Check that it doesn't collide with any user ships which are generated first. Then check to see that it doesn't collide with any existing enemy ships.
+
++ Make fleet_collides return a bool, remove the code that actually adds a ship to the fleet and move it to the board constructor
+
++ Add Prompt to user when they try to deploy overlaping ships
+
++ Prompt user if they try to fire at a point that intesects with a ship in their own fleet
+
++Prevent enemy from firing at own fleet

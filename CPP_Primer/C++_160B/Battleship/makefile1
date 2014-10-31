@@ -1,0 +1,19 @@
+TMP_DIR  := battle_tmp/
+OBJS :=  $(addprefix ${TMP_DIR}, b_main.o board.o ship.o pointcollection.o)
+CC = clang++ -stdlib=libc++ -std=c++11
+DEBUG = -g
+CFLAGS = -c ${DEBUG}
+LFLAGS = ${DEBUG}
+
+
+${TMP_DIR}%.o : %.cpp %.h
+	${CC} $(CFLAGS} $<
+
+all : $(OBJS)
+
+$(OBJS) : | $(TMP_DIR)
+
+$(TMP_DIR):
+	mkdir -p $(OBJDIR)
+
+
