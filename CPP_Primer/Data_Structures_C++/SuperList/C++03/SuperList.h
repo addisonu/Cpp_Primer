@@ -19,7 +19,7 @@ class SuperList{
 //MEMBER FUNCTIONS//
     bool isEmpty() const;
     bool isFull() const;
-    void insertFront(string newItem);
+    void insertFront(std::string newItem);
     void insertRear(std::string newitem);
     bool removeOne(std::string item);
     std::string removeFirst();
