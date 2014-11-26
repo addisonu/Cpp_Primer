@@ -99,28 +99,11 @@ template<class T> bool Heap<T>::IsEmpty() const
 template <class T> void swap(Heap<T> &heap1, Heap<T> &heap2)
 {
     using std::swap;
+
+//Swap argument data members
     swap(heap1.items, heap2.items);
     swap(heap1.length, heap2.length);
     swap(heap1.maxItems, heap2.maxItems);
-/*
-    int itmp(0);
-    T *ptmp(0);
-
-//Swap pointers to dynamic arrays
-    ptmp = heap1.items;
-    heap1.items = heap2.items;
-    heap2.items = ptmp;
-
-//Swap lengths
-    itmp = heap1.length;
-    heap1.length = heap2.length;
-    heap2.length = itmp;
-
-//Swap maxItems
-    itmp = heap1.maxItems;
-    heap1.maxItems = heap2.maxItems;
-    heap2.maxItems = itmp;
-    */
 }
 
 template <class T> std::ostream& operator<<(std::ostream &out, const Heap<T> &obj)
