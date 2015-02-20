@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <string>
-
+/*
 std::string resolve_url(std::string url, std::string new_url);
 
 int main()
@@ -34,7 +34,7 @@ int main()
     }
     return 0;
 }
-
+*/
 std::string resolve_url(std::string url, std::string new_url)
 {
             std::string tmp_url, tmp_new_url, final_url;
@@ -59,10 +59,13 @@ std::string resolve_url(std::string url, std::string new_url)
                 }
             }
             else if(new_url.find("file:") == std::string::npos && new_url.find("http://") == std::string::npos){
+//If url doesn't begin with '/' add it
+                if(new_url[0] != '/')
+                    new_url = "/" + new_url;
 
 //Search for position to concatenate url and new_url
                 std::string overlap = new_url.substr(0, new_url.find_last_of("/"));
-                std::size_t start_pos;
+                std::size_t start_pos = url.find_last_of("/");
                 bool complete = false;
                 while(!complete && overlap.size() > 0){
                     start_pos = url.find(overlap);
