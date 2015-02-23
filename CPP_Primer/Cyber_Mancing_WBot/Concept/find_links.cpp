@@ -1,8 +1,24 @@
-//Find all URLs on website (concept)
+// LEFT OFF //
+/*
+ *
+ */
 
-/*LEFT OFF:
- * unbreaking ubc.cpp, boba house return 1 url, problems after adding in_scope function to limit returned urls to those prefixed with original page location
- * consider removing has_webprefix function and replacing with working in_scope function
+// BUGS //
+/*
+ * file not being downloaded #1 - status [fixed] - problem [fstream opened in trunc mode for parse() function]
+ * terminate called throwing an exceptionAbort trap: 6 - status [fixed] - problem [couldn't handle any exception thrown while downloading page]
+ * file not being downloaded #2 - status [fixed] - problem [test_download.txt file must exist]
+ * urls with only one '/' are discarded, and others are returned from resolve_url() with extra '/' at concatenation point - status [fixed] - problem [handle the separate case where there is no overlap and entire home URL must be concatenated with relative URL]
+ * program will terminate if page can't be downloaded - status [fixed] - problem [added exception handling code in try catch block to catch CS240Exception, bad URLs are now skipped]
+ */
+
+// POSSIBLE SOLUTIONS/ADDITIONS //
+/*
+ *
+ */
+
+// NOTES //
+/*
  */
 
 #include <iostream>
@@ -13,11 +29,12 @@
 #include <queue>
 #include <map>
 #include "web/URLConnection.h"
-#include "../../dir1/resolve_url.cpp"
+#include "web/CS240Exception.h"
+#include "../../test_pages/build_url1.cpp"
 
 std::set<std::string> parse(std::string url, std::string &page_text);
 std::map<std::string, char> page_links(std::string curr_url, std::string &page_text);
-void get_page(std::string url, std::string page_text);
+int get_page(std::string url, std::string &page_text);
 bool has_websuffix(std::string str, std::size_t pg_pos);
 bool has_webprefix(std::string str);
 bool in_scope(std::string home_url, std::string new_url);
@@ -26,7 +43,7 @@ std::set<std::string> find_url(std::fstream fs);
 int main()
 {
 //Resources to download and parse page
-    std::string url("website");
+    std::string url("http://www.foodnetwork.com");
     std::string page_text = "test_download.txt";
     std::map<std::string, char> urls = page_links(url, page_text);
 
@@ -50,21 +67,29 @@ bool has_webprefix(std::string str)
     return (str.substr(0, 7) == "http://") || (str.substr(0, 5) == "file:");
 }
 
-void get_page(std::string url, std::string page_text)
+int get_page(std::string url, std::string &page_text)
 {
 // Download page //
 //Write downloaded page to argument file
     std::fstream fs(page_text, std::fstream::binary | std::fstream::in | std::fstream::out);
     fs << std::noskipws;
-    InputStream *doc;
 
-    doc = URLConnection::Open(url);
+    try{
+        InputStream *doc;
 
-    while(!doc->IsDone()){
-        char c = doc->Read();
-        fs << c;
+        doc = URLConnection::Open(url);
+
+        while(!doc->IsDone()){
+            char c = doc->Read();
+            fs << c;
+        }
+        fs.close();
+        return 0;
     }
-    fs.close();
+    catch(CS240Exception err){
+        std::cout << err.GetMessage() << std::endl;
+        return -1;
+    }
 }
 
 bool has_websuffix(std::string str, std::size_t pg_pos)
@@ -86,11 +111,16 @@ bool has_websuffix(std::string str, std::size_t pg_pos)
 std::set<std::string> parse(std::string url, std::string &page_text)
 {
 // Download page //
-    get_page(url, page_text);
+
+//If page isn't downloaded return an empty set, the calling function will check set size and handle as appropriate
+    if(get_page(url, page_text)){
+        std::set<std::string> empty;
+        return empty;
+    }
 
 // Isolate URLs //
 //Create variables to read text
-    std::fstream fs(page_text, std::fstream::binary | std::fstream::in | std::fstream::out | std::fstream::trunc);
+    std::fstream fs(page_text, std::fstream::binary | std::fstream::in | std::fstream::out);
     std::string str;
     unsigned char c(' ');
     unsigned url_cnt(0);
@@ -120,10 +150,7 @@ std::set<std::string> parse(std::string url, std::string &page_text)
 
 //Remove quotes from str
                         str = str.substr(1, str.size() - 2);
-                //debugging
-                        std::cout << "str = " << str << std::endl;
                         found_links.insert(str);
-                        ++url_cnt;
                     }
                 }
                 str = "";
@@ -156,22 +183,33 @@ std::map<std::string, char> page_links(std::string curr_url, std::string &page_t
     while(!process_links.empty()){
         found_links = parse(process_links.front(), page_text);
 
+//Check that initial page was downloaded
+        if(!found_links.size()){
+            if(process_links.front() == curr_url){
+                std::cerr << "You have entered an invalid initial URL. The program will now exit." << std::endl;
+                return urls;
+            }
+            else{
+                std::cerr << "Invalid URL" << std::endl;
+                process_links.pop();
+            }
+        }
+
 //Transfer elements from found_links to URLs and process_links
         std::string abs_path;
         for(std::string link : found_links){
             abs_path = resolve_url(process_links.front(), link);
-        //debugging
-            std::cout << "abs_path = " << abs_path << std::endl;
 
-            if(has_webprefix(abs_path)/* && in_scope(curr_url, abs_path)*/){
+            if(in_scope(curr_url, abs_path)){
                 urls.insert(std::pair<std::string, char>(abs_path, 'f'));
+                std::cout << "urls.link = " << abs_path << std::endl;
+
                 if(urls[abs_path] == 'f'){
                     process_links.push(abs_path);
                     urls[abs_path] = 't';
                 }
             }
         }
-
 //Remove processed URL from process_links
         process_links.pop();
     }
