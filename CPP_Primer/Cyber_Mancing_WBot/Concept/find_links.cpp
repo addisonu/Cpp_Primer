@@ -43,7 +43,7 @@ std::set<std::string> find_url(std::fstream fs);
 int main()
 {
 //Resources to download and parse page
-    std::string url("http://www.foodnetwork.com");
+    std::string url("website");
     std::string page_text = "test_download.txt";
     std::map<std::string, char> urls = page_links(url, page_text);
 
