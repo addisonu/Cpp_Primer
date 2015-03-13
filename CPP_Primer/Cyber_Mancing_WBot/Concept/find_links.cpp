@@ -46,8 +46,8 @@ int main()
 
     std::string url("website");
     std::string page_text = "test_download.txt";
-    std::map<std::string, char> urls = page_links(url, page_text, words);
     std::string words;
+    std::map<std::string, char> urls = page_links(url, page_text, words);
 
     std::cout << "There are " << urls.size() << " urls. Oh yeah!" << std::endl;
 
