@@ -44,5 +44,12 @@ int main()
     std::cout << w1.empty() << std::endl;
     std::cout << w2.empty() << std::endl;
 
+    w0 = w1;
+    std::cout << "w0 : \n";
+    std::cout << w0 << std::endl;
+    std::cout << "w1 : \n";
+    std::cout << w1.to_string() << std::endl;
+    std::cout << "w2 : \n";
+    std::cout << w2 << std::endl;
     return 0;
 }
