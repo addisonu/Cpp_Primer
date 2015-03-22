@@ -26,5 +26,9 @@ int main()
 //Test function to generate webpage
     idx0.gen_indxpg();
     idx1.gen_indxpg();
+
+//Test operator<<
+    std::cout << "idx0 : \n" << idx0 << std::endl;
+    std::cout << "idx1 : \n" << idx1 << std::endl;
     return 0;
 }

@@ -30,11 +30,14 @@
 #include <map>
 #include "web/URLConnection.h"
 #include "web/CS240Exception.h"
-#include "../../test_pages/build_url2.cpp"
+#include "../../test_pages/build_url3.cpp"
+#include "Indexer.h"
+#include "Hash_indexer.h"
+#include "Word.h"
 
-std::set<std::string> parse(std::string url, std::string &page_text, std::string &words);
-std::map<std::string, char> page_links(std::string curr_url, std::string &page_text, std::string &words);
-int get_page(std::string url, std::string &page_text, std::string &words);
+std::set<std::string> parse(std::string url, std::string &page_text, Indexer &words);
+std::map<std::string, char> page_links(std::string curr_url, std::string &page_text, Indexer &words);
+int get_page(std::string url, std::string &page_text, Indexer &words);
 bool has_websuffix(std::string str, std::size_t pg_pos);
 bool has_webprefix(std::string str);
 bool in_scope(std::string home_url, std::string new_url);
@@ -43,10 +46,10 @@ std::set<std::string> find_url(std::fstream fs);
 int main()
 {
 //Resources to download and parse page
-
+//!!ADD PROPER URL BEFORE TESTING!!
     std::string url("website");
     std::string page_text = "test_download.txt";
-    std::string words;
+    Indexer words;
     std::map<std::string, char> urls = page_links(url, page_text, words);
 
     std::cout << "There are " << urls.size() << " urls. Oh yeah!" << std::endl;
@@ -54,6 +57,7 @@ int main()
     for(std::pair<std::string, char> link : urls){
         std::cout << link.first << std::endl;
     }
+    std::cout << words << std::endl;
     return 0;
 }
 
@@ -69,7 +73,8 @@ bool has_webprefix(std::string str)
     return (str.substr(0, 7) == "http://") || (str.substr(0, 5) == "file:");
 }
 
-int get_page(std::string url, std::string &page_text, std::string &words)
+int get_page(std::string url, std::string &page_text, Indexer &words)
+//int get_page(std::string url, std::string &page_text, std::string &words)
 {
 // Download page //
 //Write downloaded page to argument file
@@ -110,7 +115,7 @@ bool has_websuffix(std::string str, std::size_t pg_pos)
     return end;
 }
 
-std::set<std::string> parse(std::string url, std::string &page_text, std::string &words)
+std::set<std::string> parse(std::string url, std::string &page_text, Indexer &words)
 {
 // Download page //
 
@@ -128,7 +133,7 @@ std::set<std::string> parse(std::string url, std::string &page_text, std::string
     if(fs.is_open()){
 
 //Create variables to read text
-    std::string str, words; // str holds tags and words holds words to be indexed
+    std::string str, tmp_words; // str holds tags and words holds words to be indexed
     unsigned char c(' ');
     unsigned url_cnt(0);
     bool in_body(false);
@@ -174,16 +179,19 @@ std::set<std::string> parse(std::string url, std::string &page_text, std::string
                 fs << std::noskipws;
             }
             else if(!ispunct(c) && in_body){
-                if(isspace(c) || c == '\n')
-                    c = ' ';
-                words += c;
+                if(isspace(c) || c == '\n'){
+                    words.add(Word(tmp_words, 1, url));
+                    tmp_words = "";
+                }
+                tmp_words += c;
             }
         }
+    }
     return found_links;
 }
 
 // Do bfs of website //
-std::map<std::string, char> page_links(std::string curr_url, std::string &page_text, std::string &words)
+std::map<std::string, char> page_links(std::string curr_url, std::string &page_text, Indexer &words)
 {
 //Hold all links found on page of processed url
     std::set<std::string> found_links;

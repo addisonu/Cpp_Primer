@@ -68,6 +68,8 @@ public :
         if(url.find(arg_url) == std::string::npos){
             url += arg_url + "\n"; ++count;
         }
+        else
+            ++count;
     }
 
     bool empty() { return word.size(); }

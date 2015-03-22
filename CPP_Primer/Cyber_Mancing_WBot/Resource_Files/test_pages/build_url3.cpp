@@ -33,36 +33,38 @@ std::string resolve_url(std::string url, std::string new_url)
                     url = new_url;
                 }
                 else{
+
 //If url doesn't begin with '/' add it
-                    if(new_url[0] != '/')
-                        new_url = "/" + new_url;
+                if(new_url[0] != '/')
+                    new_url = "/" + new_url;
 
 //Search for position to concatenate url and new_url
-                    std::string overlap = new_url.substr(0, new_url.find_last_of("/"));
-                    std::size_t start_pos = (url.size() > 7) ? url.find_first_of("/", 7) : url.size();
-                    bool complete = false;
+                std::string overlap = new_url.substr(0, new_url.find_last_of("/"));
+                std::size_t start_pos = (url.size() > 7) ? url.find_first_of("/", 7) : url.size();
+                bool complete = false;
 
-                    if(overlap.size() == 0){
-                        ;
-                    }
-                    else{
-                        while(!complete && overlap.size() > 0){
-                            start_pos = url.find(overlap);
-                            if(start_pos != std::string::npos){
+                if(overlap.size() == 0){
+                    ;
+//start_pos = (url.size() > 7) ? url.find_last_of("/", 7) : url.size();
+                }
+                else{
+                    while(!complete && overlap.size() > 0){
+                        start_pos = url.find(overlap);
+                        if(start_pos != std::string::npos){
+                            complete = true;
+                        }
+                        else{
+                            if(overlap.find_last_of("/") == std::string::npos){
+                                start_pos = url.size() - 2;
                                 complete = true;
                             }
-                            else{
-                                if(overlap.find_last_of("/") == std::string::npos){
-                                    start_pos = url.size() - 2;
-                                    complete = true;
-                                }
-                                else
-                                    overlap = overlap.substr(0, overlap.find_last_of("/"));
-                            }
+                            else
+                                overlap = overlap.substr(0, overlap.find_last_of("/"));
                         }
                     }
+                }
 //Build absolute url
-                    final_url = url.substr(0, start_pos) + new_url;
+                final_url = url.substr(0, start_pos) + new_url;
                 }
             }
             else{

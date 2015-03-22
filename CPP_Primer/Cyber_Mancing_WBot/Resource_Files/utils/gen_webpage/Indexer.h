@@ -1,10 +1,12 @@
 //DATE : 03/17/15
 //FILE : Indexer.h
 //DESC : Data structure built with a set and operations for indexing words
+//VERSION : 1
 
 /*BUGS :
  * appropriate return value for find_word() if it's not there, maybe return bool and word through arg reference
  * check if any object is defined in file, duplicate will occur during linking
+ * duplicate words on the same page aren't added, should be and increment count and not concatenated url - status [fixed] - problem [needed to add else branch to condition, if false increment count]
  */
 
 
@@ -75,5 +77,9 @@ private :
 
 // DATA MEMBERS //
     std::vector<Word> index;
+
+// FRIENDS //
+    friend std::ostream& operator<<(std::ostream &out, const Indexer obj);
 };
+    std::ostream& operator<<(std::ostream &out, const Indexer obj);
 #endif
