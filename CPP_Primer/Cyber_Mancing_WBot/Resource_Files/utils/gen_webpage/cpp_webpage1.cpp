@@ -1,6 +1,7 @@
 //Implementation of Cpp_webpage class
 /* BUGS :
  * change paragraph for when an fstream is passed to the function to add <br> to generated page
+ * no way to write generated page to files - status [fixed] - problem [constructor takes fstream or string as source of words to index, require file stream to write to file and string as word to generate page for]
  *
  */
 
@@ -32,37 +33,37 @@ Cpp_webpage::Cpp_webpage()
     std::cout << "</html>";
 }
 
-Cpp_webpage::Cpp_webpage(std::string tle, std::string header, unsigned lev, std::fstream &fpara, std::string spara)
+Cpp_webpage::Cpp_webpage(std::string tle, std::string header, unsigned lev, std::fstream &fpara, const std::string &spara)
 {
 //Specify html document type
-    std::cout << "<!DOCTYPE html>" << std::endl;
+    fpara << "<!DOCTYPE html>" << std::endl;
 
 //Start html doc
-    std::cout << "<html>" << std::endl;
+    fpara << "<html>" << std::endl;
 
 //Start html head
-    std::cout << "<head>" << std::endl;
+    fpara << "<head>" << std::endl;
 
 //Print title
-    std::cout << title(tle) << std::endl;
+    fpara << title(tle) << std::endl;
 
 //End html head
-    std::cout << "</head>" << std::endl;
+    fpara << "</head>" << std::endl;
 
 //Start html body
-    std::cout << "<body>" << std::endl;
+    fpara << "<body>" << std::endl;
 
 //Print header
-    std::cout << heading(lev, header) << std::endl;
+    fpara << heading(lev, header) << std::endl;
 
 //Print paragraph
-    std::cout << paragraph(fpara, spara) << std::endl;
+    paragraph(fpara, spara);
 
 //End html body
-    std::cout << "</body>" << std::endl;
+    fpara << "</body>" << std::endl;
 
 //End html doc
-    std::cout << "</html>";
+    fpara << "</html>";
 }
 
 // MEMBER FUNCTIONS //
@@ -76,7 +77,7 @@ std::string Cpp_webpage::title(std::string label)
     return result ="<title>" + label + "</title>\n";
 }
 
-std::string Cpp_webpage::paragraph(std::fstream &para, std::string str)
+void Cpp_webpage::paragraph(std::fstream &para, std::string str)
 {
 //Reset result
     result = "";
@@ -91,18 +92,8 @@ std::string Cpp_webpage::paragraph(std::fstream &para, std::string str)
                 result += ch;
         }
     }
-
-//If fstream is passed, read line form fstream into result
-    else if(para >> line){
-        std::cout << "line : " << line << std::endl;
-        result += line;
-        while(para >> line){
-            std::cout << "in while loop" << std::endl;
-            result += "<br>" + line;
-        }
-    }
-//Return result wrapped in html paragraph tags
-    return result = "<p>" + result + "</p>";
+//Wrap result in html paragraph tags
+    para << "<p>" << result << "</p>";
 }
 
 std::string Cpp_webpage::image(std::string URL)

@@ -1,7 +1,8 @@
+// Search for urls and index words using Indexer data structure
 // LEFT OFF //
 /*
  * Writing function to index words on each webpage and creating data structure to hold indexed words
- *
+ * Add code to generate webpage and save to file
  */
 
 // BUGS //
@@ -47,7 +48,7 @@ int main()
 {
 //Resources to download and parse page
 //!!ADD PROPER URL BEFORE TESTING!!
-    std::string url("website");
+    std::string url("http://www.bobahouse.net");
     std::string page_text = "test_download.txt";
     Indexer words;
     std::map<std::string, char> urls = page_links(url, page_text, words);
@@ -74,7 +75,6 @@ bool has_webprefix(std::string str)
 }
 
 int get_page(std::string url, std::string &page_text, Indexer &words)
-//int get_page(std::string url, std::string &page_text, std::string &words)
 {
 // Download page //
 //Write downloaded page to argument file
@@ -179,11 +179,12 @@ std::set<std::string> parse(std::string url, std::string &page_text, Indexer &wo
                 fs << std::noskipws;
             }
             else if(!ispunct(c) && in_body){
-                if(isspace(c) || c == '\n'){
+                if(( isspace(c) || c == '\n') && !tmp_words.empty()){
                     words.add(Word(tmp_words, 1, url));
                     tmp_words = "";
                 }
-                tmp_words += c;
+                else if(isalpha(c))
+                    tmp_words += c;
             }
         }
     }

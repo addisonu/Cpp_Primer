@@ -12,6 +12,7 @@
 #include <sstream>
 #include "node2.h"
 #include "Word.h"
+#include "cpp_webpage.h"
 
 const std::size_t INDEXER_SIZE = 676; // 2^26 i.e. every two letter combination in English alphabet
 const unsigned ALPHA_SIZE = 26; // number of letters in English alphabet
@@ -32,6 +33,7 @@ public:
     Word& find_word(std::string str, Word &non);
     node<Word>* find_word(std::string str);
     void add(Word arg_word);
+    void gen_webpage();
 
 // CONSTANT MEMBER FUNCTIONS //
 
