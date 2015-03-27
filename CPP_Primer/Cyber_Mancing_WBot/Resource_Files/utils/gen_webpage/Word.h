@@ -28,6 +28,7 @@
 #include <sstream>
 #include <iostream>
 #include <set>
+#include <fstream>
 #include <algorithm>
 
 class Word{
@@ -105,6 +106,21 @@ public :
         for(auto &ch : str)
             ch = tolower(ch);
     }
+
+    bool is_stopword(std::string stop_file, std::string word)
+    {
+        std::string stop_word;
+        std::ifstream ifs(stop_file);
+
+        if(ifs.is_open()){
+            while(std::getline(ifs, stop_word)){
+                if(stop_word == word)
+                    return true;
+            }
+        }
+        return false;
+    }
+
 // FRIENDS //
     friend std::ostream& operator<<(std::ostream& out, const Word obj);
 

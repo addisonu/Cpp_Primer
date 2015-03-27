@@ -64,5 +64,11 @@ int main()
     w0 += w3;
     std::cout << "w0 + w3 " << w0 << std::endl;
 
+    //Test is_stopword
+    std::string stop_file = "../../stop_words.txt";
+    std::string words[]{"weq", "a", "you", "it", "food", "and", "green", "then"};
+    for(const auto str : words){
+        std::cout << str << " is stop word : " << w3.is_stopword(stop_file, str) << std::endl;
+    }
     return 0;
 }

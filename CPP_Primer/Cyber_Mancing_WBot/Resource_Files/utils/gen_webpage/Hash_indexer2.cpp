@@ -74,10 +74,18 @@ void Hash_indexer::add(Word arg_word)
     node<Word> *tmp_word = index[hash_word(arg_word.get_word())]; // find general dicitionary position of word, using built in def of operator[]
     node<Word> *target = find_word(arg_word.get_word());
 
-    if(target == nullptr){
-        std::size_t pos = list_length(tmp_word); // get position of last element in list
-        node<Word> *prev_word = list_locate(tmp_word, pos); // get pointer to last element
-        list_insert(prev_word, arg_word); // insert element
+    if(target == nullptr ){
+        bool stop_check = true;
+
+        if(list_length(tmp_word) > 0){
+            std::string stop_file = "../../stop_words.txt";
+            stop_check = (arg_word.is_stopword(stop_file, arg_word.get_word()));
+        }
+        if(stop_check){
+            std::size_t pos = list_length(tmp_word); // get position of last element in list
+            node<Word> *prev_word = list_locate(tmp_word, pos); // get pointer to last element
+            list_insert(prev_word, arg_word); // insert element
+        }
     }
     else{
         target->data() += arg_word;

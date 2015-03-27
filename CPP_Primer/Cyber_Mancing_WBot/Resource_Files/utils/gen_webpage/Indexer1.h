@@ -54,14 +54,16 @@ public :
         return non;
     }
 
-    void add(Word obj)
+     void add(Word obj)
     {
         Word non, &tmp_word = find_word(obj.get_word(), non);
         if(!tmp_word.get_word().empty()){
             tmp_word += obj;
         }
         else{
-            index.push_back(obj);
+            std::string stop_file = "../../stop_words.txt";
+            if(!(obj.is_stopword(stop_file, obj.get_word())))
+                index.push_back(obj);
         }
     }
 
