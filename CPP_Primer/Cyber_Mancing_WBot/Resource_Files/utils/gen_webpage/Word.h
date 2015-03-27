@@ -64,6 +64,8 @@ public :
 
     std::string get_url() { return url; }
 
+//PRECONDITIONS : N/A
+//POSTCONDITIONS : arg_url is added to url data member and count is incremented
     void add_url(std::string arg_url)
     {
         if(url.find(arg_url) == std::string::npos){
@@ -75,6 +77,8 @@ public :
 
     bool empty() { return word.size(); }
 
+//PRECONDITIONS : N/A
+//POSTCONDITIONS : string of Word object's data member names and values is returned
     std::string to_string()
     {
         std::stringstream str;
@@ -83,6 +87,8 @@ public :
         return str.str();
     }
 
+//PRECONDITIONS : N/A
+//POSTCONDITIONS : lhs Word object is updated with incremented frequency and additional URL if rhs URL isn't already contained
     Word operator+=(const Word rhs)
     {
         if(word == rhs.word){
@@ -101,12 +107,16 @@ public :
         return *this;
     }
 
+//PRECONDITIONS : N/A
+//POSTCONDITIONS : str with all letters as lowercase is returned
     void lower_word(std::string &str)
     {
         for(auto &ch : str)
             ch = tolower(ch);
     }
 
+//PRECONDITIONS : stop_file must refer to file with stop words delimited by newlines
+//POSTCONDITIONS : true is return if word is a word in stop_file, false otherwise
     bool is_stopword(std::string stop_file, std::string word)
     {
         std::string stop_word;
@@ -122,6 +132,9 @@ public :
     }
 
 // FRIENDS //
+
+//PRECONDITIONS : N/A
+//POSTCONDITIONS : Each data member of Word is written to STDOUT delimited by newlines
     friend std::ostream& operator<<(std::ostream& out, const Word obj);
 
 private :

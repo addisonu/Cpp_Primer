@@ -14,13 +14,13 @@
 
 // NEXT 3 UPDATES //
 /*
- * Add preconditions and postconditions to all functions
+ * Remove version number from latest versions of all files and updates within source code
+ * Add comments to all files
+ * Add makefile
 */
 
 // FUTURE UPDATES //
 /*
- * Add comments to all files
- * Add makefile
  * Learn about Valgrind and how to apply to project
  * Find bench mark or other tool to test accuracy of indexing
  * Start writing unit tests using Unit_test class
@@ -29,6 +29,7 @@
 
 // PAST UPDATES //
 /*
+* Add preconditions and postconditions to all functions
 * Integrate stop word file into program
 * Add code to generate webpages, a function to Indexer and Hash_indexer
 * Integrate data structures into find_url and resolve_url programs [ubc6 uses Indexer.h]

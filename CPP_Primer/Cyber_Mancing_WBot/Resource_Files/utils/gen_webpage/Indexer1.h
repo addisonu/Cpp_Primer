@@ -38,12 +38,16 @@ public :
             tmp_word = arg_word;
     }
 
+// PRECONDITIONS : N/A
+// POSTCONDITIONS : If Word objective with word equal to str is in index, a reference to the Word will be returned
     Word& operator[](const std::string &str)
     {
         Word non;
         return find_word(str, non);
     }
 
+// PRECONDITIONS : N/A
+// POSTCONDITIONS : If Word objective with word equal to str is in index, a reference to the Word will be returned
      Word& find_word(const std::string &str, Word &non)
     {
         for(Word &obj : index){
@@ -54,6 +58,8 @@ public :
         return non;
     }
 
+// PRECONDITIONS : file "../../stop_words.txt" must exist.
+// POSTCONDITIONS : If the Word object's word isn't a stop word, it is added to index
      void add(Word obj)
     {
         Word non, &tmp_word = find_word(obj.get_word(), non);
@@ -67,6 +73,8 @@ public :
         }
     }
 
+// PRECONDITIONS : File "webpages_idx/" must exist.
+// POSTCONDITIONS : Webpage for each Word in index is generated and stored in "webpages_idx/"
     void gen_webpage()
    {
     unsigned header_lv = 1;
@@ -90,6 +98,9 @@ private :
     std::vector<Word> index;
 
 // FRIENDS //
+
+// PRECONDITIONS : N/A
+// POSTCONDITIONS : Each word in index is written to STDOUT delimited by newlines
     friend std::ostream& operator<<(std::ostream &out, const Indexer obj);
 };
     std::ostream& operator<<(std::ostream &out, const Indexer obj);

@@ -61,18 +61,24 @@ int main()
     return 0;
 }
 
+// PRECONDITIONS : home_url is the original URL passed to program in absolute path form
+// POSTCONDITIONS : return true if new_url is part website, false otherwise
 bool in_scope(std::string home_url, std::string new_url)
 {
     std::string location = home_url.substr(0, home_url.find("/", 7));
     return new_url.find(location) == 0;
 }
 
+// PRECONDITIONS : str has no spaces
+// POSTCONDITIONS : return true if first 5 - 7 characters represent beginning of proper URL
 bool has_webprefix(std::string str)
 {
 //Simplify string beginning conditions to limit URLs recognized as links
     return (str.substr(0, 7) == "http://") || (str.substr(0, 5) == "file:");
 }
 
+// PRECONDITIONS : url is the main URL of website and is the absolute path
+// POSTCONDITIONS : Webpage is downloaded and stored in a file specified by page_text
 int get_page(std::string url, std::string &page_text, Hash_indexer &words)
 {
 // Download page //
@@ -98,6 +104,8 @@ int get_page(std::string url, std::string &page_text, Hash_indexer &words)
     }
 }
 
+// PRECONDITIONS : pg_pos represents the '/' after http:// or file:// and immediately before the file name in it's absoluted path form
+// POSTCONDITIONS : true is returned if the file name has one of the following webpage file extensions, false otherwise
 bool has_websuffix(std::string str, std::size_t pg_pos)
 {
 //Simplify string ending conditions to limit URLs recognized as links
@@ -114,6 +122,8 @@ bool has_websuffix(std::string str, std::size_t pg_pos)
     return end;
 }
 
+// PRECONDITIONS : N/A
+// POSTCONDITIONS : Downloaded webpage is parsed and URLs and words are isolated and processed
 std::set<std::string> parse(std::string url, std::string &page_text, Hash_indexer &words)
 {
 // Download page //
@@ -193,6 +203,8 @@ std::set<std::string> parse(std::string url, std::string &page_text, Hash_indexe
 }
 
 // Do bfs of website //
+// PRECONDITIONS : N/A
+// POSTCONDITIONS : A breadth first search of website starting at curr_url is performed and URLs are processed
 std::map<std::string, char> page_links(std::string curr_url, std::string &page_text, Hash_indexer &words)
 {
 //Hold all links found on page of processed url

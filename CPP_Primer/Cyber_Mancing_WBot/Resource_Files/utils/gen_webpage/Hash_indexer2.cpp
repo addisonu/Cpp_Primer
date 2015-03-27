@@ -10,7 +10,7 @@
 
 // BUGS //
 /*
- * hash_word only works for strings beginning with two letters - status [fixed] - problem [needed conditional branch for words length 1 and length > 1]
+ * hash_word only works for strings beginning with two letters - status [not fixed] - problem [needed conditional branch for words length 1 and length > 1]
  */
 
 // POSSIBLE SOLUTIONS/ADDITIONS //
@@ -79,7 +79,7 @@ void Hash_indexer::add(Word arg_word)
 
         if(list_length(tmp_word) > 0){
             std::string stop_file = "../../stop_words.txt";
-            stop_check = (arg_word.is_stopword(stop_file, arg_word.get_word()));
+            stop_check = !(arg_word.is_stopword(stop_file, arg_word.get_word()));
         }
         if(stop_check){
             std::size_t pos = list_length(tmp_word); // get position of last element in list
@@ -94,8 +94,6 @@ void Hash_indexer::add(Word arg_word)
 
 // AUXILARY MEMBER FUNCTIONS //
 
-// PRECONDITION : word[0] and word[1] are alpha
-// POSTCONDITION : position of correct head node for word in index is returned
 std::size_t Hash_indexer::hash_word(std::string word) const
 {
     if(word.size() >= 2 && isalpha(word[0]) && isalpha(word[1])){
