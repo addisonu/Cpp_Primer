@@ -6,7 +6,7 @@
 /*BUGS :
  */
 
-#include "Indexer.h"
+#include "Indexer1.h"
 #include "Word.h"
 #include "cpp_webpage.h"
 

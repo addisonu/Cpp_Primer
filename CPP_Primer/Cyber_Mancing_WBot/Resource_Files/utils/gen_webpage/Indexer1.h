@@ -65,14 +65,23 @@ public :
         }
     }
 
-    void gen_indxpg()
-    {
-        std::fstream fs;
-        for(Word page : index){
-            Cpp_webpage gen(page.get_word(), "Index of " + page.get_word(), 1, fs, page.to_string());
-            std::cout << std::endl << std::endl;
-        }
+    void gen_webpage()
+   {
+    unsigned header_lv = 1;
+
+//Loop through Hash_indexer
+    for(auto ele : index){
+
+//Create and initialize fstream with file to generate webpage in
+        std::string path = "webpages_idx/" + ele.get_word() + ".html";
+        std::fstream txt("webpages_idx/" + ele.get_word() + ".html", std::fstream::in | std::fstream::out| std::fstream::trunc);
+
+//Call class to generate webpage
+        Cpp_webpage page("Index for : " + ele.get_word(), "Index for : " + ele.get_word(), header_lv, txt, ele.to_string());
+        txt.close();
     }
+}
+
 private :
 
 // DATA MEMBERS //

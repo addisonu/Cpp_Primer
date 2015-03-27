@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "Indexer.h"
+#include "Indexer1.h"
 
 int main()
 {
@@ -24,11 +24,11 @@ int main()
     std::cout << "idx1[w1.word]\n" << idx1[w1.get_word()] << std::endl;
 
 //Test function to generate webpage
-    idx0.gen_indxpg();
-    idx1.gen_indxpg();
+    idx0.gen_webpage();
+    idx1.gen_webpage();
 
 //Test operator<<
-    std::cout << "idx0 : \n" << idx0 << std::endl;
-    std::cout << "idx1 : \n" << idx1 << std::endl;
+//    std::cout << "idx0 : \n" << idx0 << std::endl;
+  //`  std::cout << "idx1 : \n" << idx1 << std::endl;
     return 0;
 }

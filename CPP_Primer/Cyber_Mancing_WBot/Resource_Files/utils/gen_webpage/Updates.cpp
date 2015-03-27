@@ -9,12 +9,11 @@
 // BUGS //
 /*
  * Extra space before word on print out
- * Word elements in data structure with count but no word
+ * Word elements in data structure with count but no word - status [fixed] - problem [some nonprintable characters being treated as word, only add alpha characters to string]
  */
 
 // NEXT 3 UPDATES //
 /*
- * Add code to generate webpages, a function to Indexer and Hash_indexer
  * Integrate stop word file into program
  * Add preconditions and postconditions to all functions
 */
@@ -33,6 +32,7 @@
 /*
 * Integrate data structures into find_url and resolve_url programs [ubc6 uses Indexer.h]
 * Integrate data structures into find_url and resolve_url programs [ubc7 uses Hash_indexer.h]
+* Add code to generate webpages, a function to Indexer and Hash_indexer
 */
 
 // NOTES //

@@ -32,8 +32,7 @@
 #include "web/URLConnection.h"
 #include "web/CS240Exception.h"
 #include "../../test_pages/build_url3.cpp"
-#include "Indexer.h"
-#include "Hash_indexer.h"
+#include "Indexer1.h"
 #include "Word.h"
 
 std::set<std::string> parse(std::string url, std::string &page_text, Indexer &words);
@@ -58,7 +57,8 @@ int main()
     for(std::pair<std::string, char> link : urls){
         std::cout << link.first << std::endl;
     }
-    std::cout << words << std::endl;
+//    std::cout << words << std::endl;
+    words.gen_webpage();
     return 0;
 }
 

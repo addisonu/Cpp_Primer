@@ -119,9 +119,8 @@ void Hash_indexer::gen_webpage()
             while(tmp_word->link() != nullptr){
 
 //Create and initialize fstream with file to generate webpage in
-            std::cout << "word = " << tmp_word->data().get_word() << std::endl;
-            std::string path = "webpages/" + tmp_word->data().get_word() + ".html";
-            std::fstream txt("webpages/" + tmp_word->data().get_word() + ".html", std::fstream::in | std::fstream::out| std::fstream::trunc);
+            std::string path = "webpages_hash/" + tmp_word->data().get_word() + ".html";
+            std::fstream txt("webpages_hash/" + tmp_word->data().get_word() + ".html", std::fstream::in | std::fstream::out| std::fstream::trunc);
 
 //Call class to generate webpage
             Cpp_webpage page("Index for : " + tmp_word->data().get_word(), "Index for : " + tmp_word->data().get_word(), header_lv, txt, tmp_word->data().to_string());
