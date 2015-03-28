@@ -31,7 +31,7 @@
 #include <map>
 #include "web/URLConnection.h"
 #include "web/CS240Exception.h"
-#include "../../test_pages/build_url3.cpp"
+#include "../../test_pages/build_url.cpp"
 #include "Hash_indexer.h"
 #include "Word.h"
 

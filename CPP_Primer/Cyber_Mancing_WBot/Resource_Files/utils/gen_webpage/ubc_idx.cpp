@@ -31,8 +31,8 @@
 #include <map>
 #include "web/URLConnection.h"
 #include "web/CS240Exception.h"
-#include "../../test_pages/build_url3.cpp"
-#include "Indexer1.h"
+#include "../../test_pages/build_url.cpp"
+#include "Indexer.h"
 #include "Word.h"
 
 std::set<std::string> parse(std::string url, std::string &page_text, Indexer &words);

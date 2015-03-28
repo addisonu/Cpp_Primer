@@ -11,58 +11,58 @@
 
 Cpp_webpage::Cpp_webpage()
 {
-//Specify html document type
+// Specify html document type
     std::cout << "<!DOCTYPE html>" << std::endl;
 
-//Start html doc
+// Start html doc
     std::cout << "<html>" << std::endl;
 
-//Start html head
+// Start html head
     std::cout << "<head>" << std::endl;
 
-//End html head
+// End html head
     std::cout << "</head>" << std::endl;
 
-//Start html body
+// Start html body
     std::cout << "<body>" << std::endl;
 
-//End html body
+// End html body
     std::cout << "</body>" << std::endl;
 
-//End html doc
+// End html doc
     std::cout << "</html>";
 }
 
 Cpp_webpage::Cpp_webpage(std::string tle, std::string header, unsigned lev, std::fstream &fpara, const std::string &spara)
 {
-//Specify html document type
+// Specify html document type
     fpara << "<!DOCTYPE html>" << std::endl;
 
-//Start html doc
+// Start html doc
     fpara << "<html>" << std::endl;
 
-//Start html head
+// Start html head
     fpara << "<head>" << std::endl;
 
-//Print title
+// Print title
     fpara << title(tle) << std::endl;
 
-//End html head
+// End html head
     fpara << "</head>" << std::endl;
 
-//Start html body
+// Start html body
     fpara << "<body>" << std::endl;
 
-//Print header
+// Print header
     fpara << heading(lev, header) << std::endl;
 
-//Print paragraph
+// Print paragraph
     paragraph(fpara, spara);
 
-//End html body
+// End html body
     fpara << "</body>" << std::endl;
 
-//End html doc
+// End html doc
     fpara << "</html>";
 }
 
@@ -70,20 +70,22 @@ Cpp_webpage::Cpp_webpage(std::string tle, std::string header, unsigned lev, std:
 
 std::string Cpp_webpage::title(std::string label)
 {
-//Reset result
+// Reset result
     result = "";
 
-//Open html title tags, print label, close tags
+// Open html title tags, print label, close tags
     return result ="<title>" + label + "</title>\n";
 }
 
 void Cpp_webpage::paragraph(std::fstream &para, std::string str)
 {
-//Reset result
+// Reset result
     result = "";
 
-//If string is passed, copy argument string into result
+// If string is passed, copy argument string into result
     std::string line;
+
+// Check if str is empty, if not print each word on separate line
     if(str.size()){
         for(auto ch : str){
             if(isspace(ch))
@@ -92,40 +94,40 @@ void Cpp_webpage::paragraph(std::fstream &para, std::string str)
                 result += ch;
         }
     }
-//Wrap result in html paragraph tags
+// Wrap result in html paragraph tags
     para << "<p>" << result << "</p>";
 }
 
 std::string Cpp_webpage::image(std::string URL)
 {
-//Reset result
+// Reset result
     result = "";
 
-//Open html image tag, add URL, close tags
+// Open html image tag, add URL, close tags
     return result = "<img src=\"" + URL + "\" />\n";
 }
 
 std::string Cpp_webpage::link(std::string URL, std::string label)
 {
-//Reset result
+// Reset result
     result = "";
 
-//Open html link tag, add URL, close tags
+// Open html link tag, add URL, close tags
     if(label != "")
         return result = "<a href=\"" + URL + "\"></a>\n";
 
     else
-        return result = "<a href=\"" + URL + "\">" + label+ "</a>\n";
+        return result = "<a href=\"" + URL + "\">" + label + "</a>\n";
 }
 
 std::string Cpp_webpage::heading(unsigned level, std::string label)
 {
-//Reset result
+// Reset result
     result = "";
 
-//Convert level to string
+// Convert level to string
     std::string num = std::to_string(level);
 
-//Open html heading tags of size level, print heading, close tags
+// Open html heading tags of size level, print heading, close tags
     return result = "<h" + num + ">" + label + "</h" + num + ">\n";
 }

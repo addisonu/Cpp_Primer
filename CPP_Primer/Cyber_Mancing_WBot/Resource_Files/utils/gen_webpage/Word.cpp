@@ -22,6 +22,7 @@
 
     std::ostream& operator<<(std::ostream& out, const Word obj)
     {
+// Write each data member name and value onto STDOUT
         std::cout << "word : " << obj.word << "\n"
             << "count : " << obj.count << "\n"
             << "URLs : " << "\n" << obj.url;

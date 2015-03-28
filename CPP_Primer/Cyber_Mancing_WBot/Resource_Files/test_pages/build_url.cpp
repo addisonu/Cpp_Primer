@@ -8,7 +8,8 @@ std::string resolve_url(std::string url, std::string new_url)
             std::string tmp_url, tmp_new_url, final_url;
             if(new_url.find(".") == 0){
 
-//Search for the patterns "./", "../", and "/" at the new_url beginning
+// Search for the patterns "./", "../", and "/" at the new_url beginning
+// Resolve each URL according path rules
                     if(new_url.find("./") == 0){
                         tmp_new_url = new_url.substr(new_url.find("/"));
                         tmp_url = url.substr(0, url.find_last_of("/"));
@@ -24,29 +25,31 @@ std::string resolve_url(std::string url, std::string new_url)
                             url = url.substr(0, url.find_last_of("/"));
                         }
                         final_url = url + new_url;
-                }
+                    }
             }
+// If path is relative but doesn't start with '."
             else if(new_url.find("file:") == std::string::npos && new_url.find("http://") == std::string::npos){
 
-//Check if url and new_url are equal
+// Check if url and new_url are equal
                 if(url.find(new_url) != std::string::npos){
                     url = new_url;
                 }
                 else{
 
-//If url doesn't begin with '/' add it
+// If url doesn't begin with '/' add it
                 if(new_url[0] != '/')
                     new_url = "/" + new_url;
 
-//Search for position to concatenate url and new_url
+// Search for position to concatenate url and new_url
                 std::string overlap = new_url.substr(0, new_url.find_last_of("/"));
                 std::size_t start_pos = (url.size() > 7) ? url.find_first_of("/", 7) : url.size();
                 bool complete = false;
 
+// Check if entire home url must be prepended to new_url
                 if(overlap.size() == 0){
                     ;
-//start_pos = (url.size() > 7) ? url.find_last_of("/", 7) : url.size();
                 }
+// If not, remove the redundant parts of the path
                 else{
                     while(!complete && overlap.size() > 0){
                         start_pos = url.find(overlap);

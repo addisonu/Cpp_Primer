@@ -41,14 +41,19 @@ public :
     Word(std::string arg_word) : word(arg_word) { }
     Word(std::string arg_word, unsigned arg_count, std::string arg_url) : word(arg_word), count(arg_count), url(arg_url)
     {
-//Change word to lower case
+// Change word to lower case
         lower_word(word);
+
+// Create variables to format url data member
         size_t pos(0);
+
+// If there are " " change each one to a "\n"
         if((pos = url.find(" ", pos)) != std::string::npos){
             while((pos = url.find(" ", pos)) != std::string::npos){
                 url.replace(pos, 1, "\n");
             }
         }
+// If arg_url was not empty, append "\n" to url
         if(url.size())
             url += "\n";
     }
@@ -68,9 +73,11 @@ public :
 //POSTCONDITIONS : arg_url is added to url data member and count is incremented
     void add_url(std::string arg_url)
     {
+// If arg_url is a new URL add it to the Word and increment count
         if(url.find(arg_url) == std::string::npos){
             url += arg_url + "\n"; ++count;
         }
+// If arg_url is alread listed on url, increment Word frequency without adding arg_url
         else
             ++count;
     }
@@ -91,12 +98,17 @@ public :
 //POSTCONDITIONS : lhs Word object is updated with incremented frequency and additional URL if rhs URL isn't already contained
     Word operator+=(const Word rhs)
     {
+// Check if rhs and lhs hold the same word
         if(word == rhs.word){
             std::string tmp_url;
+
+// Separate rhs.url into individual URLs to avoid adding duplicate URLs to url
             for(const auto ch : rhs.url){
                 if(ch != '\n')
                     tmp_url += ch;
                 else{
+
+// add_url will check if tmp_url is already listed in url
                     add_url(tmp_url);
                     tmp_url = "";
                 }
@@ -123,6 +135,8 @@ public :
         std::ifstream ifs(stop_file);
 
         if(ifs.is_open()){
+
+// Read each line from stop_file into stop_word and compare to word
             while(std::getline(ifs, stop_word)){
                 if(stop_word == word)
                     return true;
