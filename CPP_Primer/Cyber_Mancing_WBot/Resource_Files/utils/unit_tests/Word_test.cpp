@@ -4,7 +4,7 @@
 
 // LEFT OFF //
 /*
- * No tests are being run
+ * Check tests are written correctly
  */
 
 // Library and CppUnit header files
@@ -84,9 +84,9 @@ void Word_test::tearDown()
 
 void Word_test::test_get_word()
 {
-    CPPUNIT_ASSERT(" " == pWord_test[0]->get_word());
+    CPPUNIT_ASSERT("" == pWord_test[0]->get_word());
     CPPUNIT_ASSERT("Net" == pWord_test[1]->get_word());
-    CPPUNIT_ASSERT("Las" == pWord_test[2]->get_word());
+    CPPUNIT_ASSERT("las" == pWord_test[2]->get_word());
 }
 
 void Word_test::test_set_word()
@@ -170,6 +170,7 @@ int main(int argc, char **argv)
 
     CPPUNIT_NS::TestRunner testrunner;
     testrunner.addTest(CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest());
+    testrunner.run(testresult);
 
     CPPUNIT_NS::CompilerOutputter compileroutputter(&collectedresults, std::cerr);
     compileroutputter.write();
