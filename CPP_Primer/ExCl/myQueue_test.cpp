@@ -1,4 +1,4 @@
-// Implement a stack using STL queue class
+// Implement a queue using STL stack adapter
 
 #include <iostream>
 #include <stack>
