@@ -143,7 +143,7 @@ void Word_test::test_compound_add1()//const Word rhs);
     pWord_test[1]->add_url("http://www.macys.com");
     std::size_t cnt = pWord_test[2]->get_count();
     *pWord_test[2] += *pWord_test[1];
-    //CPPUNIT_ASSERT("http://www.macys.com\nhttp://www.nordstroms.com\nhttp://www.kun    gfu.com\n" == pWord_test[2]->get_url() && (cnt + 1) == pWord_test[2]->get_count());
+    CPPUNIT_ASSERT("http://www.macys.com\nhttp://www.nordstroms.com\nhttp://www.kun    gfu.com\n" == pWord_test[2]->get_url() && (cnt + 1) == pWord_test[2]->get_count());
     CPPUNIT_ASSERT("las" == pWord_test[0]->get_word());
 }
 

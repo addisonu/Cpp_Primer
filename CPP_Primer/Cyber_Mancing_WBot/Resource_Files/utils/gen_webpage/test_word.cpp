@@ -25,7 +25,7 @@ int main()
     std::cout << "w0 count : " << w0.get_count() << std::endl;
     w0.add_url("http://www.kungfu.com");
     w0.add_url("http://www.kungfu1.com");//adding duplicate url
-    std::cout << "w0 URLs : " << w0.get_url() << std::endl;
+    std::cout << "w0 URLs : " << w0.get_url() <<  "space" <<std::endl;
 
     w1.set_word("Net++");
     std::cout << "w1 word : " << w1.get_word() << std::endl;

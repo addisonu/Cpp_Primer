@@ -38,7 +38,11 @@ public :
 // MEMBER FUNCTIONS //
 // CONSTRUCTORS //
     Word() { }
-    Word(std::string arg_word) : word(arg_word) { }
+    Word(std::string arg_word) : word(arg_word)
+    {
+// Change word to lower case
+        lower_word(word);
+    }
     Word(std::string arg_word, unsigned arg_count, std::string arg_url) : word(arg_word), count(arg_count), url(arg_url)
     {
 // Change word to lower case
@@ -82,7 +86,7 @@ public :
             ++count;
     }
 
-    bool empty() { return word.size(); }
+    bool empty() { return !word.size(); }
 
 //PRECONDITIONS : N/A
 //POSTCONDITIONS : string of Word object's data member names and values is returned
@@ -132,8 +136,9 @@ public :
     bool is_stopword(std::string stop_file, std::string word)
     {
         std::string stop_word;
-        std::ifstream ifs(stop_file);
-
+// Add and comment following lines to compile Word_test.cpp with clang++ because ifstream will only take string literal or array
+        std::ifstream ifs("../../stop_words.txt");
+        //std::ifstream ifs(stop_file);
         if(ifs.is_open()){
 
 // Read each line from stop_file into stop_word and compare to word
