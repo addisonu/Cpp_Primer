@@ -1,6 +1,6 @@
 //DATE : 04/04/15
-//FILE : node2_test.cpp
-//DESC : Unit tests for <class_name> class
+//FILE : Node2_test.cpp
+//DESC : Unit tests for Node2_test class
 
 // LEFT OFF //
 /*

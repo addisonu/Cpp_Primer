@@ -1,6 +1,6 @@
 //DATE : 04/04/15
 //FILE : Indexer_test.cpp
-//DESC : Unit tests for <class_name> class
+//DESC : Unit tests for Indexer_test class
 
 // LEFT OFF //
 /*

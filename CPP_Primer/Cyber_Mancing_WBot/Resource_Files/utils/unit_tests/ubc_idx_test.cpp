@@ -1,6 +1,6 @@
 //DATE : 04/04/15
 //FILE : ubc_idx_test.cpp
-//DESC : Unit tests for <class_name> class
+//DESC : Unit tests for ubc_idx_test class
 
 // LEFT OFF //
 /*

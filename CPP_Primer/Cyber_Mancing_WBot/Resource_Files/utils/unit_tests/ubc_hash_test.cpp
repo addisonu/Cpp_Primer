@@ -1,6 +1,6 @@
 //DATE : 04/04/15
 //FILE : ubc_hash_test.cpp
-//DESC : Unit tests for <class_name> class
+//DESC : Unit tests for ubc_hash_test class
 
 // LEFT OFF //
 /*
@@ -115,6 +115,9 @@ void ubc_hash_test::in_scope_test()
 }
 
 void ubc_hash_test::find_url_test()
+{
+
+}
 
 //===========================================================
 
