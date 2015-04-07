@@ -37,6 +37,7 @@ public:
 //PRECONDITIONS : N/A
 //POSTCONDITIONS : string formatted as HTML heading tag is returned
     std::string heading(unsigned level, std::string label);
+    std::string get_result() { return result; }
 
 private:
 
