@@ -62,7 +62,6 @@ private :
 void Cpp_webpage_test::setUp()
 {
     Cpp_webpage cpw1;
-    std::string webpage();
 
     std::fstream txt("webpages/0.html", std::fstream::in | std::fstream::out | std::fstream::trunc);
     std::string str = "a b c d e f g", str1, str2;
@@ -84,7 +83,7 @@ void Cpp_webpage_test::setUp()
 
 void Cpp_webpage_test::tearDown()
 {
-
+    ;
 }
 
 void Cpp_webpage_test::title_test()
@@ -97,22 +96,43 @@ void Cpp_webpage_test::title_test()
 
 void Cpp_webpage_test::paragraph_test()
 {
-
+    std::fstream txt("webpages/0.html", std::fstream::in | std::fstream::out | std::fstream::trunc);
+    std::string str = "p a r a g r a p h e r", str1;
+    str1 = "p<br>a<br>r<br>a<br>g<br>r<br>a<br>p<br>h<br>e<br>r<br>";
+    cpp_obj.paragraph(txt, str);
+    std::getline(txt, str1);
+    CPPUNIT_ASSERT(str == str1);
 }
 
 void Cpp_webpage_test::image_test()
 {
-
+    std::string str("image_test");
+    cpp_obj.image(str);
+    str = "<img src=\"" + str + "\" />\n";
+    CPPUNIT_ASSERT((cpp_obj.get_result().find(str)) != std::string::npos);
 }
 
 void Cpp_webpage_test::link_test()
 {
+    std::string URL("http://www.test_url"), str, label;
+    str = "<a href=\"" + URL + "\"></a>\n";
+    cpp_obj.link(URL, label);
+    CPPUNIT_ASSERT(cpp_obj.get_result().find(str) != std::string::npos);
 
+    label = "label";
+    cpp_obj.link(URL, label);
+    str = "<a href=\"" + URL + "\">" + label + "</a>\n";
+    CPPUNIT_ASSERT(cpp_obj.get_result().find(str) != std::string::npos);
 }
 
 void Cpp_webpage_test::heading_test()
 {
-
+    std::string label("label");
+    unsigned num(2);
+    std::stringstream str;
+    str << "<h" << num << ">" << label << "</h" << num << ">\n";
+    cpp_obj.heading(num, label);
+    CPPUNIT_ASSERT(cpp_obj.get_result().find(str.str()) != std::string::npos);
 }
 
 //===========================================================
