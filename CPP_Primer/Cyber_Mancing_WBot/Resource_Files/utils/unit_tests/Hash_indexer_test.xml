@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding='ISO-8859-1' standalone='yes' ?>
+<TestRun>
+  <FailedTests>
+    <FailedTest id="1">
+      <Name>Hash_indexer_test::set_word_test</Name>
+      <FailureType>Assertion</FailureType>
+      <Location>
+        <File>hash_indexer_test.cpp</File>
+        <Line>89</Line>
+      </Location>
+      <Message>assertion failed
+- Expression: hash_obj.find_word(w2.get_word())-&gt;data().get_count() == 1
+</Message>
+    </FailedTest>
+    <FailedTest id="6">
+      <Name>Hash_indexer_test::gen_webpage_test</Name>
+      <FailureType>Assertion</FailureType>
+      <Location>
+        <File>hash_indexer_test.cpp</File>
+        <Line>144</Line>
+      </Location>
+      <Message>assertion failed
+- Expression: str2.find(&quot;gen_webpage0&quot;) != std::string::npos
+</Message>
+    </FailedTest>
+    <FailedTest id="7">
+      <Name>Hash_indexer_test::hash_word_test</Name>
+      <FailureType>Assertion</FailureType>
+      <Location>
+        <File>hash_indexer_test.cpp</File>
+        <Line>156</Line>
+      </Location>
+      <Message>assertion failed
+- Expression: hash_obj.hash_word(w1.get_word()) == 0
+</Message>
+    </FailedTest>
+  </FailedTests>
+  <SuccessfulTests>
+    <Test id="2">
+      <Name>Hash_indexer_test::get_word_test</Name>
+    </Test>
+    <Test id="3">
+      <Name>Hash_indexer_test::get_size_test</Name>
+    </Test>
+    <Test id="4">
+      <Name>Hash_indexer_test::find_word_test</Name>
+    </Test>
+    <Test id="5">
+      <Name>Hash_indexer_test::add_test</Name>
+    </Test>
+    <Test id="8">
+      <Name>Hash_indexer_test::op_out_test</Name>
+    </Test>
+  </SuccessfulTests>
+  <Statistics>
+    <Tests>8</Tests>
+    <FailuresTotal>3</FailuresTotal>
+    <Errors>0</Errors>
+    <Failures>3</Failures>
+  </Statistics>
+</TestRun>

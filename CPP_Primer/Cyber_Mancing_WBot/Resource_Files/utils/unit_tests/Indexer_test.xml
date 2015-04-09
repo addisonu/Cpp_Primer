@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding='ISO-8859-1' standalone='yes' ?>
+<TestRun>
+  <FailedTests>
+    <FailedTest id="1">
+      <Name>Indexer_test::set_word_test</Name>
+      <FailureType>Assertion</FailureType>
+      <Location>
+        <File>indexer_test.cpp</File>
+        <Line>83</Line>
+      </Location>
+      <Message>assertion failed
+- Expression: idx_obj.find_word(w2.get_word(), non).get_count() == w1.get_count()
+</Message>
+    </FailedTest>
+    <FailedTest id="3">
+      <Name>Indexer_test::find_word_test</Name>
+      <FailureType>Assertion</FailureType>
+      <Location>
+        <File>indexer_test.cpp</File>
+        <Line>101</Line>
+      </Location>
+      <Message>assertion failed
+- Expression: idx_obj.find_word(str, non).get_word() == str
+</Message>
+    </FailedTest>
+    <FailedTest id="5">
+      <Name>Indexer_test::gen_webpage_test</Name>
+      <FailureType>Assertion</FailureType>
+      <Location>
+        <File>indexer_test.cpp</File>
+        <Line>133</Line>
+      </Location>
+      <Message>assertion failed
+- Expression: str2.find(&quot;gen_webpage0&quot;) != std::string::npos
+</Message>
+    </FailedTest>
+  </FailedTests>
+  <SuccessfulTests>
+    <Test id="2">
+      <Name>Indexer_test::op_sub_test</Name>
+    </Test>
+    <Test id="4">
+      <Name>Indexer_test::add_test</Name>
+    </Test>
+    <Test id="6">
+      <Name>Indexer_test::op_out_test</Name>
+    </Test>
+  </SuccessfulTests>
+  <Statistics>
+    <Tests>6</Tests>
+    <FailuresTotal>3</FailuresTotal>
+    <Errors>0</Errors>
+    <Failures>3</Failures>
+  </Statistics>
+</TestRun>
