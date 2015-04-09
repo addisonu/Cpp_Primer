@@ -72,7 +72,8 @@ void Indexer_test::setUp()
 
 void Indexer_test::tearDown()
 {
-    ;
+    ;// Keep test in case dynamic memory is used in future
+ 
 }
 
 void Indexer_test::set_word_test()
@@ -139,7 +140,7 @@ void Indexer_test::gen_webpage_test()
 
 void Indexer_test::op_out_test()
 {
-    ;
+    ;//Consider redirecting STDOUT to test operator<<
 }
 
 //===========================================================

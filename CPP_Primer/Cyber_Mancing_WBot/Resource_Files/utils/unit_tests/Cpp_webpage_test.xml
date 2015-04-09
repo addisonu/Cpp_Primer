@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding='ISO-8859-1' standalone='yes' ?>
+<TestRun>
+  <FailedTests>
+    <FailedTest id="2">
+      <Name>Cpp_webpage_test::paragraph_test</Name>
+      <FailureType>Assertion</FailureType>
+      <Location>
+        <File>Cpp_webpage_test.cpp</File>
+        <Line>104</Line>
+      </Location>
+      <Message>assertion failed
+- Expression: str == str1
+</Message>
+    </FailedTest>
+    <FailedTest id="4">
+      <Name>Cpp_webpage_test::link_test</Name>
+      <FailureType>Assertion</FailureType>
+      <Location>
+        <File>Cpp_webpage_test.cpp</File>
+        <Line>125</Line>
+      </Location>
+      <Message>assertion failed
+- Expression: cpp_obj.get_result().find(str) != std::string::npos
+</Message>
+    </FailedTest>
+    <FailedTest id="5">
+      <Name>Cpp_webpage_test::heading_test</Name>
+      <FailureType>Assertion</FailureType>
+      <Location>
+        <File>Cpp_webpage_test.cpp</File>
+        <Line>135</Line>
+      </Location>
+      <Message>assertion failed
+- Expression: cpp_obj.get_result().find(str.str()) != std::string::npos
+</Message>
+    </FailedTest>
+  </FailedTests>
+  <SuccessfulTests>
+    <Test id="1">
+      <Name>Cpp_webpage_test::title_test</Name>
+    </Test>
+    <Test id="3">
+      <Name>Cpp_webpage_test::image_test</Name>
+    </Test>
+  </SuccessfulTests>
+  <Statistics>
+    <Tests>5</Tests>
+    <FailuresTotal>3</FailuresTotal>
+    <Errors>0</Errors>
+    <Failures>3</Failures>
+  </Statistics>
+</TestRun>

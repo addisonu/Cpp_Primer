@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding='ISO-8859-1' standalone='yes' ?>
+<TestRun>
+  <FailedTests>
+    <FailedTest id="7">
+      <Name>Word_test::test_compound_add0</Name>
+      <FailureType>Assertion</FailureType>
+      <Location>
+        <File>Word_test.cpp</File>
+        <Line>135</Line>
+      </Location>
+      <Message>assertion failed
+- Expression: &quot;http://www.macys.com\nhttp://www.nordstroms.com\nhttp://www.kungfu.com\n&quot; == pWord_test[2]-&gt;get_url()
+</Message>
+    </FailedTest>
+    <FailedTest id="8">
+      <Name>Word_test::test_compound_add1</Name>
+      <FailureType>Assertion</FailureType>
+      <Location>
+        <File>Word_test.cpp</File>
+        <Line>146</Line>
+      </Location>
+      <Message>assertion failed
+- Expression: &quot;http://www.macys.com\nhttp://www.nordstroms.com\nhttp://www.kun    gfu.com\n&quot; == pWord_test[2]-&gt;get_url() &amp;&amp; (cnt + 1) == pWord_test[2]-&gt;get_count()
+</Message>
+    </FailedTest>
+  </FailedTests>
+  <SuccessfulTests>
+    <Test id="1">
+      <Name>Word_test::test_get_word</Name>
+    </Test>
+    <Test id="2">
+      <Name>Word_test::test_set_word</Name>
+    </Test>
+    <Test id="3">
+      <Name>Word_test::test_get_count</Name>
+    </Test>
+    <Test id="4">
+      <Name>Word_test::test_get_url</Name>
+    </Test>
+    <Test id="5">
+      <Name>Word_test::test_add_url</Name>
+    </Test>
+    <Test id="6">
+      <Name>Word_test::test_empty</Name>
+    </Test>
+    <Test id="9">
+      <Name>Word_test::test_lower_word</Name>
+    </Test>
+    <Test id="10">
+      <Name>Word_test::test_is_stopword</Name>
+    </Test>
+  </SuccessfulTests>
+  <Statistics>
+    <Tests>10</Tests>
+    <FailuresTotal>2</FailuresTotal>
+    <Errors>0</Errors>
+    <Failures>2</Failures>
+  </Statistics>
+</TestRun>

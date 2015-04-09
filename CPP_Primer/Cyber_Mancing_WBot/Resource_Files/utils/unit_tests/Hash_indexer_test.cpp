@@ -27,7 +27,7 @@
 
 // Class header files
 
-#include "Hash_indexer.h"
+#include "../gen_webpage/Hash_indexer.h"
 
 using namespace CppUnit;
 
@@ -41,7 +41,7 @@ class Hash_indexer_test : public CppUnit::TestFixture
     CPPUNIT_TEST(add_test);
     CPPUNIT_TEST(gen_webpage_test);
     CPPUNIT_TEST(hash_word_test);
-    CPPUNIT_TEST(operator<<_test);
+    CPPUNIT_TEST(op_out_test);
     CPPUNIT_TEST_SUITE_END();
 
 public :
@@ -56,63 +56,112 @@ protected :
     void add_test();
     void gen_webpage_test();
     void hash_word_test();
-    void operator<<_test();
+    void op_out_test();
 
 private :
     Hash_indexer hash_obj;
+    Word w1, w2;
+    Word non;
 };
 
 //===========================================================
 
 void Hash_indexer_test::setUp()
 {
-
+    w1.set_word("setUp");
+    w1.set_count(1);
+    w1.add_url("http://www.setUp.com");
+    hash_obj.add(w1);
 }
 
 void Hash_indexer_test::tearDown()
 {
-
+    ;// Keep test in case dynamic memory is used in future
 }
 
 void Hash_indexer_test:: set_word_test()
 {
-
+    w2.set_word("set_word");
+    w2.set_count(1);
+    w2.add_url("http://www.set_word.com");
+    hash_obj.add(w2);
+    CPPUNIT_ASSERT(hash_obj.find_word(w2.get_word())->data().get_word() == "set_word");
+    CPPUNIT_ASSERT(hash_obj.find_word(w2.get_word())->data().get_count() == 1);
+    CPPUNIT_ASSERT(hash_obj.find_word(w2.get_word())->data().get_url() == "set_word");
 }
 
 void Hash_indexer_test:: get_word_test()
 {
-
+    w1.set_word("get_word");
+    hash_obj.add(w1);
+    CPPUNIT_ASSERT(hash_obj.find_word(w1.get_word())->data().get_word() == "get_word");
 }
 
 void Hash_indexer_test:: get_size_test()
 {
-
+    Hash_indexer hash_obj1;
+    w1.set_word("get_size1");
+    w2.set_word("get_size2");
+    Word w3("get_size3", 1, "http://www.get_size.com");
+    hash_obj1.add(w1);
+    hash_obj1.add(w2);
+    hash_obj1.add(w3);
+    CPPUNIT_ASSERT(hash_obj1.get_size(w1.get_word()) == 3);
 }
 
 void Hash_indexer_test:: find_word_test()
 {
-
+    w2.set_word("find_word");
+    hash_obj.add(w2);
+    CPPUNIT_ASSERT(hash_obj.find_word(w2.get_word())->data().get_word() == "find_word");
 }
 
 void Hash_indexer_test:: add_test()
 {
-
+    w1.set_word("add");
+    hash_obj.add(w1);
+    CPPUNIT_ASSERT(hash_obj.find_word(w1.get_word())->data().get_word() == "add");
 }
 
 void Hash_indexer_test:: gen_webpage_test()
 {
+    Hash_indexer hash_obj1;
+    Word u0("gen_webpage0", 1, "http://www.gen_webpage0.com");
+    Word u1("gen_webpage1", 2, "http://www.gen.com http://www.webpage.com");
 
+    hash_obj1.add(u0);
+    hash_obj1.add(u1);
+
+    hash_obj.gen_webpage();
+    std::ifstream txt("webpages_idx/");
+    std::string str1, str2;
+    unsigned cnt(0);
+
+    while(std::getline(txt, str1)){
+        str2 += str1;
+    }
+
+    CPPUNIT_ASSERT(str2.find("gen_webpage0") != std::string::npos);
+    CPPUNIT_ASSERT(str2.find("http://www.gen_webpage0.com") != std::string::npos);
+    CPPUNIT_ASSERT(str2.find("gen_webpage1") != std::string::npos);
+    CPPUNIT_ASSERT(str2.find("http://www.gen.com") != std::string::npos);
+    CPPUNIT_ASSERT(str2.find("http://www.webpage.com") != std::string::npos);
 }
 
 void Hash_indexer_test:: hash_word_test()
 {
+    w1.set_word("zzyx");
+    w2.set_word("aaron");
 
+    CPPUNIT_ASSERT(hash_obj.hash_word(w1.get_word()) == 0);
+    CPPUNIT_ASSERT(hash_obj.hash_word(w2.get_word()) == 675);
 }
 
-void Hash_indexer_test:: operator<<_test()
+void Hash_indexer_test:: op_out_test()
 {
-
+    ;//Consider redirecting STDOUT to test operator<<
 }
+
 //===========================================================
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Hash_indexer_test);
