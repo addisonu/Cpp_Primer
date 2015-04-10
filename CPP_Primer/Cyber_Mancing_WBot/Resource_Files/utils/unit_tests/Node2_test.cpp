@@ -4,8 +4,7 @@
 
 // LEFT OFF //
 /*
- * Fleshing out test member functions
- * Fix operator== for Word object to test list_search
+ * Write tests correctly
  */
 
 // Library and CppUnit header files
@@ -47,6 +46,7 @@ class Node2_test : public CppUnit::TestFixture
     CPPUNIT_TEST(list_insert_test);
     CPPUNIT_TEST(list_remove_test);
     CPPUNIT_TEST(list_search_test);
+    CPPUNIT_TEST(list_locate_test);
     CPPUNIT_TEST_SUITE_END();
 
 public :
@@ -65,6 +65,7 @@ protected :
     void list_insert_test();
     void list_remove_test();
     void list_search_test();
+    void list_locate_test();
 
 private :
     node<Word> *node_obj;
@@ -79,7 +80,7 @@ void Node2_test::setUp()
     w1.set_word("setUp");
     w1.set_count(1);
     w1.add_url("http://www.setUp.com");
-    node_obj->set_data(w1);
+    node_obj = new node<Word>(w1);
 }
 
 void Node2_test::tearDown()
@@ -124,15 +125,17 @@ void Node2_test::set_data_test()
 
 void Node2_test::set_link_test()
 {
-    node<Word> link_node;
-    node_obj->set_link(&link_node);
-    CPPUNIT_ASSERT(node_obj->link() == &link_node);
+    node<Word> *link_node = new node<Word>();
+    node_obj->set_link(link_node);
+    CPPUNIT_ASSERT(node_obj->link() == link_node);
 }
 
 void Node2_test::link_clear_test()
 {
-    tearDown();
-    CPPUNIT_ASSERT(node_obj == NULL);
+    if(node_obj != NULL){
+        tearDown();
+        CPPUNIT_ASSERT(node_obj == NULL);
+    }
 }
 
 void Node2_test::list_copy_test()
@@ -147,7 +150,7 @@ void Node2_test::list_copy_test()
     list_copy(node_obj, head_copy, tail_copy);
 
     pnode tmp_node_cp = head_copy;
-    pnode tmp_node_og = head_copy;
+    pnode tmp_node_og = node_obj;
 
     while(tmp_node_og->link()){
         CPPUNIT_ASSERT(tmp_node_cp == tmp_node_og);
@@ -207,7 +210,18 @@ void Node2_test::list_search_test()
 {
     Word u1("list_search", 2, "http://www.list_sea.com http://www.list_reach.com");
     list_insert(node_obj, u1);
-    CPPUNIT_ASSERT(list_search(node_obj, u1)->data() == u1);
+    node<Word> *found_ptr = list_search(node_obj, u1);
+
+    if(found_ptr != NULL)
+        CPPUNIT_ASSERT(found_ptr->data() == u1);
+}
+
+void Node2_test::list_locate_test()
+{
+    node<Word> *locate_ptr = list_locate(node_obj, 1);
+
+    if(locate_ptr != NULL)
+        CPPUNIT_ASSERT(node_obj == locate_ptr);
 }
 
 //===========================================================
