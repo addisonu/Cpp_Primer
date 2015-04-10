@@ -5,6 +5,7 @@
 // LEFT OFF //
 /*
  * Fleshing out test member functions
+ * Tests won't run
  */
 
 // Library and CppUnit header files
@@ -75,7 +76,7 @@ private :
 
 void ubc_hash_test::setUp()
 {
-    url = "../../test_pages/home_html";
+    url = "../../test_pages/home.html";
     page_text = "test_download.txt";
 }
 
@@ -86,7 +87,7 @@ void ubc_hash_test::tearDown()
 
 void ubc_hash_test::parse_test()
 {
-    std::string curr_url = "../../test_pages/ubc_test.html";
+    std::string curr_url = "add url";
     std::string indexed_arr[] = {"there", "are", "a", "couple", "of", "great", "bubbles", "in", "my", "home", "bases", "of", "new york", "and", "la"};
     unsigned cnt(0);
     std::string *ptr = indexed_arr;
@@ -98,6 +99,7 @@ void ubc_hash_test::parse_test()
 
 void ubc_hash_test::page_links_test()
 {
+    url = "replace with url";
     urls = page_links(url, page_text, words);
     std::string url_base = "add url for home.html from test_pages"; // debugging
     std::string url_arr[] = {"home.html", "tp1/tp2/h1.html", "tp1/h2.html", "tp1/tp3/h3.html", "tp1/h4.html", "tp2/h5.html", "h6.html", "tp2/no_title.html"};
