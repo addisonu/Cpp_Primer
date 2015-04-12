@@ -1,11 +1,12 @@
-//Write a program for reversing numbers in binary
+//Write a program for reversing numbers in binary and returning decimal representation
 
 #include <iostream>
 #include <cstdlib>
+#include <cmath>
 #include <sstream>
 #include <string>
 
-int dec_to_bin(int dec);
+int dec_to_rbin(int dec);
 int bin_to_dec(int bin);
 
 int main()
@@ -14,11 +15,12 @@ int main()
     std::cout << "Enter an integer.\n";
     std::cin >> dec;
 
-    std::cout << "The reversed binary representaion of " << dec << " is " << dec_to_bin(dec) << std::endl;
+    std::cout << "The decimal representation of the reversed binary of " << dec << " is " << bin_to_dec(dec_to_rbin(dec)) << std::endl;
     return 0;
 }
 
-int dec_to_bin(int dec)
+// Converts decimal into reversed binary representation
+int dec_to_rbin(int dec)
 {
     std::stringstream str_bin;
 
@@ -30,13 +32,17 @@ int dec_to_bin(int dec)
     return dec;
 }
 
+// Converts binary to decimal
 int bin_to_dec(int bin)
 {
-    std::stringstream str_dec(bin);
+    std::stringstream str_dec;
+    str_dec << bin;
     unsigned cnt = str_dec.str().size();
+    char ch('0');
+    bin = 0;
 
-    /*for(const auto ch : str_dec.str())*/for(const char *ch = cbegin(str_dec.str()); ch != cend(str_dec.str()); ++ch){
-        bin += atoi(ch);// * cnt++;
+    while(str_dec.get(ch)){
+        bin += (ch - '0') * pow(2, --cnt);
     }
     return bin;
 }
