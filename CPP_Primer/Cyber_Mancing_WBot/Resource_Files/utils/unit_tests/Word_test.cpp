@@ -4,7 +4,7 @@
 
 // LEFT OFF //
 /*
- * Check tests are written correctly
+ * NOTE : No changes carry over from one test to another, only assumptions that can be made about an object's state are established in setUp()
  */
 
 // Library and CppUnit header files
@@ -44,6 +44,8 @@ class Word_test : public CppUnit::TestFixture
     CPPUNIT_TEST(test_compound_add1);
     CPPUNIT_TEST(test_lower_word);
     CPPUNIT_TEST(test_is_stopword);
+    CPPUNIT_TEST(test_op_eq);
+    CPPUNIT_TEST(test_cp_assg);
     CPPUNIT_TEST_SUITE_END();
 
 public :
@@ -62,6 +64,8 @@ protected :
     void test_compound_add1();
     void test_lower_word();
     void test_is_stopword();
+    void test_op_eq();
+    void test_cp_assg();
 
 private :
     Word *pWord_test[3];
@@ -128,14 +132,15 @@ void Word_test::test_empty()
 void Word_test::test_compound_add0()
 {
 // Test += for rhs Word with URL not contained in lhs Word
-
     pWord_test[0]->set_word("Las");
+    pWord_test[0]->add_url("http://www.kungfu.com");
     std::size_t cnt = pWord_test[2]->get_count();
-    *(pWord_test[2]) += *(pWord_test[0]);
+    *pWord_test[2] += *pWord_test[0];
     CPPUNIT_ASSERT("http://www.macys.com\nhttp://www.nordstroms.com\nhttp://www.kungfu.com\n" == pWord_test[2]->get_url());
-    CPPUNIT_ASSERT(cnt == pWord_test[2]->get_count());
+    CPPUNIT_ASSERT((cnt + pWord_test[0]->get_count()) == pWord_test[2]->get_count());
 }
-void Word_test::test_compound_add1()//const Word rhs);
+
+void Word_test::test_compound_add1()
 {
 // Test += for rhs Word with URL contained in lhs Word
 
@@ -143,8 +148,8 @@ void Word_test::test_compound_add1()//const Word rhs);
     pWord_test[1]->add_url("http://www.macys.com");
     std::size_t cnt = pWord_test[2]->get_count();
     *pWord_test[2] += *pWord_test[1];
-    CPPUNIT_ASSERT("http://www.macys.com\nhttp://www.nordstroms.com\nhttp://www.kun    gfu.com\n" == pWord_test[2]->get_url() && (cnt + 1) == pWord_test[2]->get_count());
-    CPPUNIT_ASSERT("las" == pWord_test[0]->get_word());
+    CPPUNIT_ASSERT("http://www.macys.com\nhttp://www.nordstroms.com\n" == pWord_test[2]->get_url());
+    CPPUNIT_ASSERT((cnt + pWord_test[1]->get_count()) == pWord_test[2]->get_count());
 }
 
 void Word_test::test_lower_word()
@@ -158,6 +163,23 @@ void Word_test::test_is_stopword()
 {
     const char stop_file[] = "../../stop_words.txt";
     CPPUNIT_ASSERT(true == pWord_test[0]->is_stopword(stop_file, "and"));
+}
+
+void Word_test::test_op_eq()
+{
+    Word u1("Equal", 1, "http://www.equal.com");
+    Word u2("Equal", 1, "http://www.equal.com");
+    CPPUNIT_ASSERT(u1 == u2);
+}
+
+void Word_test::test_cp_assg()
+{
+    Word u1("Equal", 1, "http://www.equal.com");
+    Word u2("Equal2", 2, "http://www.equal22.com http://ww.equal222");
+    u2 = u1;
+    Word u3 = u1;
+    CPPUNIT_ASSERT(u2 == u1);
+    CPPUNIT_ASSERT(u3 == u1);
 }
 
 //===========================================================

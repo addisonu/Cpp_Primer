@@ -91,8 +91,7 @@ void Node2_test::tearDown()
 void Node2_test::data_test()
 {
     Word w("data", 1, "http://www.data.com");
-    w1 = w;
-    node_obj->set_data(w1);
+    node_obj->set_data(w);
     CPPUNIT_ASSERT(node_obj->data().get_word() == "data");
     CPPUNIT_ASSERT(node_obj->data().get_count() == 1);
     CPPUNIT_ASSERT(node_obj->data().get_url() == "http://www.data.com\n");
@@ -100,27 +99,30 @@ void Node2_test::data_test()
 
 void Node2_test::link_test()
 {
-   CPPUNIT_ASSERT(node_obj->link() == NULL);
+    CPPUNIT_ASSERT(node_obj->link() == NULL);
 
-   Word w("link", 2, "http://www.link.com http://www.url.com");
-   w2 = w;
-   list_insert(node_obj, w2);
+    Word w("link", 2, "http://www.link.com http://www.url.com");
+    list_insert(node_obj, w);
 
-   CPPUNIT_ASSERT(node_obj->link()->data().get_word() == "link");
-   CPPUNIT_ASSERT(node_obj->link()->data().get_count() == 2);
-   CPPUNIT_ASSERT(node_obj->link()->data().get_url() == "http://www.link.com\nhttp://www.url.com\n");
+    CPPUNIT_ASSERT(node_obj->link()->data().get_word() == "link");
+    CPPUNIT_ASSERT(node_obj->link()->data().get_count() == 2);
+    CPPUNIT_ASSERT(node_obj->link()->data().get_url() == "http://www.link.com\nhttp://www.url.com\n");
+    CPPUNIT_ASSERT(node_obj->link()->data().get_word() == w.get_word());
+    CPPUNIT_ASSERT(node_obj->link()->data().get_count() == w.get_count());
+    CPPUNIT_ASSERT(node_obj->link()->data().get_url() == w.get_url());
 }
 
 void Node2_test::set_data_test()
 {
-    CPPUNIT_ASSERT(node_obj->link() != NULL);
+    CPPUNIT_ASSERT(node_obj->link() == NULL);
 
     Word w3("set_data", 3, "http://www.data.com http://www.set.com http://www.third.com");
-    node_obj->link()->set_data(w3);
+    node<Word> n(w3);
+    list_insert(node_obj, w3);
 
     CPPUNIT_ASSERT(node_obj->link()->data().get_word() == "set_data");
     CPPUNIT_ASSERT(node_obj->link()->data().get_count() == 3);
-    CPPUNIT_ASSERT(node_obj->link()->data().get_url() == "http://www.link.com\nhttp://www.url.com\nhttp://www.third.com\n");
+    CPPUNIT_ASSERT(node_obj->link()->data().get_url() == "http://www.data.com\nhttp://www.set.com\nhttp://www.third.com\n");
 }
 
 void Node2_test::set_link_test()
@@ -142,10 +144,14 @@ void Node2_test::list_copy_test()
 {
     typedef node<Word>* pnode;
     pnode head_copy, tail_copy;
-    Word w("new head_ptr", 0, "");
-    node_obj = new node<Word>(w);
-    list_insert(node_obj, w1);
+
+    Word w1("link", 2, "http://www.link.com http://www.url.com");
+    Word w2("new head_ptr", 0, "");
+    Word w3("set_data", 3, "http://www.data.com http://www.set.com http://www.third.com");
+
+    node_obj = new node<Word>(w1);
     list_insert(node_obj, w2);
+    list_insert(node_obj, w3);
 
     list_copy(node_obj, head_copy, tail_copy);
 
@@ -153,7 +159,7 @@ void Node2_test::list_copy_test()
     pnode tmp_node_og = node_obj;
 
     while(tmp_node_og->link()){
-        CPPUNIT_ASSERT(tmp_node_cp == tmp_node_og);
+        CPPUNIT_ASSERT(tmp_node_cp->data() == tmp_node_og->data());
         tmp_node_cp = tmp_node_cp->link();
         tmp_node_og = tmp_node_og->link();
     }
@@ -192,18 +198,18 @@ void Node2_test::list_remove_test()
 {
     Word u1("list_remove1", 2, "http://www.list_in.com http://www.list_sert.com");
     Word u2("list_remove2", 1, "http://www.list_head_remove.com");
-    node_obj->set_data(u2);
     list_insert(node_obj, u1);
+    list_insert(node_obj->link(), u2);
 
-    CPPUNIT_ASSERT(node_obj->data().get_word() == "list_remove2");
-    CPPUNIT_ASSERT(node_obj->data().get_count() == 1);
-    CPPUNIT_ASSERT(node_obj->data().get_url() == "http://www.list_head_remove.com");
+    CPPUNIT_ASSERT(node_obj->link()->data().get_word() == "list_remove1");
+    CPPUNIT_ASSERT(node_obj->link()->data().get_count() == 2);
+    CPPUNIT_ASSERT(node_obj->link()->data().get_url() == "http://www.list_in.com\nhttp://www.list_sert.com\n");
 
     list_remove(node_obj);
 
-    CPPUNIT_ASSERT(node_obj->data().get_word() == "list_remove1");
-    CPPUNIT_ASSERT(node_obj->data().get_count() == 2);
-    CPPUNIT_ASSERT(node_obj->data().get_url() == "http://www.list_in.com\nhttp://www.list_sert.com\n");
+    CPPUNIT_ASSERT(node_obj->link()->data().get_word() == "list_remove2");
+    CPPUNIT_ASSERT(node_obj->link()->data().get_count() == 1);
+    CPPUNIT_ASSERT(node_obj->link()->data().get_url() == "http://www.list_head_remove.com\n");
 }
 
 void Node2_test::list_search_test()

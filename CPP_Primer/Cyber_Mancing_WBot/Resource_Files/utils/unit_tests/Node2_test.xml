@@ -1,101 +1,36 @@
 <?xml version="1.0" encoding='ISO-8859-1' standalone='yes' ?>
 <TestRun>
-  <FailedTests>
-    <FailedTest id="1">
-      <Name>Node2_test::data_test</Name>
-      <FailureType>Assertion</FailureType>
-      <Location>
-        <File>node2_test.cpp</File>
-        <Line>96</Line>
-      </Location>
-      <Message>assertion failed
-- Expression: node_obj-&gt;data().get_word() == &quot;data&quot;
-</Message>
-    </FailedTest>
-    <FailedTest id="2">
-      <Name>Node2_test::link_test</Name>
-      <FailureType>Assertion</FailureType>
-      <Location>
-        <File>node2_test.cpp</File>
-        <Line>109</Line>
-      </Location>
-      <Message>assertion failed
-- Expression: node_obj-&gt;link()-&gt;data().get_word() == &quot;link&quot;
-</Message>
-    </FailedTest>
-    <FailedTest id="3">
-      <Name>Node2_test::set_data_test</Name>
-      <FailureType>Assertion</FailureType>
-      <Location>
-        <File>node2_test.cpp</File>
-        <Line>116</Line>
-      </Location>
-      <Message>assertion failed
-- Expression: node_obj-&gt;link() != NULL
-</Message>
-    </FailedTest>
-    <FailedTest id="6">
-      <Name>Node2_test::list_copy_test</Name>
-      <FailureType>Assertion</FailureType>
-      <Location>
-        <File>node2_test.cpp</File>
-        <Line>156</Line>
-      </Location>
-      <Message>assertion failed
-- Expression: tmp_node_cp == tmp_node_og
-</Message>
-    </FailedTest>
-    <FailedTest id="7">
-      <Name>Node2_test::list_head_insert_test</Name>
-      <FailureType>Assertion</FailureType>
-      <Location>
-        <File>node2_test.cpp</File>
-        <Line>166</Line>
-      </Location>
-      <Message>assertion failed
-- Expression: node_obj-&gt;data().get_word() == &quot;list_head_insert&quot;
-</Message>
-    </FailedTest>
-    <FailedTest id="8">
-      <Name>Node2_test::list_head_remove_test</Name>
-      <FailureType>Assertion</FailureType>
-      <Location>
-        <File>node2_test.cpp</File>
-        <Line>176</Line>
-      </Location>
-      <Message>assertion failed
-- Expression: node_obj-&gt;data().get_word() == &quot;list_head_remove&quot;
-</Message>
-    </FailedTest>
-    <FailedTest id="9">
-      <Name>Node2_test::list_insert_test</Name>
-      <FailureType>Assertion</FailureType>
-      <Location>
-        <File>node2_test.cpp</File>
-        <Line>186</Line>
-      </Location>
-      <Message>assertion failed
-- Expression: node_obj-&gt;link()-&gt;data().get_word() == &quot;list_insert&quot;
-</Message>
-    </FailedTest>
-    <FailedTest id="10">
-      <Name>Node2_test::list_remove_test</Name>
-      <FailureType>Assertion</FailureType>
-      <Location>
-        <File>node2_test.cpp</File>
-        <Line>198</Line>
-      </Location>
-      <Message>assertion failed
-- Expression: node_obj-&gt;data().get_word() == &quot;list_remove2&quot;
-</Message>
-    </FailedTest>
-  </FailedTests>
+  <FailedTests></FailedTests>
   <SuccessfulTests>
+    <Test id="1">
+      <Name>Node2_test::data_test</Name>
+    </Test>
+    <Test id="2">
+      <Name>Node2_test::link_test</Name>
+    </Test>
+    <Test id="3">
+      <Name>Node2_test::set_data_test</Name>
+    </Test>
     <Test id="4">
       <Name>Node2_test::set_link_test</Name>
     </Test>
     <Test id="5">
       <Name>Node2_test::link_clear_test</Name>
+    </Test>
+    <Test id="6">
+      <Name>Node2_test::list_copy_test</Name>
+    </Test>
+    <Test id="7">
+      <Name>Node2_test::list_head_insert_test</Name>
+    </Test>
+    <Test id="8">
+      <Name>Node2_test::list_head_remove_test</Name>
+    </Test>
+    <Test id="9">
+      <Name>Node2_test::list_insert_test</Name>
+    </Test>
+    <Test id="10">
+      <Name>Node2_test::list_remove_test</Name>
     </Test>
     <Test id="11">
       <Name>Node2_test::list_search_test</Name>
@@ -106,8 +41,8 @@
   </SuccessfulTests>
   <Statistics>
     <Tests>12</Tests>
-    <FailuresTotal>8</FailuresTotal>
+    <FailuresTotal>0</FailuresTotal>
     <Errors>0</Errors>
-    <Failures>8</Failures>
+    <Failures>0</Failures>
   </Statistics>
 </TestRun>
