@@ -4,7 +4,6 @@
 
 // LEFT OFF //
 /*
- * Fixing paragraph_test
  */
 
 // Library and CppUnit header files
@@ -61,25 +60,12 @@ private :
 // Test constructors
 void Cpp_webpage_test::setUp()
 {
-    //Cpp_webpage cpw1;
-
     std::fstream txt("webpages/0.html", std::fstream::in | std::fstream::out | std::fstream::trunc);
     std::string str = "a b c d e f g", str1, str2;
     std::stringstream ss;
     ss << "<!DOCTYPE html>\n<html>\nwebpages/0.html\n</head>\n<body>\n<h1></h1>\na b c d e f g\n</body>\n</html>";
 
     cpp_obj = new Cpp_webpage("test webpage", "This is a test ... testing", 1, txt, str);
-    /* bool output = true;
-
-    while(std::getline(txt, str1)){
-        ss >> str2;
-        if(str1 != str2){
-            output = false;
-            break;
-        }
-    }
-    CPPUNIT_ASSERT(output);
-*/
 }
 
 void Cpp_webpage_test::tearDown()
