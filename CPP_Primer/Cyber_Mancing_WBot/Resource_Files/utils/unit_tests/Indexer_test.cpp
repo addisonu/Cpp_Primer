@@ -73,16 +73,17 @@ void Indexer_test::setUp()
 void Indexer_test::tearDown()
 {
     ;// Keep test in case dynamic memory is used in future
- 
 }
 
 void Indexer_test::set_word_test()
 {
     w2.set_word("set_word");
+    w2.set_count(7);
+    w2.add_url("http://www.set_wordw2.com");
     idx_obj.set_word(w1.get_word(), w2);
     CPPUNIT_ASSERT(idx_obj.find_word(w2.get_word(), non).get_word() == "set_word");
-    CPPUNIT_ASSERT(idx_obj.find_word(w2.get_word(), non).get_count() == w1.get_count());
-    CPPUNIT_ASSERT(idx_obj.find_word(w2.get_word(), non).get_url() == w1.get_url());
+    CPPUNIT_ASSERT(idx_obj.find_word(w2.get_word(), non).get_count() == w2.get_count());
+    CPPUNIT_ASSERT(idx_obj.find_word(w2.get_word(), non).get_url() == w2.get_url());
 }
 
 void Indexer_test::op_sub_test()
@@ -97,8 +98,8 @@ void Indexer_test::op_sub_test()
 void Indexer_test::find_word_test()
 {
     std::string str("find_word");
-    w1.set_word(str);
-    idx_obj.set_word(w2.get_word(), w1);
+    w2.set_word(str);
+    idx_obj.set_word(w1.get_word(), w2);
     CPPUNIT_ASSERT(idx_obj.find_word(str, non).get_word() == str);
 }
 
@@ -116,23 +117,18 @@ void Indexer_test::add_test()
 void Indexer_test::gen_webpage_test()
 {
     Indexer idx_obj1;
-    Word u0("gen_webpage0", 1, "http://www.gen_webpage0.com");
     Word u1("gen_webpage1", 2, "http://www.gen.com http://www.webpage.com");
 
-    idx_obj1.add(u0);
     idx_obj1.add(u1);
 
     idx_obj1.gen_webpage();
-    std::ifstream txt("webpages_idx/");
+    std::ifstream txt("webpages/idx.html");
     std::string str1, str2;
-    unsigned cnt(0);
 
     while(std::getline(txt, str1)){
         str2 += str1;
     }
 
-    CPPUNIT_ASSERT(str2.find("gen_webpage0") != std::string::npos);
-    CPPUNIT_ASSERT(str2.find("http://www.gen_webpage0.com") != std::string::npos);
     CPPUNIT_ASSERT(str2.find("gen_webpage1") != std::string::npos);
     CPPUNIT_ASSERT(str2.find("http://www.gen.com") != std::string::npos);
     CPPUNIT_ASSERT(str2.find("http://www.webpage.com") != std::string::npos);
