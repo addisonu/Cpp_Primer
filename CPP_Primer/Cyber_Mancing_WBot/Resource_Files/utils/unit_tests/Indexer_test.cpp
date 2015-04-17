@@ -4,7 +4,6 @@
 
 // LEFT OFF //
 /*
- * Fleshing out test member functions
  */
 
 // Library and CppUnit header files
