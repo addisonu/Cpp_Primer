@@ -4,7 +4,7 @@
 
 // LEFT OFF //
 /*
- * Fleshing out test member functions
+ * Fixing paragraph_test
  */
 
 // Library and CppUnit header files
@@ -53,7 +53,7 @@ protected :
     void heading_test();
 
 private :
-    Cpp_webpage cpp_obj;
+    Cpp_webpage *cpp_obj;
 };
 
 //===========================================================
@@ -61,15 +61,15 @@ private :
 // Test constructors
 void Cpp_webpage_test::setUp()
 {
-    Cpp_webpage cpw1;
+    //Cpp_webpage cpw1;
 
     std::fstream txt("webpages/0.html", std::fstream::in | std::fstream::out | std::fstream::trunc);
     std::string str = "a b c d e f g", str1, str2;
     std::stringstream ss;
     ss << "<!DOCTYPE html>\n<html>\nwebpages/0.html\n</head>\n<body>\n<h1></h1>\na b c d e f g\n</body>\n</html>";
 
-    Cpp_webpage cpw2("test webpage", "This is a test ... t    esting", 1, txt, str);
-    bool output = true;
+    cpp_obj = new Cpp_webpage("test webpage", "This is a test ... testing", 1, txt, str);
+    /* bool output = true;
 
     while(std::getline(txt, str1)){
         ss >> str2;
@@ -79,50 +79,53 @@ void Cpp_webpage_test::setUp()
         }
     }
     CPPUNIT_ASSERT(output);
+*/
 }
 
 void Cpp_webpage_test::tearDown()
 {
-    ;
+    delete cpp_obj;
 }
 
 void Cpp_webpage_test::title_test()
 {
     std::string str("title");
     std::string title("<title>" + str + "</title>");
-    cpp_obj.title(str);
-    CPPUNIT_ASSERT(cpp_obj.get_result().find(title) != std::string::npos);
+    cpp_obj->title(str);
+    CPPUNIT_ASSERT(cpp_obj->get_result().find(title) != std::string::npos);
 }
 
 void Cpp_webpage_test::paragraph_test()
 {
-    std::fstream txt("webpages/0.html", std::fstream::in | std::fstream::out | std::fstream::trunc);
-    std::string str = "p a r a g r a p h e r", str1;
-    str1 = "p<br>a<br>r<br>a<br>g<br>r<br>a<br>p<br>h<br>e<br>r<br>";
-    cpp_obj.paragraph(txt, str);
-    std::getline(txt, str1);
-    CPPUNIT_ASSERT(str == str1);
+    std::fstream txt("webpages/1.html", std::fstream::in | std::fstream::out | std::fstream::trunc);
+    std::string str = "p a r a g r a p h e r", str1, str2;
+    str1 = "<p>p<br>a<br>r<br>a<br>g<br>r<br>a<br>p<br>h<br>e<br>r</p>";
+    cpp_obj->paragraph(txt, str);
+    txt.close();
+    txt.open("webpages/1.html");
+    std::getline(txt, str2);
+    CPPUNIT_ASSERT(str1 == str2);
 }
 
 void Cpp_webpage_test::image_test()
 {
     std::string str("image_test");
-    cpp_obj.image(str);
+    cpp_obj->image(str);
     str = "<img src=\"" + str + "\" />\n";
-    CPPUNIT_ASSERT((cpp_obj.get_result().find(str)) != std::string::npos);
+    CPPUNIT_ASSERT((cpp_obj->get_result().find(str)) != std::string::npos);
 }
 
 void Cpp_webpage_test::link_test()
 {
     std::string URL("http://www.test_url"), str, label;
     str = "<a href=\"" + URL + "\"></a>\n";
-    cpp_obj.link(URL, label);
-    CPPUNIT_ASSERT(cpp_obj.get_result().find(str) != std::string::npos);
+    cpp_obj->link(URL, label);
+    CPPUNIT_ASSERT(cpp_obj->get_result().find(str) != std::string::npos);
 
     label = "label";
-    cpp_obj.link(URL, label);
+    cpp_obj->link(URL, label);
     str = "<a href=\"" + URL + "\">" + label + "</a>\n";
-    CPPUNIT_ASSERT(cpp_obj.get_result().find(str) != std::string::npos);
+    CPPUNIT_ASSERT(cpp_obj->get_result().find(str) != std::string::npos);
 }
 
 void Cpp_webpage_test::heading_test()
@@ -130,9 +133,9 @@ void Cpp_webpage_test::heading_test()
     std::string label("label");
     unsigned num(2);
     std::stringstream str;
-    str << "<h" << num << ">" << label << "</h" << num << ">\n";
-    cpp_obj.heading(num, label);
-    CPPUNIT_ASSERT(cpp_obj.get_result().find(str.str()) != std::string::npos);
+    str << "<h" << num << ">" << label << "</h" << num << ">";
+    cpp_obj->heading(num, label);
+    CPPUNIT_ASSERT(cpp_obj->get_result() == str.str());
 }
 
 //===========================================================
