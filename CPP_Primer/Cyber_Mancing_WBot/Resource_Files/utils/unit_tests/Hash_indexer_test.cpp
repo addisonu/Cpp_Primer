@@ -4,7 +4,7 @@
 
 // LEFT OFF //
 /*
- * Fleshing out test member functions
+ * All unit tests pass except gen_webpage_test; gen_webpage() functions correctly when tested without CppUnit framework
  */
 
 // Library and CppUnit header files
@@ -85,9 +85,10 @@ void Hash_indexer_test:: set_word_test()
     w2.set_count(1);
     w2.add_url("http://www.set_word.com");
     hash_obj.add(w2);
-    CPPUNIT_ASSERT(hash_obj.find_word(w2.get_word())->data().get_word() == "set_word");
-    CPPUNIT_ASSERT(hash_obj.find_word(w2.get_word())->data().get_count() == 1);
-    CPPUNIT_ASSERT(hash_obj.find_word(w2.get_word())->data().get_url() == "set_word");
+    node<Word> *pwd = hash_obj.find_word(w2.get_word());
+    CPPUNIT_ASSERT(pwd->data().get_word() == w2.get_word());
+    CPPUNIT_ASSERT(pwd->data().get_count() == w2.get_count());
+    CPPUNIT_ASSERT(pwd->data().get_url() == w2.get_url());
 }
 
 void Hash_indexer_test:: get_word_test()
@@ -126,16 +127,14 @@ void Hash_indexer_test:: add_test()
 void Hash_indexer_test:: gen_webpage_test()
 {
     Hash_indexer hash_obj1;
-    Word u0("gen_webpage0", 1, "http://www.gen_webpage0.com");
-    Word u1("gen_webpage1", 2, "http://www.gen.com http://www.webpage.com");
+    Word u0("agen_webpage0", 1, "http://www.gen_webpage0.com");
 
     hash_obj1.add(u0);
-    hash_obj1.add(u1);
 
-    hash_obj.gen_webpage();
-    std::ifstream txt("webpages_idx/");
+    hash_obj1.gen_webpage();
+    std::ifstream txt("webpages/hash.html");
+    txt.open("webpages/hash.html");
     std::string str1, str2;
-    unsigned cnt(0);
 
     while(std::getline(txt, str1)){
         str2 += str1;
@@ -153,8 +152,8 @@ void Hash_indexer_test:: hash_word_test()
     w1.set_word("zzyx");
     w2.set_word("aaron");
 
-    CPPUNIT_ASSERT(hash_obj.hash_word(w1.get_word()) == 0);
-    CPPUNIT_ASSERT(hash_obj.hash_word(w2.get_word()) == 675);
+    CPPUNIT_ASSERT(hash_obj.hash_word(w1.get_word()) == 675);
+    CPPUNIT_ASSERT(hash_obj.hash_word(w2.get_word()) == 0);
 }
 
 void Hash_indexer_test:: op_out_test()
