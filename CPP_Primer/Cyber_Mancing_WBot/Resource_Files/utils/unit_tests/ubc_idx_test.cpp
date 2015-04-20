@@ -4,8 +4,7 @@
 
 // LEFT OFF //
 /*
- * Fleshing out test member functions
- * Fix infinite loop starting with third test
+ * All unit tests pass
  */
 
 // Library and CppUnit header files
@@ -65,19 +64,21 @@ protected :
     void in_scope_test();
 
 private :
-    std::string url;
+    std::string curr_url;
     std::string page_text;
     Indexer words;
     std::set<std::string> found_words;
     std::map<std::string, char> urls;
+    Word non;
+
 };
 
 //===========================================================
 
 void ubc_idx_test::setUp()
 {
-    url = "../../test_pages/home_html";
-    page_text = "test_download.txt";
+    curr_url = ("http://www.bobateahouse.net");
+    page_text = "../gen_webpage/test_download.txt";
 }
 
 void ubc_idx_test::tearDown()
@@ -87,57 +88,130 @@ void ubc_idx_test::tearDown()
 
 void ubc_idx_test::parse_test()
 {
-    std::string curr_url = "../../test_pages/ubc_test.html";
-    std::string indexed_arr[] = {"there", "are", "a", "couple", "of", "great", "bubbles", "in", "my", "home", "bases", "of", "new york", "and", "la"};
-    unsigned cnt(0);
-    std::string *ptr = indexed_arr;
-    found_words = parse(curr_url, page_text, words);
+    curr_url = "file://<replace>/Resource_Files/test_pages/test_out.html";
+    page_text = "webpages/test_out1.txt";
+    parse(curr_url, page_text, words);
+    std::ifstream txt1(page_text.c_str());
 
-    for(const auto id_word : found_words)
-        CPPUNIT_ASSERT(id_word == *(ptr++));
+    if(txt1.is_open()){
+        std::string str, pos;
+        char ch(' ');
+        bool start = false;
+        parse(curr_url, page_text, words);
+
+        txt1 >> std::noskipws;
+        while(txt1 >> ch){
+            if(ch == '<'){
+                while((txt1 >> ch) && ch != '>')
+                    pos += ch;
+                pos += ch;
+                if(pos.find("/body>") != std::string::npos)
+                    start = false;
+                else if(pos.find("body>") != std::string::npos)
+                    start = true;
+                pos = "";
+            }
+            else if(start){
+                if(ch == '>')
+                    txt1 >> ch;
+                else if(isspace(ch)){
+                    if(!str.empty() && !non.is_stopword("../../stop_words.txt", str)){
+                        //std::cout << "word = " << str << std::endl; // keep for debugging
+                        CPPUNIT_ASSERT(!(words.find_word(str, non) == non)/*NULL*/);
+                        str = "";
+                    }
+                    else
+                        str = "";
+                }
+                else if(!ispunct(ch))
+                    str+= tolower(ch);
+            }
+        }
+    }
 }
 
 void ubc_idx_test::page_links_test()
 {
-    urls = page_links(url, page_text, words);
-    std::string url_base = "add url for home.html from test_pages"; // debugging
-    std::string url_arr[] = {"home.html", "tp1/tp2/h1.html", "tp1/h2.html", "tp1/tp3/h3.html", "tp1/h4.html", "tp2/h5.html", "h6.html", "tp2/no_title.html"};
-    unsigned cnt(0);
+    std::string test_urls[8];
 
-    for(auto url : urls)
-        CPPUNIT_ASSERT(true == urls[url_base + url_arr[cnt++]]);
+    test_urls[0] = "file://<replace>/resource_files/test_pages/h6.html";
+    test_urls[1] = "file://<replace>/resource_files/test_pages/home.html";
+    test_urls[2] = "file://<replace>/resource_files/test_pages/tp1/h2.html";
+    test_urls[3] = "file://<replace>/resource_files/test_pages/tp1/h4.html";
+    test_urls[4] = "file://<replace>/resource_files/test_pages/tp1/tp3/h1.html";
+    test_urls[5] = "file://<replace>/resource_files/test_pages/tp1/tp3/h3.html";
+    test_urls[6] = "file://<replace>/resource_files/test_pages/tp2/h5.html";
+    test_urls[7] = "file://<replace>/resource_files/test_pages/tp2/no_title.html";
+
+    curr_url = *test_urls;
+    page_text = "webpages/page_links_out1.txt";
+    urls = page_links(curr_url, page_text, words);
+
+    for(auto ele : test_urls){
+        curr_url = ele;
+        parse(curr_url, page_text, words);
+        std::ifstream txt1(page_text.c_str());
+        if(txt1.is_open()){
+            std::string str, pos;
+            char ch(' ');
+            bool start = false;
+
+            txt1 >> std::noskipws;
+            while(txt1 >> ch){
+                if(ch == '<'){
+                    while((txt1 >> ch) && ch != '>')
+                        pos += ch;
+                    pos += ch;
+                    if(pos.find("/body>") != std::string::npos)
+                        start = false;
+                    else if(pos.find("body>") != std::string::npos){
+                        start = true;
+                    }
+                    if(start && pos.find("a href=") != std::string::npos){
+                            pos = pos.substr(pos.find("\"") + 1, pos.size() - pos.find("\"") - 3);
+                            pos = resolve_url(curr_url, pos);
+                            CPPUNIT_ASSERT(urls.at(pos) == 't');
+                            //std::cout << "pos = " << pos << std::endl; // keep for debugging
+                    }
+                    pos = "";
+                }
+            }
+        }
+    }
 }
 
 void ubc_idx_test::get_page_test()
 {
-    CPPUNIT_ASSERT(true == !get_page(url, page_text, words));
+    curr_url = "http://www.bobateahouse.net";
+    CPPUNIT_ASSERT(true == !get_page(curr_url, page_text, words));
 }
 
 void ubc_idx_test::has_websuffix_test()
 {
+// has_websuffix() operates on strings that include their enclosing quotes, add space to end of each following string to keep same number of spaces
     std::size_t pg_pos = 0;
     std::string html, htm, shtml, cgi, jsp, asp, aspx, php, pl, cfm;
-    html = "http://www.url.html";
-    htm = "http://www.url.htm";
-    shtml = "http://www.url.shtml";
-    cgi = "http://www.url.cgi";
-    jsp = "http://url.jsp";
-    asp = "file://url.asp";
-    aspx  = "file://url.aspx";
-    php = "file://url.php";
-    pl = "file://url.pl";
-    cfm = "file://url.cfm";
+    html = "http://www.url.com/1.html ";
+    htm = "http://www.url.com/2.htm ";
+    shtml = "http://www.url.com/3.shtml ";
+    cgi = "http://www.url.com/4.cgi ";
+    jsp = "http://url.com/5.jsp ";
+    asp = "file://url.com/6.asp ";
+    aspx = "file://url.com/7.aspx ";
+    php = "file://url.com/8.php ";
+    pl = "file://url.com/9.pl ";
+    cfm = "file://url.com/10.cfm ";
 
-    CPPUNIT_ASSERT(true == has_websuffix(html, pg_pos));
-    CPPUNIT_ASSERT(true == has_websuffix(htm, pg_pos));
-    CPPUNIT_ASSERT(true == has_websuffix(shtml, pg_pos));
-    CPPUNIT_ASSERT(true == has_websuffix(cgi, pg_pos));
-    CPPUNIT_ASSERT(true == has_websuffix(jsp, pg_pos));
-    CPPUNIT_ASSERT(true == has_websuffix(asp, pg_pos));
-    CPPUNIT_ASSERT(true == has_websuffix(aspx, pg_pos));
-    CPPUNIT_ASSERT(true == has_websuffix(php, pg_pos));
-    CPPUNIT_ASSERT(true == has_websuffix(pl, pg_pos));
-    CPPUNIT_ASSERT(true == has_websuffix(cfm, pg_pos));
+    CPPUNIT_ASSERT(has_websuffix(html, pg_pos = html.find_last_of("/")));
+    CPPUNIT_ASSERT(has_websuffix(htm, pg_pos = htm.find_last_of("/")));
+    CPPUNIT_ASSERT(has_websuffix(shtml, pg_pos = shtml.find_last_of("/")));
+    CPPUNIT_ASSERT(has_websuffix(cgi, pg_pos = cgi.find_last_of("/")));
+    CPPUNIT_ASSERT(has_websuffix(jsp, pg_pos = jsp.find_last_of("/")));
+    CPPUNIT_ASSERT(has_websuffix(asp, pg_pos = asp.find_last_of("/")));
+    CPPUNIT_ASSERT(has_websuffix(aspx, pg_pos = aspx.find_last_of("/")));
+    CPPUNIT_ASSERT(has_websuffix(php, pg_pos = php.find_last_of("/")));
+    CPPUNIT_ASSERT(has_websuffix(pl, pg_pos = pl.find_last_of("/")));
+    CPPUNIT_ASSERT(has_websuffix(cfm, pg_pos = cfm.find_last_of("/")));
 }
 
 void ubc_idx_test::has_webprefix_test()

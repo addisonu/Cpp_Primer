@@ -1,35 +1,18 @@
 <?xml version="1.0" encoding='ISO-8859-1' standalone='yes' ?>
 <TestRun>
-  <FailedTests>
-    <FailedTest id="3">
-      <Name>ubc_idx_test::get_page_test</Name>
-      <FailureType>Assertion</FailureType>
-      <Location>
-        <File>ubc_idx_test.cpp</File>
-        <Line>113</Line>
-      </Location>
-      <Message>assertion failed
-- Expression: true == !get_page(url, page_text, words)
-</Message>
-    </FailedTest>
-    <FailedTest id="4">
-      <Name>ubc_idx_test::has_websuffix_test</Name>
-      <FailureType>Assertion</FailureType>
-      <Location>
-        <File>ubc_idx_test.cpp</File>
-        <Line>132</Line>
-      </Location>
-      <Message>assertion failed
-- Expression: true == has_websuffix(htm, pg_pos)
-</Message>
-    </FailedTest>
-  </FailedTests>
+  <FailedTests></FailedTests>
   <SuccessfulTests>
     <Test id="1">
       <Name>ubc_idx_test::parse_test</Name>
     </Test>
     <Test id="2">
       <Name>ubc_idx_test::page_links_test</Name>
+    </Test>
+    <Test id="3">
+      <Name>ubc_idx_test::get_page_test</Name>
+    </Test>
+    <Test id="4">
+      <Name>ubc_idx_test::has_websuffix_test</Name>
     </Test>
     <Test id="5">
       <Name>ubc_idx_test::has_webprefix_test</Name>
@@ -40,8 +23,8 @@
   </SuccessfulTests>
   <Statistics>
     <Tests>6</Tests>
-    <FailuresTotal>2</FailuresTotal>
+    <FailuresTotal>0</FailuresTotal>
     <Errors>0</Errors>
-    <Failures>2</Failures>
+    <Failures>0</Failures>
   </Statistics>
 </TestRun>
