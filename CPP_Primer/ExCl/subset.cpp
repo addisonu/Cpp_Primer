@@ -40,8 +40,7 @@ int main()
         bool B_bigger = subset(A, B);
 
         if(A_bigger != B_bigger){
-
-        std::cout << (A_bigger > B_bigger ? "B is a subset of A" : "A is a subset of B") << std::endl;
+            std::cout << (A_bigger > B_bigger ? "B is a subset of A" : "A is a subset of B") << std::endl;
         }
         else
             std::cout << (A_bigger == false ? "A and B are disjoint or have a nonempty intersection." : "A is equal to B.") << std::endl;
