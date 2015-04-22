@@ -5,17 +5,19 @@
 // n testcases, n < = 100
 // per testcase:
 // c, d, v (1 ≤ c, d ≤ 100 and 0 ≤ v ≤ 500): the number of cats, dogs, and voters.
-// v lines with two pet identifiers : C# || D#, wher the firt indentifier is the pet to keep and second is pet release
+// v lines with two pet identifiers : C# || D#, wher the firt identifier is the pet to keep and second is pet release
 // OUTPUT //
 // Per testcase: One line with the maximum possible number of satisfied voters for the show.
 
 // LEFT OFF //
 /*
  * Working out how to set the frequency of pets to keep and dismis, single set freq needs to be changed to two sets keep and dis
+ * Implementing incorrect solution in attempt to better understand problem
  */
 
 // BUGS //
 /*
+ * Current implementation will not give solution; try maximum spanning graph
  */
 
 // POSSIBLE SOLUTIONS/ADDITIONS //
@@ -88,28 +90,43 @@ int main()
                 freq.insert(std::pair<std::string, vote>(test.second.first, vote(0,1)));
             }
         }
+// Get the number of times a pet is kept/dismissed
 // Transfer frequency of each pet to testcase
         for(auto &ele : testcase){
             ele.first.second += freq[ele.first.first].first;
             ele.second.second += freq[ele.second.first].second;
-
-// Update the max
-       //     if(max_vt < ele.first.second + ele.second.second)
-         //       max_vt = ele.first.second + ele.second.second;
         }
-        /*std::cout << "The max number of voters who get their choices satisfied " << max_vt << std::endl;
-    */
-        std::cout << "Votes for this testcase :\n";
+/*      std::cout << "Votes for this testcase :\n";
         for(auto ele : testcase)
             std::cout << ele.first.first << " : " << ele.first.second << ", " << ele.second.first << " : " << ele.second.second << std::endl;
+*/
+// Create vector<vector> eq_freq to hold pets kept/dismiessed equal number of times
+    using pet_freq = decltype(freq.begin());
+    std::vector<std::pair<std::string, vote>> eq_freq;
+
+// Create var to hold max number of happy voters
+    std::size_t happy(0);
+
+    for(auto ele : testcase){
+
+// If pet1.kept > pet1.dismiss && pet2.kept < pet2.dismiss increment happy
+        std::pair<std::string, vote> check = std::pair<std::string, vote>(ele.first.first, freq[ele.first.first]);
+        if(check.second.first > check.second.second)
+            ++happy;
+
+// Else if pet1.kept == pet1.dismiss || pet2.kept == pet2.dismiss
+        else if(check.second.first == check.second.second)
+           // eq_freq.push_back(check);
+        else if()
+    }
+    for(auto ele : eq_freq){
+        if(
+
+    }
     }
 // IMP1 : sort vector, print max number of happy voters
+        /*std::cout << "The max number of voters who get their choices satisfied " << max_vt << std::endl;*/
 }
-// - Get the number of times a pet is kept/dismissed
-// - Create vector<vector> eq_freq to hold pets kept/dismiessed equal number of times
-// - Create var to hold max number of happy voters
-// - If pet1.kept > pet1.dismiss && pet2.kept < pet2.dismiss increment happy
-// -- Else if pet1.kept == pet1.dismiss || pet2.kept == pet2.dismiss
 // --- pet1.kept == pet1.dismiss && (pet2.kept < pet2.dismiss || pet2.kept == pet2.dismiss)
 // ---- add to pet1 eq_freq, then add pet2 to: ==, dismiss, or keep subvector
 // --- (pet1.kept > pet1.dismiss || pet1.kept == pet1.dismiss) && pet2.kept == pet2.dismiss
