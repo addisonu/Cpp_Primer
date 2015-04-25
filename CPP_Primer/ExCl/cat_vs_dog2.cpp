@@ -5,7 +5,7 @@
 // n testcases, n < = 100
 // per testcase:
 // c, d, v (1 ≤ c, d ≤ 100 and 0 ≤ v ≤ 500): the number of cats, dogs, and voters.
-// v lines with two pet identifiers : C# || D#, wher the firt identifier is the pet to keep and second is pet release
+// v lines with two pet identifiers : C# || D#, where the first identifier is the pet to keep and second is the pet to release
 // OUTPUT //
 // Per testcase: One line with the maximum possible number of satisfied voters for the show.
 
@@ -38,11 +38,10 @@
 #include <utility>
 
 // ALIAS //
-    using pet = std::string;
-    using freq = std::size_t;
-    using edge = std::pair<std::pair<pet, freq>, std::pair<pet, freq>>;
-    using vote = std::pair<pet, freq>;
-    //using wgt_ele = 
+using pet = std::string;
+using freq = std::size_t;
+using vote = std::pair<pet, freq>;
+using edge = std::pair<vote,vote>;
 
 bool is_circuit(const edge &edg, std::pair<freq, freq> **graph, const std::map<pet, std::vector<pet>> &edge_set);
 std::size_t max(freq freq1, freq freq2);
@@ -53,7 +52,7 @@ int main()
     std::size_t n(0), v(0), c(0), d(0);
 
 // - get user input for n, c, d, v
-    std::cout << "Enter the number of testcase.\n";
+    std::cout << "Enter the number of testcases.\n";
     std::cin >> n;
     std::cout << "Enter the number of voters.\n";
     std::cin >> v;
@@ -69,7 +68,6 @@ int main()
         unsigned happy(0);
 
 // -- create adjacency matrix, graph
-        //typedef std::size_t (*ptc)[c];
         std::pair<freq, freq> **graph = new std::pair<freq, freq>*[c];
         for(auto k = graph; k != graph + c; ++k)
             *k = new std::pair<freq, freq>[d]();
@@ -92,14 +90,14 @@ int main()
             std::size_t cat_idx(0);
             std::size_t dog_idx(0);
  
-            if(vote.first.first[0] == tolower('c')){
+            if(tolower(vote.first.first[0]) == 'c'){
                 cat = vote.first.first;
                 dog = vote.second.first;
                 cat_idx = atoi(cat.substr(1).c_str());
                 dog_idx = atoi(dog.substr(1).c_str());
                 ++graph[cat_idx][dog_idx].first;
             }
-            else if(vote.first.first[0] == tolower('d')){
+            else if(tolower(vote.first.first[0]) == 'd'){
                 dog = vote.first.first;
                 cat = vote.second.first;
                 cat_idx = atoi(cat.substr(1).c_str());
@@ -115,8 +113,10 @@ int main()
                     pet wcat = "c" + ss.str();
                     ss << (m + 1);
                     pet wdog = "d" + ss.str();
-                    edge edg(vote(wcat, graph[l + 1][m + 1].first), vote(wdog, graph[l + 1][m + 1].second));
-                    weight.push_back(edg);
+                    if(graph[l + 1][m + 1].first || graph[l + 1][m + 1].second){
+                        edge edg(vote(wcat, graph[l + 1][m + 1].first), vote(wdog, graph[l + 1][m + 1].second));
+                        weight.push_back(edg);
+                    }
                 }
             }
 
@@ -132,19 +132,14 @@ int main()
 
 // --- check if edge will make a circuit if yes => don't add edge, no => add adge
             if(!is_circuit(*wgt_it, graph, edge_set)){
-                //try{
                     if(edge_set.find(wgt_it->first.first) == edge_set.end()){
                         std::vector<pet> dog_edg{wgt_it->second.first};
                         edge_set.insert(std::pair<pet,std::vector<pet>>(wgt_it->first.first, dog_edg));
                     }
                     else
                         edge_set[wgt_it->first.first].push_back(wgt_it->second.first);
-                    
-                //}
-                //catch(std::out_of_range e){
-                  //  edge_set.insert(wgt);
-                //}
-// ----- add edge weight to happy
+
+// --- add edge weight to happy
                 happy += max(wgt_it->first.second, wgt_it->second.second);
                 ++wgt_it;
             }
