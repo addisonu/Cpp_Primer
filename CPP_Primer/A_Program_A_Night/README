@@ -1,2 +1,6 @@
-// A_Program_A_Night is a mini repo for a small nightly program focusing on some particular concept
-// Each commit will have the format, "APAN : <concept>"
+// DATE : 04/26/15
+// FILE : README
+// DESC : Details about A_Program_A_Night mini repo
+
+// Nightly program focusing on a particular concept
+// Commit message will have the format : "APAN : <concept>"
