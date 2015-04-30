@@ -5,19 +5,17 @@
 // n testcases, n < = 100
 // per testcase:
 // c, d, v (1 ≤ c, d ≤ 100 and 0 ≤ v ≤ 500): the number of cats, dogs, and voters.
-// v lines with two pet identifiers : C# || D#, wher the firt identifier is the pet to keep and second is pet release
+// v lines with two pet identifiers : C# || D#, where the first identifier is the pet to keep and second is the pet to release
 // OUTPUT //
 // Per testcase: One line with the maximum possible number of satisfied voters for the show.
 
 // LEFT OFF //
 /*
- * Working out how to set the frequency of pets to keep and dismis, single set freq needs to be changed to two sets keep and dis
- * Implementing incorrect solution in attempt to better understand problem
+ * Testing and Debugging
  */
 
 // BUGS //
 /*
- * Current implementation will not give solution; try maximum spanning graph
  */
 
 // POSSIBLE SOLUTIONS/ADDITIONS //
@@ -30,6 +28,8 @@
 
 #include <iostream>
 #include <vector>
+#include <set>
+#include <sstream>
 #include <string>
 #include <algorithm>
 #include <map>
@@ -37,103 +37,154 @@
 #include <exception>
 #include <utility>
 
+// ALIAS //
+using pet = std::string;
+using freq = std::size_t;
+using vote = std::pair<pet, freq>;
+using edge = std::pair<vote,vote>;
+
+bool is_circuit(const edge &edg, std::pair<freq, freq> **graph, const std::map<pet, std::vector<pet>> &edge_set);
+std::size_t max(freq freq1, freq freq2);
+
 int main()
 {
-// Create var : testcases (n), voters (v), cats (c), dogs (d)
-    unsigned n(0), v(0), c(0), d(0);
+// INPUT var //
+    std::size_t n(0);
 
-// Take user input for : number of testcases (n), voters (v), cats (c), dogs (d)
-    std::cout << "How many testcases will be run?\n";
+// - get user input for n, c, d, v
+    std::cout << "Enter the number of testcases.\n";
     std::cin >> n;
 
-// Create set to hold frequency of each request to keep or dismiss an animal, size n
-    using pet = std::pair<std::string, unsigned>;
-    typedef std::pair<unsigned, unsigned> vote;
-    std::map<std::string, vote> freq;
-
-// For each test case:
+// - for each test case
     for(unsigned i = 0; i != n; ++i){
-        std::vector<std::pair<pet, pet>> testcase;
 
-// Get values for testcase
-        std::cout << "How many cats are there?\n";
-        std::cin >> c;
-        std::cout << "How many dogs are there?\n";
-        std::cin >> d;
-        std::cout << "How many voters are there?\n";
-        std::cin >> v;
+    std::size_t v(0), c(0), d(0);
 
-// Store testcase in vector
-        std::pair<pet, pet> test;
+    std::cout << "Enter the number of cats, dogs, and voters.\n";
+    std::cin >> c;
+    std::cin >> d;
+    std::cin >> v;
 
+// -- create var happy to hold max number of happy voters
+        unsigned happy(0);
+
+// -- create adjacency matrix, graph
+        std::pair<freq, freq> **graph = new std::pair<freq, freq>*[c];
+        for(auto k = graph; k != graph + c; ++k)
+            *k = new std::pair<freq, freq>[d]();
+
+// -- create edge frequency vector, weight
+        std::vector<edge> weight;
+
+// -- get user input for each vote
         for(unsigned j = 0; j != v; ++j){
-            std::cout << "Enter the pet the voter wants to keep.\n";
-            std::cin >> test.first.first;
 
-            std::cout << "Enter the pet the voter wants to dismiss.\n";
-            std::cin >> test.second.first;
+            edge vote;
+            std::cout << "You must vote to keep one pet and to dismiss one pet. Vote for one cat and one dog.\n";
+            std::cout << "Enter the pet you would like to stay and the pet you would like to dismiss.\n";
+            std::cin >> vote.first.first;
+            std::cin >> vote.second.first;
 
-            testcase.push_back(test);
+// --- store each vote in graph
+            pet cat, dog;
+            std::size_t cat_idx(0);
+            std::size_t dog_idx(0);
 
-// Increment frequency for pet to be kept
-            try{
-                ++(freq.at(test.first.first).first);
+            if(tolower(vote.first.first[0]) == 'c'){
+                cat = vote.first.first;
+                dog = vote.second.first;
+                cat_idx = atoi(cat.substr(1).c_str()) - 1;
+                dog_idx = atoi(dog.substr(1).c_str()) - 1;
+                ++graph[cat_idx][dog_idx].first;
             }
-            catch(std::out_of_range e){
-                freq.insert(std::pair<std::string, vote>(test.first.first, vote(1,0)));
-            }
-// Increment frequency for pet to be dismissed
-           try{
-                ++(freq.at(test.second.first).second);
-            }
-            catch(std::out_of_range e){
-                freq.insert(std::pair<std::string, vote>(test.second.first, vote(0,1)));
+            else if(tolower(vote.first.first[0]) == 'd'){
+                dog = vote.first.first;
+                cat = vote.second.first;
+                cat_idx = atoi(cat.substr(1).c_str()) - 1;
+                dog_idx = atoi(dog.substr(1).c_str()) - 1;
+                ++graph[cat_idx][dog_idx].second;
             }
         }
-// Get the number of times a pet is kept/dismissed
-// Transfer frequency of each pet to testcase
-        for(auto &ele : testcase){
-            ele.first.second += freq[ele.first.first].first;
-            ele.second.second += freq[ele.second.first].second;
+
+// -- store each vote in weight
+            for(std::size_t l = 0; l != c; ++l){
+                for(std::size_t m = 0; m != d; ++m){
+                    std::stringstream ss1, ss2;
+                    ss1 << 'c' << (l + 1);
+                    pet wcat;
+                    std::getline(ss1, wcat);
+                    ss2 << 'd' << (m + 1);
+                    pet wdog;
+                    std::getline(ss2, wdog);
+                    if(graph[l][m].first || graph[l][m].second){
+                        edge edg(vote(wcat, graph[l][m].first), vote(wdog, graph[l][m].second));
+                        weight.push_back(edg);
+                    }
+                }
+            }
+
+// -- sort weight in descending order
+        std::sort(weight.begin(), weight.end(), [ ](edge p1, edge p2) -> bool { return max(p1.first.second, p1.second.second) > max(p2.first.second, p2.second.second); });
+
+// -- create connections map of edges, first element is a cat, second element of all dogs that an edge is shared with
+        std::map<pet, std::vector<pet>> edge_set;
+
+// -- add edge to edges, continue while there are < (c + d) - 1 elements in edges
+        auto wgt_it = weight.begin();
+
+        while(wgt_it != weight.end() && edge_set.size() < (c + d - 1)){
+
+// --- check if edge will make a circuit if yes => don't add edge, no => add adge
+            if(!is_circuit(*wgt_it, graph, edge_set)){
+                    if(edge_set.find(wgt_it->first.first) == edge_set.end()){
+                        std::vector<pet> dog_edg{wgt_it->second.first};
+                        edge_set.insert(std::pair<pet,std::vector<pet>>(wgt_it->first.first, dog_edg));
+                    }
+                    else
+                        edge_set[wgt_it->first.first].push_back(wgt_it->second.first);
+
+// --- add edge weight to happy
+                happy += max(wgt_it->first.second, wgt_it->second.second);
+            }
+            ++wgt_it;
         }
-/*      std::cout << "Votes for this testcase :\n";
-        for(auto ele : testcase)
-            std::cout << ele.first.first << " : " << ele.first.second << ", " << ele.second.first << " : " << ele.second.second << std::endl;
-*/
-// Create vector<vector> eq_freq to hold pets kept/dismiessed equal number of times
-    using pet_freq = decltype(freq.begin());
-    std::vector<std::pair<std::string, vote>> eq_freq;
 
-// Create var to hold max number of happy voters
-    std::size_t happy(0);
-
-    for(auto ele : testcase){
-
-// If pet1.kept > pet1.dismiss && pet2.kept < pet2.dismiss increment happy
-        std::pair<std::string, vote> check = std::pair<std::string, vote>(ele.first.first, freq[ele.first.first]);
-        if(check.second.first > check.second.second)
-            ++happy;
-
-// Else if pet1.kept == pet1.dismiss || pet2.kept == pet2.dismiss
-        else if(check.second.first == check.second.second)
-           // eq_freq.push_back(check);
-        else if()
+std::cout << "maximum number of happy voters : " << happy << std::endl;
     }
-    for(auto ele : eq_freq){
-        if(
-
-    }
-    }
-// IMP1 : sort vector, print max number of happy voters
-        /*std::cout << "The max number of voters who get their choices satisfied " << max_vt << std::endl;*/
+    return 0;
 }
-// --- pet1.kept == pet1.dismiss && (pet2.kept < pet2.dismiss || pet2.kept == pet2.dismiss)
-// ---- add to pet1 eq_freq, then add pet2 to: ==, dismiss, or keep subvector
-// --- (pet1.kept > pet1.dismiss || pet1.kept == pet1.dismiss) && pet2.kept == pet2.dismiss
-// ---- add pet2 to eq_freq, then add pet1 to: ==, dismiss, or keep subvector
-// - for each == pet, sum how many edges will be kept/dismissed/==, based ono above rules
-// -- if kept sum > dismiss sum, kept, else dismiss
-// --- add kept or dismissed sum to happy
-// -- else if == > (kept && dismiss), push into another vector, still_equal
-// - sort still_equal
-// -- continue until still_equlal.size() == 0
+
+bool is_circuit(const edge &edg, std::pair<freq, freq> **graph, const std::map<pet, std::vector<pet>> &edge_set)
+{
+    pet cat = edg.first.first;
+    std::size_t cat_idx = atoi(cat.substr(1).c_str()) - 1;
+    pet dog = edg.second.first;
+    std::size_t dog_idx = atoi(dog.substr(1).c_str()) - 1;
+
+    for(auto ele : edge_set){
+        if(ele.first != cat){
+            std::size_t ecat_idx = atoi(ele.first.substr(1).c_str()) - 1;
+
+            if(graph[ecat_idx][dog_idx].first || graph[ecat_idx][dog_idx].second){
+
+                for(auto edog : ele.second){
+                    if(edog != dog){
+                        std::size_t edog_idx = atoi(edog.substr(1).c_str()) - 1;
+
+                        if(graph[cat_idx][edog_idx].first || graph[cat_idx][edog_idx].second)
+                            return true;
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
+
+std::size_t max(freq freq1, freq freq2)
+{
+    if(freq1 > freq2)
+        return freq1;
+    else
+        return freq2;
+}
