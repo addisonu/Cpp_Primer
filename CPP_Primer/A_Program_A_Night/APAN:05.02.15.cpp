@@ -8,12 +8,20 @@ int main()
 {
 // ALIAS //
     typedef char *cstring;
-    using ref = char (&)[3];
+    using cref = char (&)[4];
 
+// Use cstring as base type
     char cstr[] = "This is a pointer to a c-style string.";
-    cstring cstr1, cstr2;
+    cstring cstr1, *cstr2;
     cstr1 = cstr;
-    cstr2 = cstr;
-    std::cout << cstr << std::endl;
+    cstr2 = &cstr1;
+    std::cout << cstr1 << std::endl;
+    std::cout << *cstr2 << std::endl;
+
+// Use cref as base type
+    char carr[4]{'a', 'b', 'c', '\0'};
+    const cref ref1 = carr, ref2 = ref1;
+    std::cout << ref1 << std::endl;
+    std::cout << ref2 << std::endl;
     return 0;
 }
