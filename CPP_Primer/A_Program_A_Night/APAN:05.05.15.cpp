@@ -42,7 +42,7 @@ int main()
     const void *cvp = &cf;
 
 // const_cast
-    void *vp = const_cast<void*>(vp);
+    void *vp = const_cast<void*>(cvp);
 
 // static_cast
     float *fp = static_cast<float*>(vp);
