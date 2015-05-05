@@ -28,7 +28,6 @@ public:
     int b = 0;
 };
 
-
 int main()
 {
 // Built-in type conversions
