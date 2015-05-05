@@ -48,11 +48,11 @@ int main()
     float *fp = static_cast<float*>(vp);
 
 // Conversions of class type
-
-// dynamic_cast
     B objB1(3, 4);
     B objB2;
     A &objA = objB2;
+
+// dynamic_cast
     A *ptA = dynamic_cast<A*>(&objB1);
     B &refB = dynamic_cast<B&>(objA);
 
