@@ -21,11 +21,11 @@ int main()
     int val_arr[]{val1, val2, val3, val4};
 
 // Pointer to each overloaded function
-int (*min2)(int val1, int val2) = min;
-int (*min3)(int val1, int val2, int val3) = min;
-int (*min4)(int val1, int val2, int val3, int val4) = &min;
-using Func = auto (int (*)(int, int)) -> int (*)(int, int); // alias to simplify function pointer declaration
-Func (*min5) = min_id;
+    int (*min2)(int val1, int val2) = min;
+    int (*min3)(int val1, int val2, int val3) = min;
+    int (*min4)(int val1, int val2, int val3, int val4) = &min;
+    using Func = auto (int (*)(int, int)) -> int (*)(int, int); // alias to simplify function pointer declaration
+    Func (*min5) = min_id;
 
 // Call each version of min()
     std::cout << "min(val1, val2) : " << min2(val1, val2) << std::endl;
