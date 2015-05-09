@@ -21,9 +21,9 @@ int main()
 
 // populate rvec with random numbers generated from rand
     for(std::vector<unsigned>::size_type i = 0; i != 10; ++i){
-        if(i < 5)
 
 // Generate number from 1 - 10 inclusive
+        if(i < 5)
             rvec.push_back(rand() % 10 + 1);
 
 // Generate numbers within unsigned int range
@@ -32,9 +32,9 @@ int main()
     }
 // populate evec with random numbers generated from e
     for(std::vector<unsigned>::size_type i = 0; i != 10; ++i){
-        if(i < 5)
 
 // Generate number from 1 - 10 inclusive
+        if(i < 5)
             evec.push_back(u(e));
 
 // Generate numbers within unsigned int range
