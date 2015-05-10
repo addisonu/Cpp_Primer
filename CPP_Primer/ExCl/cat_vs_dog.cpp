@@ -136,12 +136,12 @@ int main()
 
 // --- check if edge will make a circuit if yes => don't add edge, no => add adge
             if(!is_circuit(*wgt_it, graph, edge_set)){
-                    if(edge_set.find(wgt_it->first.first) == edge_set.end()){
-                        std::vector<pet> dog_edg{wgt_it->second.first};
-                        edge_set.insert(std::pair<pet,std::vector<pet>>(wgt_it->first.first, dog_edg));
-                    }
-                    else
-                        edge_set[wgt_it->first.first].push_back(wgt_it->second.first);
+                if(edge_set.find(wgt_it->first.first) == edge_set.end()){
+                    std::vector<pet> dog_edg{wgt_it->second.first};
+                    edge_set.insert(std::pair<pet,std::vector<pet>>(wgt_it->first.first, dog_edg));
+                }
+                else
+                    edge_set[wgt_it->first.first].push_back(wgt_it->second.first);
 
 // --- add edge weight to happy
                 happy += max(wgt_it->first.second, wgt_it->second.second);
@@ -149,7 +149,13 @@ int main()
             ++wgt_it;
         }
 
-std::cout << "maximum number of happy voters : " << happy << std::endl;
+        std::cout << "maximum number of happy voters : " << happy << std::endl;
+
+// -- free dynamic memory allocated for graph
+        for(std::size_t k = 0; k != c; ++k)
+            delete[] graph[k];
+
+        delete[] graph;
     }
     return 0;
 }
