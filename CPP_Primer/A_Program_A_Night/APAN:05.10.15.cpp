@@ -5,7 +5,6 @@
 #include <iostream>
 #include <vector>
 
-using std::vector<int>;
 // Create class type to be passed to function, must overload operator<
 class Demo{
 public :
@@ -43,19 +42,15 @@ private :
 };
 
 // Forward declarations
-template <typename T> T min(const T lhs, const T rhs);
+template <typename T> T min(const T &lhs, const T &rhs);
+template <std::size_t N, std::size_t M> const char* min(const char (&lhs) [N], const char (&rhs) [M]);
 
 int main()
 {
 // Call min on built-in types
     std::cout << min(2,3) << std::endl;
     std::cout << min(3.14, 2.41) << std::endl;
-
-// Call min on libray types
-    std::string str1("Zally"), str2("Maddy");
-    //std::cout << min(str1, str2) << std::endl;
-    std::vector<int> uvec0, uvec1(2, 2), uvec2(3, 5);
-    uvec0 = min(uvec1, uvec2);// << std::endl;
+    std::cout << min("Rich", "des") << std::endl;
 
 // Call min on Demo where d1 < d2
     Demo d0, d1(1, "one", {4.4, 5.5}), d2(23, "twenty-three", {23.23});
@@ -69,9 +64,16 @@ int main()
      return 0;
 }
 
-template <typename T> T min(const T lhs, const T rhs)
+template <typename T> T min(const T &lhs, const T &rhs)
 {
     if(lhs < rhs)
+        return lhs;
+    else
+        return rhs;
+}
+
+template <std::size_t N, std::size_t M> const char* min(const char (&lhs) [N], const char (&rhs) [M]){
+    if(strcmp(lhs, rhs) > 0)
         return lhs;
     else
         return rhs;
