@@ -1,6 +1,8 @@
 // DATE : 05/11/15
-// FILE : APAN:05.12.15.cpp
-// DESC : Class templates
+// FILE : APAN:05.11.15.cpp
+// DESC : Write class template and create object
+//  1) include member functions and friend function
+//  2) overload operator== and operator<<
 
 #include <iostream>
 #include <vector>
@@ -80,7 +82,6 @@ int main()
     std::cout << "t and u are equal : " << (t == u) << std::endl;
 
 // Compare t and v
-    std::cout << std::boolalpha;
     std::cout << "t and v are equal : " << (t == v) << std::endl;
 
 // Print t
