@@ -3,7 +3,7 @@
 // DESC : Class that has dynamic memory and defines copy control members
 //  1) Constructor
 //  2) Destructor
-//  3) Copy assignment
+//  3) Copy Assignment
 
 #include <iostream>
 
@@ -21,14 +21,14 @@ public :
         *this = rhs;
     }
 
-    CC& operator=(const CC& rhs)
+    CC& operator=(const CC &rhs)
     {
 // check if argument is the same as this
     if(this == &rhs)
         return *this;
     else {
 
-// Deallocate old memory
+// deallocate old memory
         if(cpt)
             delete[] cpt;
 
@@ -38,7 +38,7 @@ public :
 
 // create new pointer with copy of elements
         if(rhs.cpt){
-            char *tmp, *trans = new char[rhs.cap];
+            char *trans = new char[rhs.cap];
             for(std::size_t i = 0; i != size + 1; ++i){
                 trans[i] = rhs.cpt[i];
             }
@@ -80,13 +80,13 @@ private :
     unsigned cap = 10;
 
 // FRIENDS //
-    friend std::ostream& operator<<(std::ostream& out, const CC &rhs);
+    friend std::ostream& operator<<(std::ostream &out, const CC &rhs);
 };
 
-std::ostream& operator<<(std::ostream& out, const CC &rhs)
+std::ostream& operator<<(std::ostream &out, const CC &rhs)
 {
     std::cout << "size : " << rhs.size << std::endl
-        << "capacity " << rhs.cap << std::endl;
+        << "capacity : " << rhs.cap << std::endl;
 
     for(std::size_t i = 0; i != rhs.size; i++)
         std::cout << rhs.cpt[i];
