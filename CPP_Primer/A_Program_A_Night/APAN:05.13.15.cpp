@@ -1,6 +1,7 @@
 // DATE : 05/13/15
 // FILE : APAN:05.13.15.cpp
-// DESC : Write a number of class related by inheritance and create objects of class type that use polymorphishm
+// DESC : Classes related by inheritance with members accessed via polymorphism
+// and create objects of class type that use polymorphishm
 //  1) Class A is abstract base class
 //  2) Class B is base class
 //  3) Class C is derived class of A and B
@@ -22,7 +23,7 @@ public :
     ~A() = default;
 
 // MEMBER FUNCTIONS //
-    virtual void set_val(int* vals, std::size_t sz) = 0;
+    virtual void set_val(int *vals, std::size_t sz) = 0;
 
 protected :
 
@@ -50,7 +51,6 @@ protected :
 
 // DATA MEMBERS //
     int b = 0;
-
 };
 
 class C : public A, public B{
@@ -66,13 +66,14 @@ public :
     ~C() = default;
 
 // MEMBER FUNCTIONS //
-    int* get_val(int* vals)
+    int* get_val(int *vals)
     {
         vals[0] = a;
         vals[1] = b;
         vals[2] = c;
         return vals;
     }
+
     void set_val(int* vals, std::size_t sz)
     {
         if(sz >= 3){
@@ -118,12 +119,12 @@ int main()
     C c0;
     C c1(1,2,3);
 
-// Object of type A& and A* a1, a2
+// Object of type A& a0 and A* a1
     A &a0 = c0;
     A *a1 = &c1;
 
-// User objects of type A to set values of c0 and c1
-    constexpr std::size_t sz1(6), sz2(3);
+// Use objects of type A to set values of c0 and c1
+    constexpr std::size_t sz1(6), sz2(2);
     int vals[sz1]{6, 7, 9, 4, 6, 11};
 
     a0.set_val(vals, sz1);
@@ -132,5 +133,6 @@ int main()
 // Print values of c0 and c1
     std::cout << c0 << std::endl;
     std::cout << c1 << std::endl;
+
     return 0;
 }
