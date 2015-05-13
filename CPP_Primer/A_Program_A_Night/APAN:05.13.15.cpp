@@ -1,7 +1,6 @@
 // DATE : 05/13/15
 // FILE : APAN:05.13.15.cpp
 // DESC : Classes related by inheritance with members accessed via polymorphism
-// and create objects of class type that use polymorphishm
 //  1) Class A is abstract base class
 //  2) Class B is base class
 //  3) Class C is derived class of A and B
