@@ -24,8 +24,8 @@ int main()
     int global(7); // local scope
     std::size_t idx(1);
     double val1(3.14), val2(2.41), val3(7.77);
-    char carr[3]{7 + 'c', 8 + 'b', 9 + 'a'};
-    char *ccp = carr;
+    char carr[3]{6 + 'c', 7 + 'b', 9 + 'a'};
+    char *const ccp = carr;
     std::string sarr[2] = {"string1", "string22"};
     std::string *str0 = &::global, *str1 = sarr;
     A obj(7), *pobj = &obj;
