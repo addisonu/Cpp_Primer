@@ -4,7 +4,6 @@
 
 #include <iostream>
 #include <string>
-#include <vector>
 
 // Forward declarations
 template <typename T> class Tclass;
@@ -36,7 +35,6 @@ template <typename T> std::ostream& operator<<(std::ostream &out, const Tclass<T
     out << obj.a;
     return out;
 }
-
 
 template <> std::ostream& operator<<(std::ostream &out, const Tclass<int> &obj)
 {
