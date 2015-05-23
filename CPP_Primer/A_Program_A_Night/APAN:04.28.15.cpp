@@ -1,6 +1,6 @@
 // DATE : 04/28/15
 // FILE : APAN:04.28.15.cpp
-// DESC : Convert string to a single case
+// DESC : Convert strings to a single case
 // 1) Convert c_style string to lowercase with for loop
 // 2) Convert library string to uppercase with while loop
 // 3) Make use of
