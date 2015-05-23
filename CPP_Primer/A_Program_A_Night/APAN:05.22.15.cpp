@@ -38,7 +38,15 @@ int main()
 // Defining pointer
     using pi = int (*)[dim3];
     pi ele = &iarr[2][1];
-    std::cout << "*ele[1] = " << ele[1][1] << std::endl;
+
+    std::size_t cnt0(0), cnt1(0);
+    for(auto u = ele; u != ele + 2; ++u){
+        for(auto w = *u; w != *u + 2; ++w){
+            std::cout << "ele[" << cnt0 << "]" << "[" << cnt1++ << "] = " << *w << std::endl;
+        }
+        ++cnt0;
+        cnt1 = 0;
+    }
 
 // array name conversion to pointer
     std::cout << "iarr = " << iarr << std::endl;
