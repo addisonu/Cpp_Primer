@@ -13,7 +13,7 @@ unsigned total(std::string str);
 int main()
 {
 // Container objects to operator on
-    std::vector<std::string> svec = {"zzzing0", "str1", "String2s", "ring3s"};
+    std::vector<std::string> svec = {"ABCDEFG", "BCDEFGH", "CDEFGHI", "fhjsdfs"};
     std::vector<double> dvec{1.1,2.2,3.3,4.4};
     std::string str("Input string");
 
@@ -35,7 +35,8 @@ int main()
 unsigned total(std::string str)
 {
     unsigned sum(0);
-    for(auto ele : str)
-        sum += ele;
+    for(auto ele : str){
+        sum += ele - 65;
+    }
     return sum;
 }
