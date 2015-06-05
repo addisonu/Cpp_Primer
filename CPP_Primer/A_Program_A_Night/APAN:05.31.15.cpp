@@ -28,7 +28,7 @@ int main()
 // const objects
     constexpr unsigned sz(6);
     const char carr[sz] = "Hello";
-    const char *pcarr = carr;
+    const char *const pcarr = carr;
     std::cout << "carr : " << carr << std::endl;
     std::cout << "pcarr : " << pcarr << std::endl;
 
