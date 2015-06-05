@@ -4,21 +4,16 @@
 //  1) array
 
 #include <iostream>
-#include <iterator>
 
 int main()
 {
 // array object
     constexpr unsigned sz(5);
     double darr[sz]{2.3, 2.6, 7.4, 54.3};
-   
+
 // Iterator
     double *pdarr = darr;
 
-// Type aliass
-    //std::iterator<double> it = std::begin(darr);
-    //std::const_iterator<double>
-// Constructors
 // Operations
     std::cout << "*pdarr = " << *pdarr << std::endl; // dereference
     std::cout << "*(pdarr + 2) = " << *(pdarr + 2) << std::endl;// pointer addition
@@ -32,7 +27,7 @@ int main()
 
 // c-style character strings
 // Constructors
-    char carr0[sz + 10] = {'C', 'D', 'e', 'f'};
+    char carr0[sz + 10] = {'C', 'D', '0', 'f', '\0'};
     char carr1[sz] = {'C', 'D', 'e', 'f', '\0'};
     char carr2[] = "CD2e";
     char carr3[sz] = "CD3e";
