@@ -34,8 +34,6 @@ int main()
     std::list<std::string>::const_reverse_iterator crit; // const_reverse_iterator
     std::list<std::string>::size_type sz(7); // size_type
     std::cout << "sz = " << sz << std::endl;
-    //std::list<std::string>::difference_type diff = f5.end() - f5.begin(); // difference_type
-    //std::cout << "diff = " << diff << std::endl;
     std::list<std::string>::value_type val = "value_type"; // value_type
     std::cout << "val = " << val << std::endl;
     std::list<std::string>::reference ref = f2.front(); // reference
@@ -111,8 +109,8 @@ int main()
 
 void print(std::ostream &out, std::list<std::string> ls, std::string name)
 {
-    std::cout << name << " : " << std::endl;
+    out << name << " : " << std::endl;
     for(auto ele : ls)
         out << ele << ", ";
-    std::cout << '\n' << std::endl;
+    out << '\n' << std::endl;
 }
