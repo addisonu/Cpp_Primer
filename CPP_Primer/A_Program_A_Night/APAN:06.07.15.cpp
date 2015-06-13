@@ -1,5 +1,5 @@
-// DATE : 06/04/15
-// FILE : APAN:06.04.15.cpp
+// DATE : 06/07/15
+// FILE : APAN:06.07.15.cpp
 // DESC : Program in series of data structure APANs
 //  1) Library array
 
