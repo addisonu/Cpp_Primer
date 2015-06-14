@@ -3,9 +3,7 @@
 // DESC : Write a program to discover the answer to this puzzle: "Let's say men and women are paid equally (from the same uniform distribution). If women date randomly and marry the first man with a higher salary, what fraction of the population will get married
 
 #include <iostream>
-#include <string>
 #include <random>
-#include <vector>
 
 class Marry_higher_salary{
 
@@ -13,10 +11,12 @@ public :
 
 // CONTRUCTORS //
     Marry_higher_salary() = default; // default
+
     Marry_higher_salary(const unsigned long sample) { sample_sz = sample;  } // Takes sample size
 
 // MEMBER FUNCTIONS //
     void reset() { married_cnt = 0; }
+
     void new_woman() { woman = dist(eng); } // Generate woman with salary
 
     void marry() { ++married_cnt; } // woman marries man with higher salary
@@ -33,7 +33,7 @@ public :
 
     double married_pcnt() { return static_cast<double>(married_cnt) / pop_sz; } // return percentage of pop that marries, assume equal number of men and women
 
-        double run_exp()
+    double run_exp()
     {
         reset();
         for(std::size_t i = 0; i != sample_sz; ++i){
@@ -42,6 +42,7 @@ public :
         }
         return married_pcnt();
     }
+
 private :
 
 // DATA MEMBERS //
@@ -59,8 +60,8 @@ private :
     std::default_random_engine Marry_higher_salary::eng;
     std::uniform_int_distribution<unsigned> Marry_higher_salary::dist(1, 100);
     unsigned Marry_higher_salary::married_cnt = 0;
-    unsigned Marry_higher_salary::num_dates = 100;
-    unsigned long Marry_higher_salary::pop_sz = 2 * sample_sz;
+    unsigned Marry_higher_salary::num_dates = 30;
+    unsigned long Marry_higher_salary::pop_sz = sample_sz;
     unsigned long Marry_higher_salary::sample_sz = 100;
 
 int main()
