@@ -1,0 +1,24 @@
+# DATE : 06/15/15
+# FILE : robots.txt
+# DESC : File stating which files can be downloaded by robots and which can't be downloaded
+
+# LEFT OFF //
+#
+
+# BUGS //
+#
+
+
+# POSSIBLE SOLUTIONS/ADDITIONS //
+#
+
+# NOTES //
+
+User-agent: *
+Disallow: /reply
+Disallow: /fb/
+Disallow: /suggest
+Disallow: /flag
+Disallow: /mf
+Disallow: /eaf
+

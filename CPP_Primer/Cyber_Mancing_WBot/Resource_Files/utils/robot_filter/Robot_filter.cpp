@@ -17,20 +17,63 @@
 // NOTES //
 /*
  */
+// Library files
+#include <iostream>
+#include <fstream>
+#include <sstream>
 
-class Robot_filter {
-public :
+// Class files
+#include "Robot_filter.h"
 
-// CONSTRUCTORS //
-Robot_filter() {}
+//Robot_filter::Robot_filter() { }
 
-// MEMBER FUNCTIONS //
+bool Robot_filter::LoadExclusionFile(std::fstream &fs)
+{
+// Open file using command line arguments
+    fs.open(file);
+    return fs.is_open();
+}
 
-// PRECONDITIONS :
-// POSTCONDITIONS :
-bool get_excluded(  istream & input) {  }
+bool Robot_filter::IsUrlPathExcluded()
+{
+// Get file
+    std::fstream fs;
+    if(LoadExclusionFile(fs)){
 
-// PRECONDITIONS :
-// POSTCONDITIONS :
-bool is_exclueded(const char *url) {  }
-};
+// Parse text searching for case-insentive phrase "User-agent : *"
+        char ch(' ');
+        std::string str, dis = "disallow";
+        fs << std::noskipws;
+        while(fs >> ch){
+            if(isalpha(ch) || ch == '/' || ch == '-' || ch == ':' || ch == '*')
+                str += tolower(ch);
+            else if(ch == '\n' && str.find("user-agent:*") == std::string::npos){
+                str = "";
+            }
+            else if(str.find("user-agent:*") != std::string::npos){
+                str = "";
+                while(fs >> ch){
+// find \n
+                    if(ch == '\n'){
+                        std::size_t pos(0);
+                        if((pos = str.find(dis)) != std::string::npos){
+                            if(url == str.substr(pos + dis.length())){
+                                return true;
+                            }
+                            str = "";
+                        }
+                    }
+// build string
+                    else if(isalpha(ch) || ch == '/')
+                        str += tolower(ch);
+                }
+            }
+            else
+                ; // null statement
+        }
+    }
+    else
+        std::cerr << "Exclusion file was not opened." << std::endl;
+
+    return false;
+}
