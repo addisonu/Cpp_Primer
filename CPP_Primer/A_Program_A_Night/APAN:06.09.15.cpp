@@ -27,7 +27,6 @@ int main()
     std::array<double, 7> dlarr({7, 3, 4, 2.3, 2, 5, 3.33,});
     decltype(dlarr) cpdlarr = dlarr;
     std::list<double> dlst(ddeq.cbegin(), ddeq.cbegin() + ddeq.size() / 2);
-    //std::vector<double> vfill(ddeq.size() - dlst.size(), 7);
     dlst.insert(dlst.cend(), ddeq.size() - dlst.size(), 7);
     std::forward_list<double> dflst(ddeq.cbegin() + ddeq.size() / 2, ddeq.cend());
     double darr[]{1.1, 2.2, 3.3, 4.4, 5.5, 6.6, 7.7};
@@ -49,6 +48,7 @@ int main()
     auto lam_even = [] (int val) -> bool { return (val % 2) == 0; };
     auto lam_odd = [] (int val) -> bool { if((val % 2) == 1) std::cout << val << " is odd.\n"; return (val % 2) == 1; };
     auto lam_near_eq = [EPSILON] (double val1, double val2) -> bool { return abs(val1 - val2) <= EPSILON; };
+
 // Algorithms
     std::cout << "for_each :\n";
     std::for_each(dvec.cbegin(), dvec.cend(), lam_odd); // applies call object to each element in range, can modify elements
