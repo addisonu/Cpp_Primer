@@ -1,6 +1,7 @@
 // DATE : 06/12/15
 // FILE : APAN:06.12.15.cpp
 // DESC : Program in series of algorithm APANs
+//  1) read from and write to sequences
 
 #include <iostream>
 #include <utility>
