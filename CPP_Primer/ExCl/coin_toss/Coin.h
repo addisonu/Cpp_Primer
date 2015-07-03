@@ -21,17 +21,35 @@ class Coin{
 public :
 
 // COPY CONTROL //
-    Coin();
+    Coin() { gen_prob(); }
     Coin(double prob_arg) : prob(prob_arg) { }
 
 // MEMBER FUNCTIONS //
-    double gen_flip() { return flip = ((100 * prob) <= fdist(eng)); }
+    double gen_flip() { 
+        /*
+         // debug start
+            unsigned val = fdist(eng);
+            std::cout << "fdist(eng) = " << val << std::endl;
+            std::cout << "upper_bound for tail values : " << (100 * prob) << std::endl;
+            std::cout << (((100 * prob) >= val) ? "tails" : "heads") << std::endl;
+                return (100 * prob) >= val;}
+        // debug end
+        */
+        return flip = ((100 * prob) >= fdist(eng)); }
     double get_prob() { return prob; }
+    void set_prob(double prob_arg) { prob = prob_arg; }
 
 private :
 
 // AUXILIARY FUNCTIONS //
-    double gen_prob() { return pdist(eng); }
+    void gen_prob() { prob = pdist(eng); }
+
+    void test_coin()
+    {
+        std::cout << "prob = " << prob << std::endl;
+        for(std::size_t i = 0; i != 10; ++i)
+            std::cout << "flip : " << gen_flip() << std::endl;
+    }
 
 // DATA MEMBERS //
     double prob = 0; // probability of flipping tails

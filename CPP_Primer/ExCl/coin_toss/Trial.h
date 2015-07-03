@@ -26,8 +26,8 @@ public :
 // COPY CONTROL //
     Trial() { }
     Trial(unsigned n_arg) : n(n_arg) { }
-    Trial(double prob) : coin(prob) { }
-    Trial(unsigned n_arg, double prob) : n(n_arg), coin(prob) { }
+//    Trial(double prob) : coin(prob) { }
+    Trial(unsigned n_arg, Coin coin_arg) : n(n_arg) { coin = coin_arg; }
 
 // MEMBER FUNCTIONS //
     double run_trial()
@@ -36,7 +36,7 @@ public :
             if(coin.gen_flip())
                 ++freq;
         }
-        return tprob = freq / n;
+        return tprob = static_cast<double>(freq) / n;
     }
 
     Trial& operator=(const Trial &rhs)
@@ -44,10 +44,19 @@ public :
         n = rhs.n;
         tprob = rhs.tprob;
         freq = rhs.freq;
+        coin = rhs.coin;
         return *this;
     }
 
     double get_coin_prob() { return coin.get_prob(); }
+
+    void test()
+    {
+        std::cout << "n = " << n << std::endl;
+        std::cout << "tprob = " << tprob << std::endl;
+        std::cout << "freq = " << freq << std::endl;
+        std::cout << "prob = " << get_coin_prob() << std::endl;
+    }
 
 private :
 

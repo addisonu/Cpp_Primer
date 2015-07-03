@@ -35,7 +35,7 @@ public :
     void run_exp()
     {
         for(unsigned i = 0; i != m; ++i){
-            Trial tmp_trial(n);
+            Trial tmp_trial(n, coin);
             trial = tmp_trial;
             ptable.push_back(trial.run_trial());
         }
@@ -54,11 +54,22 @@ public :
         return *this;
     }
 
+    void test()
+    {
+        std::cout << "m = " << m << std::endl;
+        std::cout << "n = " << n << std::endl;
+        std::cout << "ptable : \n";
+        for(auto ele : ptable)
+            std::cout << ele << ", ";
+        std::cout << std::endl;
+    }
+
 private :
 
 // AUXILIARY FUNCTIONS //
 // DATA MEMBERS //
     Trial trial;
+    Coin coin;
     std::vector<double> ptable; // holds the m probabilities for each n
     unsigned m = 10;
     unsigned n = 10;
