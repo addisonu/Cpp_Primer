@@ -25,17 +25,7 @@ public :
     Coin(double prob_arg) : prob(prob_arg) { }
 
 // MEMBER FUNCTIONS //
-    double gen_flip() { 
-        /*
-         // debug start
-            unsigned val = fdist(eng);
-            std::cout << "fdist(eng) = " << val << std::endl;
-            std::cout << "upper_bound for tail values : " << (100 * prob) << std::endl;
-            std::cout << (((100 * prob) >= val) ? "tails" : "heads") << std::endl;
-                return (100 * prob) >= val;}
-        // debug end
-        */
-        return flip = ((100 * prob) >= fdist(eng)); }
+    bool gen_flip() { return flip = ((100 * prob) >= fdist(eng)); }
     double get_prob() { return prob; }
     void set_prob(double prob_arg) { prob = prob_arg; }
 

@@ -26,7 +26,6 @@ public :
 // COPY CONTROL //
     Trial() { }
     Trial(unsigned n_arg) : n(n_arg) { }
-//    Trial(double prob) : coin(prob) { }
     Trial(unsigned n_arg, Coin coin_arg) : n(n_arg) { coin = coin_arg; }
 
 // MEMBER FUNCTIONS //

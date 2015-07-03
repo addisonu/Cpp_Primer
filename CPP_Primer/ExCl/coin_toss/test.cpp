@@ -75,7 +75,8 @@ int main()
         std::cout << "exp1 :\n";
         exp1.test();
 */
-        exp0.set_m(20);
+        exp0.set_n(1000);
+        exp0.set_m(5);
         exp0.run_exp();
         std::cout << "exp0 :\n";
         exp0.test();

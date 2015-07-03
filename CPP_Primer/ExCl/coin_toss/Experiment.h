@@ -41,7 +41,7 @@ public :
         }
     }
 
-    double get_real_prob() { return trial.get_coin_prob(); }
+    double get_real_prob() { return coin.get_prob(); }
 
     std::vector<double>& get_table() { return ptable; }
 
@@ -76,4 +76,3 @@ private :
 };
 
 #endif
-

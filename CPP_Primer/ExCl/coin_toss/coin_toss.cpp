@@ -25,30 +25,36 @@ bool limit(std::vector<double> table, double epsilon);
 int main()
 {
     Experiment experiment;
-    unsigned runs(0);
-    unsigned trials(0);
-    double epsilon(0);
+    unsigned runs(2);
+    unsigned trials(50);
+    double epsilon(0.05);
 
-    // Run experiment until the limit which is the probability is found
+// Run experiment until the limit which is the probability is found
+    std::cout << "How many times will you run the experiment?\n";
+    std::cin >> runs;
+    std::cout << "What is the value for epsilon?\n";
+    std::cin >> epsilon;
+
     do{
-        std::cout << "How many times will you run the experiment?\n";
-        std::cin >> runs;
-        std::cout << "How many trials will you run for each experiments?\n";
-        std::cin >> trials;
+        ++trials;
         Experiment tmp_exp(runs, trials);
         experiment = tmp_exp;
         experiment.run_exp();
+        experiment.test();
     }while(!limit(experiment.get_table(), epsilon));
 
     std::cout << std::boolalpha;
-    std::cout << "Was the probability found? " << (epsilon > (experiment.get_table().back() - experiment.get_real_prob())) << std::endl;
+    std::cout << "Was the probability found? " << ((epsilon > (std::abs(experiment.get_table().back() - experiment.get_real_prob()))) ? "true." : "false, the probability is " + std::to_string(experiment.get_real_prob())) << std::endl;
+
     return 0;
 }
 
+// PRECONDITION : 2 or more experiments are recorded in table
+// POSTCONDITION : true is returned if the last quantity off experiments are approaching a limit
 bool limit(std::vector<double> table, double epsilon)
 {
-    unsigned prob_diff(0); // holds the greatest difference between any two probabilites in probability table
-    unsigned tmp_diff(0);
+    double prob_diff(0); // holds the greatest difference between any two probabilites in probability table
+    double tmp_diff(0);
     for(unsigned i = 0; i != table.size() - 1; ++i){
 
         if(prob_diff < (tmp_diff = std::abs(table[i] - table[i + 1])))
@@ -56,4 +62,3 @@ bool limit(std::vector<double> table, double epsilon)
     }
     return epsilon >= prob_diff;
 }
-
