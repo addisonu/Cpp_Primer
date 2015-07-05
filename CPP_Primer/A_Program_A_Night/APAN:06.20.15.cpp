@@ -1,5 +1,5 @@
-// DATE : 06/19/15
-// FILE : APAN:06.19.15.cpp
+// DATE : 06/20/15
+// FILE : APAN:06.20.15.cpp
 // DESC : Program in series of algorithm APANs
 //  1) Numeric
 
