@@ -51,7 +51,7 @@ int main()
 {
 // Create objects
     Del d0;
-    Del d1(8.1, 5, {9, 7, 5});
+    Del d1(8.1, {9, 7, 5});
     Del d2(7.6, 9, std::pair<std::string, std::initializer_list<int>>("delegating constructor string", {8, 7, 6, 5 ,4}));
 
 // Print elements
