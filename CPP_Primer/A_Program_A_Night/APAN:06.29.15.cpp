@@ -38,13 +38,14 @@ int main()
 // Use map operations
 // Add elements
     student0.insert(p1);
-    student0.emplace(std::make_pair<std::string, int>("insert", 12));
-    std::vector<std::pair<std::string, int>> pvec{{"one", 1}, {"tw0", 2}, {"three", 3}};
+    student0.emplace("insert", 12);
+    std::vector<std::pair<std::string, int>> pvec{{"one", 1}, {"one", 4}, {"tw0", 2}, {"three", 3}};
     student0.insert(pvec.cbegin(), pvec.cend());
-    //std::initializer_list<std::pair<std::string, int>> pil{{"four", 4}, {"five", 5}, {"six", 6}};
+    std::initializer_list<std::pair<const std::string, int>> pil{{"four1", 4}, {"five1", 5}, {"six1", 6}};
+    student1.insert(pil);
     student1.insert({{"four", 4}, {"five", 5}, {"six", 6}});
     student0.insert(student0.cend(), p2);
-    student1.insert(student1.cend(), std::pair<std::string, int>("emplace", 43));
+    student1.emplace_hint(student1.end(), "emplace", 43);
 
 // Print all maps
     print_map(student0, "student0");
@@ -53,14 +54,20 @@ int main()
 // Accessing elements
     std::cout << "student0[string1] = " << student0["string1"] << std::endl;
     std::cout << "student1[four] = " << student1.at("four") << std::endl;
+    std::cout << "the count of \"one\" in student0 is : " << student0.count("one") << std::endl;
+    std::map<std::string, int>::iterator result0 = student0.lower_bound("four");
+    std::cout << "lower_bound of student0[four] is : first = " << result0->first << " second = " << result0->second << std::endl;
+    decltype(student1.upper_bound("five")) result1 = student1.upper_bound("five");
+    std::cout << "upper_bound of student1[five] is : first = " << result1->first << " second = " << result1->second << std::endl;
+
 
 // Remove elements
     std::cout << "num of elements removed = " << student0.erase("string1") << std::endl;
     print_map(student0, "student0");
     student1.erase(student1.begin());
     print_map(student1, "student1");
-    auto result = student0.erase(student0.begin(), ++student0.begin());
-    std::cout << "last element erased = " << result->first << " and " << result->second << std::endl;
+    auto result2 = student0.erase(student0.begin(), ++student0.begin());
+    std::cout << "last element erased = " << result2->first << " and " << result2->second << std::endl;
 
         return 0;
 }
@@ -69,6 +76,6 @@ void print_map(const std::map<std::string, int> map_arg, std::string name)
 {
     std::cout << name << " :\n";
     for(auto ele : map_arg)
-        std::cout << "first : " << ele.first << " second : " << ele.second;
+        std::cout << "first : " << ele.first << " second : " << ele.second << std::endl;
     std::cout << std::endl;
 }
