@@ -42,7 +42,7 @@ int main()
     mst1.emplace_hint(mst1.cbegin(), 'e');
 
 // Print all multisets
-    std::cout << "\nInsert elements" << std::endl;
+    std::cout << "Insert elements" << std::endl;
     print(mst0, "mst0");
     print(mst1, "mst1");
     print(mst2, "mst2");
