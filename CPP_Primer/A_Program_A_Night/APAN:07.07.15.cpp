@@ -51,8 +51,8 @@ inline void swap(Obj &lhs, Obj &rhs)
 
 std::ostream& operator<<(std::ostream &out, const Obj &obj)
 {
-    std::cout << "a : " << obj.a << std::endl;
-    std::cout << "b : " << obj.b << std::endl;
+    out << "a : " << obj.a << std::endl;
+    out << "b : " << obj.b << std::endl;
     return out;
 }
 
