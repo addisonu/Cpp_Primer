@@ -14,7 +14,13 @@ int main()
     std::string str;
     std::getline(std::cin, str);
 
-    assert(str.size());
+    assert(str.size()); // will be executed if NDEBUG not defined
+
+// Will be executed if NDEBUG defined
+#ifdef NDEBUG
+    std::cerr << __func__ << " : str.size = " << str.size() << (str.size() ? "\nString will be printed." : "\nString will not be printed.") << std::endl;
+#endif
+
     print(str);
 
     return 0;
