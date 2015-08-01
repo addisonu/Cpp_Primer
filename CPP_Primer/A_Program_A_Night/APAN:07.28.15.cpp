@@ -16,7 +16,7 @@
 using namespace cv;
 
 // Forward declarations
-int print_img(Mat img, std::string name, unsigned wt); // print an image
+int print_img(Mat img, std::string name, unsigned wt); // print image
 static void track_chng(int track_pos, void *user_data); // function that changes image based on trackbar position
 
 // Global var
