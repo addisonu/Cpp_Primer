@@ -1,6 +1,6 @@
 // DATE : 07/24/15
 // FILE : APAN:07.24.15.cpp
-// DESC : Define and use rvalue references
+// DESC : Define and use an rvalue reference
 
 #include <iostream>
 #include <string>
