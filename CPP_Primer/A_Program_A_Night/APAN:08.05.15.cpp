@@ -1,6 +1,6 @@
 // DATE : 08/05/15
 // FILE : APAN:08.05.15.cpp
-// DESC : C++ Primer exercises : 
+// DESC : C++ Primer exercises : 1.7, 1.8, 1.9, 1.10
 
 #include <iostream>
 
