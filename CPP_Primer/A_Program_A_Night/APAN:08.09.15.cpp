@@ -1,6 +1,6 @@
 // DATE : 08/09/15
 // FILE : APAN:08.09.15.cpp
-// DESC : C++ primer exercises :
+// DESC : C++ primer exercises : 2.18, 2.34, 2.35, 2.40
 
 #include <iostream>
 #include "../C++_Primer/Sales_item.h"
