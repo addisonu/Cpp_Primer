@@ -1,6 +1,6 @@
 // DATE : 08/10/15
 // FILE : 08.10.15.cpp
-// DESC : C++ primer exercises :
+// DESC : C++ primer exercises : 2.41, 2.42, 3.1, 3.2
 
 #include <iostream>
 #include <string>
