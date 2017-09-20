@@ -8,6 +8,9 @@
 
 #include <queue>
 #include <vector>
+#include <unordered_map>
+#include <string>
+#include <climits>
 
 struct Node{
 
@@ -15,15 +18,15 @@ struct Node{
 
     Node(Node *parent_arg, std::string state_arg, std::string action_arg, int path_cost_arg) : parent(parent_arg), state(state_arg), action(action_arg), path_cost(path_cost_arg){ }
 
-    bool operator<(const Node& rhs) const
+    bool operator>(const Node& rhs) const
     {
-        return this->path_cost < rhs.path_cost;
+        return this->path_cost > rhs.path_cost;
     }
 
     Node *parent = nullptr;
     std::string state;
-    std::string action;
-    int path_cost = -1;
+    std::string action = "none";
+    unsigned path_cost = UINT_MAX;
 };
 
 class SearchTree{
@@ -31,7 +34,8 @@ class SearchTree{
     public:
 
     // TYPE MEMBERS //
-    using queue_type = std::priority_queue<Node, std::vector<Node>, std::less<Node>>;
+    using queue_type = std::priority_queue<Node, std::vector<Node>, std::greater<Node>>;
+    using hash_type = std::unordered_map<std::string, Node>;
 
     // MEMBER FUNCTIONS //
     SearchTree() = default;
@@ -41,6 +45,6 @@ class SearchTree{
 
     // DATA MEMBERS //
     queue_type frontier_set;
-
+    hash_type explored_set;
 };
 #endif
