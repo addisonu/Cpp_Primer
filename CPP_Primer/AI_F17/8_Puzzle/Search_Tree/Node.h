@@ -14,6 +14,7 @@
 
 struct Node{
 
+    // MEMBER FUNCTIONS //
     Node() = default;
 
     Node(Node *parent_arg, std::string state_arg, std::string action_arg, int path_cost_arg) : parent(parent_arg), state(state_arg), action(action_arg), path_cost(path_cost_arg){ }
@@ -23,6 +24,7 @@ struct Node{
         return this->path_cost > rhs.path_cost;
     }
 
+    // DATA MEMBERS //
     Node *parent = nullptr;
     std::string state;
     std::string action = "none";
@@ -39,12 +41,32 @@ class SearchTree{
 
     // MEMBER FUNCTIONS //
     SearchTree() = default;
-    queue_type * get_frontier_set() { return &frontier_set; }
+    queue_type* get_frontier_set() { return &frontier_set; }
+    hash_type* get_explored_set() { return &explored_set; }
 
     private:
 
     // DATA MEMBERS //
     queue_type frontier_set;
     hash_type explored_set;
+};
+
+class EightPuzzle {
+    public:
+
+    // MEMBER FUNCTIONS //
+    EightPuzzle() = default;
+    double search_time();
+    unsigned manhattan_heuristic(const Node &node);
+    unsigned misplaced_tile_heuristic(const Node &node);
+    void a_star_search(Node &result);
+    void ida_search(Node &result);
+    void df_branch_bound_search(Node &result);
+    char *time = nullptr;
+
+    private:
+    std::vector<int> heuristic_table;
+    
+    // DATA MEMBERS //
 };
 #endif
