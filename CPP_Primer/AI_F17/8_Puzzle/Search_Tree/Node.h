@@ -56,7 +56,8 @@ class EightPuzzle {
 
     // MEMBER FUNCTIONS //
     EightPuzzle() = default;
-    Node move(const Node &node);
+    SearchTree* get_tree() { return &tree; }
+    Node move(const Node &node, const std::string &move);
     bool goal_test(std::string goal_state, std::string test_state);
     double search_time();
     unsigned manhattan_heuristic(const Node &node);
@@ -66,6 +67,7 @@ class EightPuzzle {
     void df_branch_bound_search(Node &result);
 
     private:
+    SearchTree tree;
     std::vector<int> heuristic_table;
     char *time = nullptr;
     
