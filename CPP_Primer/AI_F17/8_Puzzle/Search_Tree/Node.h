@@ -56,16 +56,18 @@ class EightPuzzle {
 
     // MEMBER FUNCTIONS //
     EightPuzzle() = default;
+    Node move(const Node &node);
+    bool goal_test(std::string goal_state, std::string test_state);
     double search_time();
     unsigned manhattan_heuristic(const Node &node);
     unsigned misplaced_tile_heuristic(const Node &node);
     void a_star_search(Node &result);
     void ida_search(Node &result);
     void df_branch_bound_search(Node &result);
-    char *time = nullptr;
 
     private:
     std::vector<int> heuristic_table;
+    char *time = nullptr;
     
     // DATA MEMBERS //
 };

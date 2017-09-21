@@ -10,6 +10,17 @@
 #include <climits>
 #include "Node.h"
 
+Node move(const &Node node)
+{
+    Node node;
+    return node;
+}
+
+bool goal_test(std::string goal_state, std::string test_state)
+{
+    return false;
+}
+
 double EightPuzzle::search_time()
 {
 
