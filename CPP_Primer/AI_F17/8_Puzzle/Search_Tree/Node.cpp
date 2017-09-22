@@ -134,7 +134,7 @@ unsigned EightPuzzle::misplaced_tile_heuristic(const Node &node)
 
 void EightPuzzle::a_star_search(Node &result)
 {
-
+    
 }
 
 void EightPuzzle::ida_search(Node &result)
