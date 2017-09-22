@@ -143,7 +143,6 @@ void EightPuzzle::a_star_search(std::string initial_state, Node &result)
 
     // get top node and start searching for goal
     Node *current = nullptr;
-    //while(!goal_test(goal_state, tree.get_frontier_set()->top().state) && !tree.get_frontier_set().empty()){
     while(!tree.get_frontier_set().empty() && (current = tree.get_frontier_set()->top().state)) && goal_test(goal_state, current.state){
         //Node current_node = tree.get_frontier_set()->top();
         tree.get_frontier_set()->pop();
@@ -151,21 +150,33 @@ void EightPuzzle::a_star_search(std::string initial_state, Node &result)
         // if the node isn't the goal generate it's successors and check 3 cases:
         for(int i = 0; i != 4; ++i)// 4 is because there are four moves to generate a child: left, up, right, down
             auto child = move(current, i);
-        if(tree.get_frontier_set()){
-        // child is in frontier_set with greater path_cost
-        // update child
+            Node former_child;
+            bool found(false);
+            for(auto ele : tree.get_frontier_set()){
+                if(ele.state == child.state){
+                    found = true;
+                    former_child = ele;
+                    break;
+                }
+            }
+        if(found && former_child.path_cost > child.path_cost){
+        // child is in frontier_set with greater path_cost, update child
+            former_child = child;
         }
         else{
             try{
-                get_tree()->get_explored_set()->at(state);
+                auto former_child = get_tree()->get_explored_set()->at(state);
 
                 // child is in the explored_set with greater path_cost
                 // update child and move to frontier_set
-                //child.path_cost
+                if(former_child.path_cost > child.path_cost){
+                    former_child = child;
+                }
             }
             catch(const std::out_of_range& oor){
                 // child is in neither frontier_set nor explored_set
                 // add child to frontier
+                tree.get_frontier_set()->push(child);
             }
         }
         // add current node to explored_set
