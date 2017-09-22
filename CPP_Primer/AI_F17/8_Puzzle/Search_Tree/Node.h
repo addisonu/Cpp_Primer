@@ -31,6 +31,13 @@ struct Node{
     unsigned path_cost = UINT_MAX;
 };
 
+enum class MOVE{
+        LEFT = 0,
+        UP,
+        RIGHT,
+        DOWN,
+};
+
 class SearchTree{
 
     public:
@@ -58,12 +65,12 @@ class EightPuzzle {
     EightPuzzle() = default;
     EightPuzzle(std::string goal_state_arg) : goal_state(goal_state_arg) { }
     SearchTree* get_tree() { return &tree; }
-    Node move(const Node &node, const std::string &move);
+    Node move(const Node &node, MOVE move/*const std::string &move*/);
     bool goal_test(std::string goal_state, std::string test_state);
     //double search_time();// use <ctime> clock function
     unsigned manhattan_heuristic(const Node &node);
     unsigned misplaced_tile_heuristic(const Node &node);
-    void a_star_search(Node &result);
+    void a_star_search(std::string initial_state, Node &result);
     void ida_search(Node &result);
     void df_branch_bound_search(Node &result);
 
