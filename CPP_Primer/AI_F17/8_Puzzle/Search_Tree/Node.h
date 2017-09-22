@@ -56,10 +56,11 @@ class EightPuzzle {
 
     // MEMBER FUNCTIONS //
     EightPuzzle() = default;
+    EightPuzzle(std::string goal_state_arg) : goal_state(goal_state_arg) { }
     SearchTree* get_tree() { return &tree; }
     Node move(const Node &node, const std::string &move);
     bool goal_test(std::string goal_state, std::string test_state);
-    double search_time();
+    //double search_time();// use <ctime> clock function
     unsigned manhattan_heuristic(const Node &node);
     unsigned misplaced_tile_heuristic(const Node &node);
     void a_star_search(Node &result);
@@ -68,8 +69,10 @@ class EightPuzzle {
 
     private:
     SearchTree tree;
+    std::string goal_state;
     std::vector<int> heuristic_table;
-    char *time = nullptr;
+    std::vector<Node> search_result;
+    std::vector<clock_t> search_time;
     
     // DATA MEMBERS //
 };

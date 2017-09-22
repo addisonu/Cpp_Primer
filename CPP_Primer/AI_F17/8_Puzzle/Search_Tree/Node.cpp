@@ -89,7 +89,6 @@ Node move(const &Node node, const std::string &move)
     else{
         return node;
     }
-
     return node;
 }
 
@@ -97,23 +96,40 @@ bool goal_test(std::string goal_state, std::string test_state)
 {
     return goal_state == test_state;
 }
-
+/*
 double EightPuzzle::search_time()
 {
-
+// use <ctime> clock function
     return 0;
 }
-
+*/
 unsigned EightPuzzle::manhattan_heuristic(const Node &node)
 {
+    // the sum of the distances of the tiles from their goal positions. Because tiles
+    // cannot move along diagonals, the distance we will count is the sum of the horizontal
+    // and vertical distances
+    unsigned ver_dis(0);
+    unsigned hor_dis(0);
 
-    return 0;
+    for(std::size_t i = 0; i != goal_state.size(); ++i){
+        if(goal_state[i] != node.state[i]){
+            ver_dis += pos / 3;
+            hor_dis += pos % 3;
+        }
+    }
+    return ver_dis + hor_dis;
 }
 
 unsigned EightPuzzle::misplaced_tile_heuristic(const Node &node)
 {
-
-    return 0;
+    // the number of misplaced tiles
+    unsigned misplaced_tile(0);
+    for(std::size_t i = 0; i != goal_state.size(); ++i){
+        if(goal_state[i] != node.state[i]){
+            ++misplaced_tile;
+        }
+    }
+    return misplaced_tile;
 }
 
 void EightPuzzle::a_star_search(Node &result)
