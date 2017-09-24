@@ -11,6 +11,7 @@
 #include <exception>
 #include <algorithm>
 #include <cmath>
+#include <iterator>
 #include "Node.h"
 
 Node EightPuzzle::move(/*const*/ Node &node, MOVE move/*const std::string &move*/)
@@ -151,17 +152,18 @@ unsigned EightPuzzle::misplaced_tile_heuristic(const Node &node)
     return misplaced_tile;
 }
 
-// NOTE: need to generate real g(n) not use from heuristic
+// NOTE: need to generate actual g(n) not use from heuristic
 void EightPuzzle::a_star_search(const std::string &initial_state, Node &result)
 {
-    /*// add roo to frontier_set
+    // give root initial state and add to frontier_set
     Node root;
     root.state = initial_state;
     tree.get_frontier_set()->push(root);
 
     // get top node and start searching for goal
-    Node *current = nullptr;
-    while(!tree.get_frontier_set().empty() && (current = tree.get_frontier_set()->top().state)) && goal_test(goal_state, current.state){
+    Node current = Node(tree.get_frontier_set()->top());
+    //while(!tree.get_frontier_set()->empty() && /*(current = &Node(tree.get_frontier_set()->top()))) && */goal_test(goal_state, current.state)){
+    while(!tree.get_frontier_set()->empty() && goal_test(goal_state, current.state)){
         if(current.state == initial_state){
             continue; // don't process root node
         }
@@ -170,9 +172,12 @@ void EightPuzzle::a_star_search(const std::string &initial_state, Node &result)
 
         // if the node isn't the goal generate it's successors and check 3 cases:
         for(int i = 0; i != 4; ++i)// 4 is because there are four moves to generate a child: left, up, right, down
-            auto child = move(current, i);
+            // add code to skip checking action equal to current node action
+            auto child = move(current, static_cast<MOVE>(i));
             Node former_child;
             bool found(false);
+
+            std::iterator<std::priority_queue<Node, std::vector<Node>, std::greater<Node>>> it;
             for(auto ele : tree.get_frontier_set()){
                 if(ele.state == child.state){
                     found = true;
@@ -204,7 +209,6 @@ void EightPuzzle::a_star_search(const std::string &initial_state, Node &result)
         explored_set[current.state] = current;
     }
     result = tree.get_frontier_set()->top();
-*/
 }
 
 void EightPuzzle::ida_search(const std::string &initial_state, Node &result)
