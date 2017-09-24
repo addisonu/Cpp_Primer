@@ -29,18 +29,11 @@ Node EightPuzzle::move(/*const*/ Node &node, MOVE move)
         state[blank_pos - 1] = 'b';
         state[blank_pos] = neighbor_tile;
 
-        try{
-            // check if new state is reversal of previous move
-            tree.get_explored_set()->at(state);
-            // node has already been generated, fall through to return statement
-        }
-        catch(const std::out_of_range& oor){
-            // new_node hasn't been generated before, update new node
-            new_node.parent = &node;
-            new_node.state = state;
-            new_node.action = "left";
-            new_node.path_cost = node.path_cost;
-        }
+        // update new node
+        new_node.parent = &node;
+        new_node.state = state;
+        new_node.action = "left";
+        new_node.path_cost = node.path_cost + 1;
     }
     else if(move == MOVE::UP && (blank_pos != 0 && blank_pos != 1 && blank_pos != 2)){
         auto neighbor_tile = state[blank_pos - 3];
@@ -96,7 +89,7 @@ Node EightPuzzle::move(/*const*/ Node &node, MOVE move)
             new_node.path_cost = node.path_cost;
         }
     }
-    return node;
+    return new_node;
 }
 
 bool EightPuzzle::goal_test(std::string goal_state, std::string test_state)
@@ -104,6 +97,15 @@ bool EightPuzzle::goal_test(std::string goal_state, std::string test_state)
     return goal_state == test_state;
 }
 
+std::vector<Node> EightPuzzle::generate_successor(Node &parent)
+{
+    std::vector<Node> successor;
+    for(int i = 0; i != 4; ++i){// 4 is because there are four moves to generate a child: left, up, right, down
+        // add code to skip checking action equal to current node action
+        successor.push_back(move(parent, static_cast<MOVE>(i)));
+    }
+    return successor;
+}
 /*void EightPuzzle::add_node(const std::string &key_state, const Node &val_node)
 {
     std::string state(key_state);
@@ -174,6 +176,7 @@ void EightPuzzle::a_star_search(const std::string &initial_state, Node &result)
 
         // if the node isn't the goal generate it's successors and check 3 cases:
         for(int i = 0; i != 4; ++i){// 4 is because there are four moves to generate a child: left, up, right, down
+            // update for loop to generat_successor function call
             // add code to skip checking action equal to current node action
             auto child = move(current, static_cast<MOVE>(i));
             Node *former_child = nullptr;
@@ -216,7 +219,9 @@ void EightPuzzle::a_star_search(const std::string &initial_state, Node &result)
                 }
                 catch(const std::out_of_range& oor){
                 // child is in frontier_set with greater path_cost, update child
-                    *former_child = child;
+                    if(former_child->path_cost > child.path_cost){
+                        *former_child = child;
+                    }
                 }
             }
         }
@@ -231,11 +236,85 @@ void EightPuzzle::a_star_search(const std::string &initial_state, Node &result)
 
 void EightPuzzle::ida_search(const std::string &initial_state, Node &result)
 {
+    // create root node and add to tree
     Node root;
-    //root.state;
+    root.state = initial_state;
+    tree.get_all_nodes()->insert(root);
+    tree.get_frontier_set()->push(&root);
+
+    // set score of best solution L, to max
+    decltype(root.path_cost) min_f(UINT_MAX);
+    unsigned L = min_f;
+
+    // loop until frontier_set is empty
+    Node current = *(tree.get_frontier_set()->top());
+
+    while(!tree.get_frontier_set()->empty()){
+
+        // get top element from frontier_set
+        // check if element is the goal
+        if(goal_test(goal_state, current.state)){
+            // yes => L = min(element.path_cost, L)
+            L = L <= current.path_cost ? L : current.path_cost;
+        }
+        else{
+            // no => generate sucessors
+            auto successor = generate_successor(current);
+
+            for(auto &child : successor){
+                if(child.path_cost >= L){
+                    continue;
+                }
+                else{
+                    // sucessor.path_cost < L, add to tree and frontier
+                    tree.get_all_nodes()->insert(child);
+                    tree.get_frontier_set()->push(&child);
+                }
+                if(child.path_cost > L && child.path_cost < min_f){
+                    min_f = child.path_cost;
+                }
+            }
+        }
+        L = min_f;// update L to next contour
+    }
 }
 
 void EightPuzzle::df_branch_bound_search(const std::string &initial_state, Node &result)
 {
+    // create root node and add to tree
+    Node root;
+    root.state = initial_state;
+    tree.get_all_nodes()->insert(root);
+    tree.get_frontier_set()->push(&root);
 
+    // set score of best solution L, to max
+    unsigned L = UINT_MAX;
+
+    // loop until frontier_set is empty
+    Node current = *(tree.get_frontier_set()->top());
+
+    while(!tree.get_frontier_set()->empty()){
+
+        // get top element from frontier_set
+        // check if element is the goal
+        if(goal_test(goal_state, current.state)){
+            // yes => L = min(element.path_cost, L)
+            L = L <= current.path_cost ? L : current.path_cost;
+        }
+        else{
+            // no => generate sucessors
+            auto successor = generate_successor(current);
+
+            for(auto &child : successor){
+                if(child.path_cost >= L){
+                    continue;
+                }
+                else{
+                    // sucessor.path_cost < L, add to tree and frontier
+                    tree.get_all_nodes()->insert(child);
+                    tree.get_frontier_set()->push(&child);
+                }
+            }
+        }
+    }
 }

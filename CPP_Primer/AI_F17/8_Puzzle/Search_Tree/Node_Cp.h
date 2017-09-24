@@ -85,6 +85,7 @@ class EightPuzzle {
     SearchTree* get_tree() { return &tree; }
     Node move(/*const*/ Node &node, MOVE move/*const std::string &move*/);
     bool goal_test(std::string goal_state, std::string test_state);
+    std::vector<Node> generate_successor(Node &parent);
     /*void add_node(const std::string &key_state, const Node &val_node);
 */
     // heuristic functions
