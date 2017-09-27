@@ -45,7 +45,7 @@ enum class MOVE{
 // Custom compare function for priority_queue
 struct CompareNode{
     bool operator()(const Node *lhs, const Node *rhs) const{
-        return lhs->path_cost > rhs->path_cost;
+        return (lhs->path_cost + lhs->act_path_cost) > (rhs->path_cost + rhs->path_cost);
     }
 };
 
@@ -79,7 +79,7 @@ class EightPuzzle {
     public:
 
     // TYPE MEMBERS //
-    using heuristic_type = unsigned (*)(const Node &node);
+    using heuristic_type = unsigned (EightPuzzle::*)(const std::string &node_state);
 
     // MEMBER FUNCTIONS //
     EightPuzzle() = default;
@@ -97,7 +97,8 @@ class EightPuzzle {
     // heuristic functions
 
     // the sum of the horizontal and vertical distances of the tiles from their goal positions. Will return the h(n) portion of f(n)
-    unsigned manhattan_heuristic(const Node &node);
+    unsigned manhattan_heuristic(const std::string &node_state);
+    //unsigned manhattan_heuristic(const Node &node);
     /*heuristic_type man_func = manhattan_heuristic;
     heuristic_type mis_func = misplaced_tile_heuristic;
 */ //debugging
@@ -107,9 +108,9 @@ class EightPuzzle {
     // search algorithms
     //void a_star_search(const std::string &initial_state, Node &result);
     void a_star_search(const std::string &initial_state, Node &result, heuristic_type funct_pnt);
-    /*void a_star_search(const std::string &initial_state, Node &result, heuristic_type funct_pnt, Node &node);
-    void a_star_search_manhattan(const std::string &initial_state, Node &result);
-    void a_star_search_misplaced_tile(const std::string &initial_state, Node &result);*/
+    //void a_star_search(const std::string &initial_state, Node &result, heuristic_type funct_pnt, Node &node);
+    void a_star_search_manhattan(const std::string &initial_state, Node &result, Node &node);
+    /*void a_star_search_misplaced_tile(const std::string &initial_state, Node &result);*/
     void ida_search(const std::string &initial_state, Node &result);
     void df_branch_bound_search(const std::string &initial_state, Node &result);
 

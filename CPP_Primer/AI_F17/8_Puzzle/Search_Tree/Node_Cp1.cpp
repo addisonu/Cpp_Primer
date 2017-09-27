@@ -16,6 +16,7 @@
 #include <cmath>
 #include "Node_Cp.h"
 
+// update to take different heuristics
 Node EightPuzzle::move(/*const*/ Node &node, MOVE move)
 {
     // create new node to hold new state
@@ -36,7 +37,7 @@ Node EightPuzzle::move(/*const*/ Node &node, MOVE move)
         new_node.state = state;
         new_node.action = "left";
         new_node.act_path_cost = node.act_path_cost + 1;
-        //new_node.path_cost = node.path_cost + 1;
+        new_node.path_cost = manhattan_heuristic(state);
     }
     else if(move == MOVE::UP && (blank_pos != 0 && blank_pos != 1 && blank_pos != 2)){
         auto neighbor_tile = state[blank_pos - 3];
@@ -48,7 +49,7 @@ Node EightPuzzle::move(/*const*/ Node &node, MOVE move)
         new_node.state = state;
         new_node.action = "up";
         new_node.act_path_cost = node.act_path_cost + 1;
-        //new_node.path_cost = node.path_cost;
+        new_node.path_cost = manhattan_heuristic(state);
     }
     else if(move == MOVE::RIGHT && (blank_pos != 2 && blank_pos != 5 && blank_pos != 8)){
         auto neighbor_tile = state[blank_pos + 1];
@@ -60,7 +61,7 @@ Node EightPuzzle::move(/*const*/ Node &node, MOVE move)
         new_node.state = state;
         new_node.action = "right";
         new_node.act_path_cost = node.act_path_cost + 1;
-        //new_node.path_cost = node.path_cost;
+        new_node.path_cost = manhattan_heuristic(state);
     }
     else if(move == MOVE::DOWN && (blank_pos != 6 && blank_pos != 7 && blank_pos != 8)){
         auto neighbor_tile = state[blank_pos + 3];
@@ -72,7 +73,7 @@ Node EightPuzzle::move(/*const*/ Node &node, MOVE move)
         new_node.state = state;
         new_node.action = "down";
         new_node.act_path_cost = node.act_path_cost;
-        //new_node.path_cost = node.path_cost;
+        new_node.path_cost = manhattan_heuristic(state);
     }
     return new_node;
 }
@@ -117,14 +118,15 @@ double EightPuzzle::search_time()
     return 0;
 }
 */
-unsigned EightPuzzle::manhattan_heuristic(const Node &node)
+unsigned EightPuzzle::manhattan_heuristic(const std::string &node_state)
+//unsigned EightPuzzle::manhattan_heuristic(const Node &node)
 {
     unsigned ver_dis(0);
     unsigned hor_dis(0);
 
     // (pos / 3) will give row, (pos % 3) will give col
     for(std::size_t pos = 0; pos != goal_state.size(); ++pos){
-        if(goal_state[pos] != node.state[pos]){
+        if(goal_state[pos] != node_state[pos]){
             // find col and row of node state
 
             auto node_row(0);
@@ -139,7 +141,7 @@ unsigned EightPuzzle::manhattan_heuristic(const Node &node)
             }
             // find col and row of goal state
 
-            std::size_t goal_pos = goal_state.find(node.state[pos]);
+            std::size_t goal_pos = goal_state.find(node_state[pos]);
             auto goal_row = goal_pos / 3;
             auto goal_col = goal_pos % 3;
 
@@ -181,10 +183,13 @@ void EightPuzzle::a_star_search(const std::string &initial_state, Node &result, 
         //Node current_node = tree.get_frontier_set()->top();
 
         // if the node isn't the goal generate it's successors and check 3 cases:
-        for(int i = 0; i != 4; ++i){// 4 is because there are four moves to generate a child: left, up, right, down
+        //for(int i = 0; i != 4; ++i){// 4 is because there are four moves to generate a child: left, up, right, down
             // update for loop to generat_successor function call
             // add code to skip checking action equal to current node action
-            auto child = move(current, static_cast<MOVE>(i));
+            //auto child = move(current, static_cast<MOVE>(i));//remove
+
+        auto successors = generate_successor(current);
+        for(auto child : successors){
             Node *former_child = nullptr;
             bool found(false);
 
@@ -236,15 +241,17 @@ void EightPuzzle::a_star_search(const std::string &initial_state, Node &result, 
         (*tree.get_explored_set())[current.state] = tree.get_frontier_set()->top();
         tree.get_frontier_set()->pop();
         current = *(tree.get_frontier_set()->top());
+        ++num_nodes_expanded;
     }
     result = *(tree.get_frontier_set()->top());
 }
-/*
+
 void EightPuzzle::a_star_search_manhattan(const std::string &initial_state, Node &result, Node &node)
 {
-    a_star_search(initial_state, result, manhattan_heuristic(node));
+    heuristic_type man_func = &EightPuzzle::manhattan_heuristic;
+    a_star_search(initial_state, result, man_func);
 }
-
+/*
 void EightPuzzle::a_star_search_misplaced_tile(const std::string &initial_state, Node &result)
 {
     a_star_search(initial_state, result, misplaced_tile_heuristic);
