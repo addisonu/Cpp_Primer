@@ -30,8 +30,8 @@ struct Node{
     Node *parent = nullptr;
     std::string state;
     std::string action = "none";
-    unsigned path_cost = UINT_MAX;
-    unsigned act_path_cost = UINT_MAX;
+    unsigned path_cost = UINT_MAX;// may change to g(n) and h(n)
+    unsigned act_path_cost = 0;
 };
 
 // represent 8-puzzle actions
