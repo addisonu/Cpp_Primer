@@ -11,6 +11,8 @@
 #include <climits>
 #include <exception>
 //#include <algorithm>
+#include <iostream> // debug
+#include <stdlib.h> // debug
 #include <cmath>
 #include "Node_Cp.h"
 
@@ -106,6 +108,17 @@ std::vector<Node> EightPuzzle::generate_successor(Node &parent)
     }
     return successor;
 }
+
+void EightPuzzle::set_goal_state(std::string goal_arg)
+{
+    goal_state = goal_arg;
+}
+
+std::string EightPuzzle::get_goal_state()
+{
+    return goal_state;
+}
+
 /*void EightPuzzle::add_node(const std::string &key_state, const Node &val_node)
 {
     std::string state(key_state);
@@ -130,16 +143,58 @@ unsigned EightPuzzle::manhattan_heuristic(const Node &node)
     for(std::size_t pos = 0; pos != goal_state.size(); ++pos){
         if(goal_state[pos] != node.state[pos]){
             // find col and row of goal state
-            auto goal_row = pos / 3;
-            auto goal_col = pos % 3;
+            
+            // debug
+            auto node_row(0);
+            auto node_col(0);
+            if(pos < 3){
+                node_row = pos / 3;
+                node_col = pos;
+            }
+            else{
+                node_row = pos / 3;
+                node_col = pos % 3;
+            }
+            // find col and row of node state
 
+            std::size_t goal_pos = goal_state.find(node.state[pos]);
+            auto goal_row = goal_pos / 3;
+            auto goal_col = goal_pos % 3;
+            // debug
+/*
+            auto goal_row(0);
+            auto goal_col(0);
+            if(pos < 3){
+                goal_row = pos / 3;
+                goal_col = pos;
+            }
+            else{
+                goal_row = pos / 3;
+                goal_col = pos % 3;
+            }
             // find col and row of node state
             std::size_t node_pos = node.state.find(goal_state[pos]);
             auto node_row = node_pos / 3;
             auto node_col = node_pos % 3;
-
-            ver_dis += std::abs(static_cast<double>(goal_row - node_row));
-            hor_dis += std::abs(static_cast<double>(goal_col - node_col));
+        */
+            // debug
+            /*std::cout << std::string(10, '-') << std::endl;
+            std::cout << "tile: " << node.state[pos]
+                << "\npos = " << pos
+                << "\ngoal_row = " << goal_row
+                << "\ngoal_col = " << goal_col
+                << "\nnode_row = " << node_row
+                << "\nnode_col = " << node_col
+                << std::endl;
+            std::cout << " is off by ver_pos = "
+                << std::abs(static_cast<int>(goal_row - node_row))
+                << std::endl;
+            std::cout << "and is off by hor_pos = "
+                << std::abs(static_cast<int>(goal_col - node_col)) << std::endl;
+*/
+            // debug
+            ver_dis += std::abs(static_cast<int>(goal_row - node_row));
+            hor_dis += std::abs(static_cast<int>(goal_col - node_col));
         }
     }
     return ver_dis + hor_dis;
@@ -157,7 +212,8 @@ unsigned EightPuzzle::misplaced_tile_heuristic(const Node &node)
 }
 
 // NOTE: need to generate actual g(n) not use from heuristic
-void EightPuzzle::a_star_search(const std::string &initial_state, Node &result)
+//void EightPuzzle::a_star_search(const std::string &initial_state, Node &result)
+void EightPuzzle::a_star_search(const std::string &initial_state, Node &result, heuristic_type funct_pnt)
 {
     // give root initial state and add to tree
     Node root;
@@ -233,7 +289,17 @@ void EightPuzzle::a_star_search(const std::string &initial_state, Node &result)
     }
     result = *(tree.get_frontier_set()->top());
 }
+/*
+void EightPuzzle::a_star_search_manhattan(const std::string &initial_state, Node &result, Node &node)
+{
+    a_star_search(initial_state, result, manhattan_heuristic(node));
+}
 
+void EightPuzzle::a_star_search_misplaced_tile(const std::string &initial_state, Node &result)
+{
+    a_star_search(initial_state, result, misplaced_tile_heuristic);
+}
+*/// debugging
 void EightPuzzle::ida_search(const std::string &initial_state, Node &result)
 {
     // create root node and add to tree

@@ -31,14 +31,15 @@ struct Node{
     std::string state;
     std::string action = "none";
     unsigned path_cost = UINT_MAX;
+    unsigned act_path_cost = UINT_MAX;
 };
 
 // represent 8-puzzle actions
 enum class MOVE{
-        LEFT = 0,
-        UP,
-        RIGHT,
-        DOWN,
+    LEFT = 0,
+    UP,
+    RIGHT,
+    DOWN,
 };
 
 // Custom compare function for priority_queue
@@ -67,7 +68,7 @@ class SearchTree{
     private:
 
     // DATA MEMBERS //
-    std::set<Node> all_nodes;
+    set_type all_nodes;
     queue_type frontier_set;
     hash_type explored_set;
 };
@@ -76,6 +77,9 @@ class SearchTree{
 class EightPuzzle {
 
     public:
+
+    // TYPE MEMBERS //
+    using heuristic_type = unsigned (*)(const Node &node);
 
     // MEMBER FUNCTIONS //
     EightPuzzle() = default;
@@ -86,18 +90,26 @@ class EightPuzzle {
     Node move(/*const*/ Node &node, MOVE move/*const std::string &move*/);
     bool goal_test(std::string goal_state, std::string test_state);
     std::vector<Node> generate_successor(Node &parent);
-    /*void add_node(const std::string &key_state, const Node &val_node);
-*/
+    void set_goal_state(std::string goal_arg);
+    std::string get_goal_state();
+    //void add_node(Node &node);
+
     // heuristic functions
 
     // the sum of the horizontal and vertical distances of the tiles from their goal positions. Will return the h(n) portion of f(n)
     unsigned manhattan_heuristic(const Node &node);
-
+    /*heuristic_type man_func = manhattan_heuristic;
+    heuristic_type mis_func = misplaced_tile_heuristic;
+*/ //debugging
     // the number of misplaced tiles
     unsigned misplaced_tile_heuristic(const Node &node);
 
     // search algorithms
-    void a_star_search(const std::string &initial_state, Node &result);
+    //void a_star_search(const std::string &initial_state, Node &result);
+    void a_star_search(const std::string &initial_state, Node &result, heuristic_type funct_pnt);
+    /*void a_star_search(const std::string &initial_state, Node &result, heuristic_type funct_pnt, Node &node);
+    void a_star_search_manhattan(const std::string &initial_state, Node &result);
+    void a_star_search_misplaced_tile(const std::string &initial_state, Node &result);*/
     void ida_search(const std::string &initial_state, Node &result);
     void df_branch_bound_search(const std::string &initial_state, Node &result);
 
@@ -106,6 +118,7 @@ class EightPuzzle {
     // DATA MEMBERS //
     SearchTree tree;
     std::string goal_state;
+    unsigned num_nodes_expanded = 0;
     std::vector<int> heuristic_table;
     std::vector<std::pair<Node, clock_t> > search_result; // will hold goal state with search time for each algorithm
 
