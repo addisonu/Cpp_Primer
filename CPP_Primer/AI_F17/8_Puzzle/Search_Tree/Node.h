@@ -83,7 +83,7 @@ class EightPuzzle {
 
     // MEMBER FUNCTIONS //
     EightPuzzle() = default;
-    EightPuzzle(std::string goal_state_arg) : goal_state(goal_state_arg) 
+    EightPuzzle(std::string goal_state_arg, std::string initial_state_arg) : goal_state(goal_state_arg), initial_state(initial_state_arg)
     {
         man_func = &EightPuzzle::manhattan_heuristic;
         mis_tile_func = &EightPuzzle::misplaced_tile_heuristic;
@@ -96,7 +96,10 @@ class EightPuzzle {
     std::vector<Node> generate_successor(Node &parent, heuristic_type funct_pnt);
     void set_goal_state(std::string goal_arg);
     std::string get_goal_state();
+    std::vector<std::string> get_action_sequence() { return action_sequence; }// debug
+    void set_action_sequence(std::vector<std::string> seq) { action_sequence = seq; }// debug
     void print_node(Node &node);
+    std::vector<std::string> generate_action_sequence(Node &node); // will return sequence of actions to reach a node
     //void add_node(Node &node);
 
     // heuristic functions
@@ -118,9 +121,11 @@ class EightPuzzle {
     // DATA MEMBERS //
     SearchTree tree;
     std::string goal_state;
+    std::string initial_state;
     unsigned num_nodes_expanded = 0;
     std::vector<int> heuristic_table;
     std::vector<std::pair<Node, clock_t> > search_result; // will hold goal state with search time for each algorithm
+    std::vector<std::string> action_sequence;//debugging
     heuristic_type man_func;
     heuristic_type mis_tile_func;
 };

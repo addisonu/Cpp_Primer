@@ -10,7 +10,7 @@
 #include <string>
 #include <climits>
 #include <exception>
-//#include <algorithm>
+#include <algorithm>
 #include <iostream> // debug
 #include <stdlib.h> // debug
 #include <cmath>
@@ -116,6 +116,18 @@ void EightPuzzle::print_node(Node &node)
     << "\nact_path_cost: " << node.act_path_cost << std::endl;
 }
 
+std::vector<std::string> EightPuzzle::generate_action_sequence(Node &node)
+{
+    std::vector<std::string> sequence;
+    Node *parent = &node;
+
+    while(parent){
+        sequence.push_back(parent->action);
+        parent = parent->parent;
+    }
+    std::reverse(sequence.begin(), sequence.end());
+    return sequence;
+}
 /*void EightPuzzle::add_node(const std::string &key_state, const Node &val_node)
 {
     std::string state(key_state);
@@ -133,7 +145,7 @@ double EightPuzzle::search_time()
 */
 unsigned EightPuzzle::manhattan_heuristic(const std::string &node_state)
 {
-    std::cout << "in manhattan!" << std::endl;//debug
+    //std::cout << "in manhattan!" << std::endl;//debug
     unsigned ver_dis(0);
     unsigned hor_dis(0);
 
@@ -178,6 +190,39 @@ unsigned EightPuzzle::misplaced_tile_heuristic(const std::string &node_state)
 // NOTE: need to generate actual g(n) not use from heuristic
 void EightPuzzle::a_star_search(const std::string &initial_state, Node &result, heuristic_type funct_pnt)
 {
+    // initialize root node
+    Node root;
+    root.state = initial_state;
+    root.path_cost = 0;
+    root.act_path_cost = 0;
+
+    // add root to tree
+    tree.get_all_nodes()->insert(root);
+    tree.get_frontier_set()->push(&root);
+
+    // loop while there are elements on the frontier and the goal hasn't been found
+    Node *current = &root;
+
+    while(!tree.get_frontier_set()->empty() /*&& !goal_test(goal_state, current->state)*/){
+
+       // get next element and update the frontier
+        current = tree.get_frontier_set()->top();
+        tree.get_frontier_set()->pop();
+        
+        // get the sucessors and check if they are the goal
+        auto successor = generate_successor(*current, funct_pnt);
+        for(auto child : successor){
+            print_node(child);// debug
+            if(goal_test(goal_state, child.state)){
+                result = child;
+                action_sequence = generate_action_sequence(child);
+                return;
+            }
+        }
+    }
+}
+/*
+{
     std::cout << "Starting A* search" << std::endl;//debug
     // give root initial state and add to tree
     Node root;
@@ -190,6 +235,7 @@ void EightPuzzle::a_star_search(const std::string &initial_state, Node &result, 
     Node current = *(tree.get_frontier_set()->top());
     auto cnt(0);// debug
     while(++cnt <= 10 && !tree.get_frontier_set()->empty() && !goal_test(goal_state, current.state)){
+    */
         /*
         if(current.state == initial_state){
     std::cout << "in intial state block" << std::endl;//debug
@@ -203,14 +249,14 @@ void EightPuzzle::a_star_search(const std::string &initial_state, Node &result, 
             // update for loop to generat_successor function call
             // add code to skip checking action equal to current node action
             //auto child = move(current, static_cast<MOVE>(i));//remove
-
+/*
     std::cout << "Generating successors" << std::endl;//debug
         auto successors = generate_successor(current, funct_pnt);
         for(auto child : successors){
     std::cout << "searching for former child" << std::endl;//debug
             Node *former_child = nullptr;
             bool found(false);
-
+*/
 /*
             std::iterator<std::priority_queue<Node, std::vector<Node>, std::greater<Node>>> it;
             for(auto ele : tree.get_frontier_set()){
@@ -221,7 +267,8 @@ void EightPuzzle::a_star_search(const std::string &initial_state, Node &result, 
                 }
             }
 */
-            for(auto ele : *(tree.get_all_nodes())){
+/*
+for(auto ele : *(tree.get_all_nodes())){
                 if(ele.state == child.state){
     std::cout << "former child found" << std::endl;//debug
                     found = true;
@@ -239,7 +286,7 @@ void EightPuzzle::a_star_search(const std::string &initial_state, Node &result, 
             }
             else{
                 try{
-                    /*auto former_child = */get_tree()->get_explored_set()->at(child.state);
+                    get_tree()->get_explored_set()->at(child.state);
 
                     // child is in the explored_set with greater path_cost
                     // update child and move to frontier_set
@@ -273,7 +320,7 @@ void EightPuzzle::a_star_search(const std::string &initial_state, Node &result, 
     result = *(tree.get_frontier_set()->top());
     std::cout << "Ending A* search" << std::endl;//debug
 }
-
+*/
 void EightPuzzle::a_star_search_manhattan(const std::string &initial_state, Node &result)
 {
     a_star_search(initial_state, result, man_func);
@@ -283,7 +330,6 @@ void EightPuzzle::a_star_search_misplaced_tile(const std::string &initial_state,
 {
     a_star_search(initial_state, result, mis_tile_func);
 }
-
 
 void EightPuzzle::ida_search(const std::string &initial_state, Node &result, heuristic_type funct_pnt)
 {
