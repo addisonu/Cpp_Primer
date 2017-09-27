@@ -202,13 +202,15 @@ void EightPuzzle::a_star_search(const std::string &initial_state, Node &result, 
 
     // loop while there are elements on the frontier and the goal hasn't been found
     Node *current = &root;
-
+    // add code to check if root is trivial the goal
+    
     while(!tree.get_frontier_set()->empty() /*&& !goal_test(goal_state, current->state)*/){
 
        // get next element and update the frontier
         current = tree.get_frontier_set()->top();
         tree.get_frontier_set()->pop();
-        
+        ++num_nodes_expanded;
+
         // get the sucessors and check if they are the goal
         auto successor = generate_successor(*current, funct_pnt);
         for(auto child : successor){
@@ -217,6 +219,30 @@ void EightPuzzle::a_star_search(const std::string &initial_state, Node &result, 
                 result = child;
                 action_sequence = generate_action_sequence(child);
                 return;
+            }
+            // check if the another child with equal state has been generated
+            bool former_child_found(false);
+            for(auto former_child : *(tree.get_all_nodes())){
+                if(former_child.state == child.state){
+                    former_child_found = true;
+                    break;
+                }
+            }
+            if(former_child_found){
+                try{
+                    Node *former_child = nullptr;
+                    // if node is in explored + cost is less continue
+                    former_child = (*tree.get_explored_set())[child.state];
+                }
+                catch(const std::out_of_range& oor){
+                    // else if old_child is in frontier + cost is less continue
+
+                }
+            }
+            else{
+            // ele add to tree and frontier
+                tree.get_all_nodes()->insert(child);
+                tree.get_frontier_set()->push(&child);
             }
         }
     }
