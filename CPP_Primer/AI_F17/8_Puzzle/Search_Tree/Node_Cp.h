@@ -118,13 +118,13 @@ class EightPuzzle {
     unsigned misplaced_tile_heuristic(const std::string &node_state);
 
     // search algorithms
-    //void a_star_search(const std::string &initial_state, Node &result);
     void a_star_search(const std::string &initial_state, Node &result, heuristic_type funct_pnt);
-    //void a_star_search(const std::string &initial_state, Node &result, heuristic_type funct_pnt, Node &node);
-    void a_star_search_manhattan(const std::string &initial_state, Node &result, Node &node);
-    void a_star_search_misplaced_tile(const std::string &initial_state, Node &result, Node &node);
-    void ida_search(const std::string &initial_state, Node &result);
-    void df_branch_bound_search(const std::string &initial_state, Node &result);
+    //void a_star_search_manhattan(const std::string &initial_state, Node &result, Node &node);
+    void a_star_search_manhattan(const std::string &initial_state, Node &result);
+    //void a_star_search_misplaced_tile(const std::string &initial_state, Node &result, Node &node);
+    void a_star_search_misplaced_tile(const std::string &initial_state, Node &result);
+    void ida_search(const std::string &initial_state, Node &result, heuristic_type funct_pnt);
+    void df_branch_bound_search(const std::string &initial_state, Node &result, heuristic_type funct_pnt);
 
     private:
 
