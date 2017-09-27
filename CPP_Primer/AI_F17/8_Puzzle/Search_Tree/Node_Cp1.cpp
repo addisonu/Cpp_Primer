@@ -152,11 +152,11 @@ unsigned EightPuzzle::manhattan_heuristic(const std::string &node_state)
     return ver_dis + hor_dis;
 }
 
-unsigned EightPuzzle::misplaced_tile_heuristic(const Node &node)
+unsigned EightPuzzle::misplaced_tile_heuristic(const std::string &node_state)
 {
     unsigned misplaced_tile(0);
     for(std::size_t i = 0; i != goal_state.size(); ++i){
-        if(goal_state[i] != node.state[i]){
+        if(goal_state[i] != node_state[i]){
             ++misplaced_tile;
         }
     }
@@ -251,12 +251,13 @@ void EightPuzzle::a_star_search_manhattan(const std::string &initial_state, Node
     heuristic_type man_func = &EightPuzzle::manhattan_heuristic;
     a_star_search(initial_state, result, man_func);
 }
-/*
-void EightPuzzle::a_star_search_misplaced_tile(const std::string &initial_state, Node &result)
+
+void EightPuzzle::a_star_search_misplaced_tile(const std::string &initial_state, Node &result, Node &node)
 {
-    a_star_search(initial_state, result, misplaced_tile_heuristic);
+    heuristic_type mis_tile_func = &EightPuzzle::misplaced_tile_heuristic;
+    a_star_search(initial_state, result, mis_tile_func);
 }
-*/// debugging
+
 void EightPuzzle::ida_search(const std::string &initial_state, Node &result)
 {
     // create root node and add to tree
