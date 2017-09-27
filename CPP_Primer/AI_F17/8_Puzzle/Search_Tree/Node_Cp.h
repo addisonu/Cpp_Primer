@@ -83,15 +83,27 @@ class EightPuzzle {
 
     // MEMBER FUNCTIONS //
     EightPuzzle() = default;
-    EightPuzzle(std::string goal_state_arg) : goal_state(goal_state_arg) { }
+    EightPuzzle(std::string goal_state_arg) : goal_state(goal_state_arg) 
+    {
+        man_func = &EightPuzzle::manhattan_heuristic;
+        mis_tile_func = &EightPuzzle::misplaced_tile_heuristic;
+    }
 
     // helper functions
     SearchTree* get_tree() { return &tree; }
     Node move(/*const*/ Node &node, MOVE move/*const std::string &move*/);
     bool goal_test(std::string goal_state, std::string test_state);
-    std::vector<Node> generate_successor(Node &parent);
+    std::vector<Node> generate_successor(Node &parent, heuristic_type funct_pnt);
     void set_goal_state(std::string goal_arg);
     std::string get_goal_state();
+    void print_node(Node &node)
+    {
+        std::cout << "\nparent pointer: " << node.parent
+        << "\naction: " << node.action
+        << "\nstate: " << node.state
+        << "\npath_cost: " << node.path_cost
+        << "\nact_path_cost: " << node.act_path_cost << std::endl;
+    }
     //void add_node(Node &node);
 
     // heuristic functions
@@ -122,6 +134,7 @@ class EightPuzzle {
     unsigned num_nodes_expanded = 0;
     std::vector<int> heuristic_table;
     std::vector<std::pair<Node, clock_t> > search_result; // will hold goal state with search time for each algorithm
-
+    heuristic_type man_func;
+    heuristic_type mis_tile_func;
 };
 #endif
