@@ -260,8 +260,74 @@ void EightPuzzle::a_star_search_misplaced_tile(const std::string &initial_state,
     //std::cout << "time: " << (static_cast<double>(tick) / 1000) << "ms" << std::endl;//add later
 }
 
-void EightPuzzle::ida_search(const std::string &initial_state, Node &result, heuristic_type funct_pnt)
+void EightPuzzle::ida_search(const std::string &initial_state, Node &result/*, heuristic_type funct_pnt*/)
 {
+    // start timer
+    auto tick = clock();
+    auto best_tick = clock();
+
+    // initialize algorithm
+    //create root node and add it to the list
+    Node root;
+    root.state = initial_state;
+    root.path_cost = manhattan_heuristic(root.state);
+    tree.openlist.push(root);
+    tree.openlist_ref[root.state] = &root;
+
+    num_nodes_expanded = 0;
+
+    unsigned L = root.act_path_cost + root.path_cost;
+    unsigned min_f = L;
+    //std::cout << "L: " << L << std::endl;//debug
+
+    // loop while the openlist is non-empty
+    while(!tree.openlist.empty()){
+        //get top element
+        Node current = tree.openlist.top();
+        tree.openlist_ref.erase(tree.openlist.top().state);
+        tree.openlist.pop();
+        ++num_nodes_expanded;
+
+        if(tree.closedlist.find(current) != tree.closedlist.end()){
+            //continue;
+        }
+        std::cout << current.action << ", ";
+
+        //check if it is the goal, if so update L
+        if(goal_test(goal_state, current.state)){
+            std::cout << "ida found the goal!!" << std::endl;
+           // stop time
+            best_tick = clock() - tick;
+           std::cout << "optimal time: " << (static_cast<double>(tick) / 1000) << "ms" << std::endl;//add later
+ std::cout << "num_nodes_expanded" << num_nodes_expanded << std::endl;
+            return;
+        }
+        else{
+            //  generate successors
+            auto successors = generate_successor(current, man_func);// get children using Manhattan heuristic
+            
+            for(auto child : successors){
+                if((child.act_path_cost + child.path_cost) <= L){
+                    tree.openlist.push(child);
+                    tree.openlist_ref[child.state] = &child;
+                }
+            }
+            // find min_f and update L to next contour
+            min_f = successors[0].act_path_cost + successors[0].path_cost;
+            for(auto child : successors){
+                if(min_f > (child.act_path_cost + child.path_cost) && (child.act_path_cost + child.path_cost) > L){
+                    min_f = (child.act_path_cost + child.path_cost);
+                }
+            }
+            L = min_f;
+        }
+        tree.closedlist.insert(current);
+    }
+    // stop time
+    tick = clock() - tick;
+    std::cout << "time: " << (static_cast<double>(tick) / 1000) << "ms" << std::endl;//add later
+}
+/*{
     // create root node and add to tree
     Node root;
     root.state = initial_state;
@@ -304,7 +370,7 @@ void EightPuzzle::ida_search(const std::string &initial_state, Node &result, heu
         L = min_f;// update L to next contour
     }
 }
-
+*/
 void EightPuzzle::df_branch_bound_search(const std::string &initial_state, Node &result/*, heuristic_type funct_pnt*/)
 {
     // start timer

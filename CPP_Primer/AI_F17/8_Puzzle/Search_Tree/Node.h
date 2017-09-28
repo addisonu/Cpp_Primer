@@ -124,7 +124,7 @@ class EightPuzzle {
     void a_star_search(const std::string &initial_state, Node &result, heuristic_type funct_pnt);
     void a_star_search_manhattan(const std::string &initial_state, Node &result);
     void a_star_search_misplaced_tile(const std::string &initial_state, Node &result);
-    void ida_search(const std::string &initial_state, Node &result, heuristic_type funct_pnt);
+    void ida_search(const std::string &initial_state, Node &result/*, heuristic_type funct_pnt*/);
     void df_branch_bound_search(const std::string &initial_state, Node &result/*, heuristic_type funct_pnt*/);
 
     private:
