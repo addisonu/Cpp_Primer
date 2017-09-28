@@ -222,17 +222,17 @@ void EightPuzzle::a_star_search(const std::string &initial_state, Node &result, 
         auto successors = generate_successor(current, funct_pnt);
         for(auto child : successors){
             if(goal_test(goal_state, child.state)){
-                std::cout << "goal found!!!" << std::endl;
+                //std::cout << "goal found!!!" << std::endl;
                 result = child;
                 //action_sequence = generate_action_sequence(child);
-                std::cout << "num_nodes_expanded" << num_nodes_expanded << std::endl;
+                //std::cout << "num_nodes_expanded" << num_nodes_expanded << std::endl;//add later
                 return;
             }
 
             tree.openlist.push(child);
             tree.openlist_ref[child.state] = &child;
             //std::cout << "new_child.state: " << child.state << std::endl;
-            std::cout << child.action << ", ";
+            //std::cout << child.action << ", ";//add later
         }
         tree.closedlist.insert(current);
     }
@@ -247,7 +247,7 @@ void EightPuzzle::a_star_search_manhattan(const std::string &initial_state, Node
     a_star_search(initial_state, result, man_func);
     // stop time
     tick = clock() - tick;
-    std::cout << "time: " << (static_cast<double>(tick) / 1000) << "ms" << std::endl;
+    //std::cout << "time: " << (static_cast<double>(tick) / 1000) << "ms" << std::endl;//add later
 }
 
 void EightPuzzle::a_star_search_misplaced_tile(const std::string &initial_state, Node &result)
@@ -257,7 +257,7 @@ void EightPuzzle::a_star_search_misplaced_tile(const std::string &initial_state,
     a_star_search(initial_state, result, mis_tile_func);
     // stop time
     tick = clock() - tick;
-    std::cout << "time: " << (static_cast<double>(tick) / 1000) << "ms" << std::endl;
+    //std::cout << "time: " << (static_cast<double>(tick) / 1000) << "ms" << std::endl;//add later
 }
 
 void EightPuzzle::ida_search(const std::string &initial_state, Node &result, heuristic_type funct_pnt)
@@ -307,7 +307,69 @@ void EightPuzzle::ida_search(const std::string &initial_state, Node &result, heu
 
 void EightPuzzle::df_branch_bound_search(const std::string &initial_state, Node &result/*, heuristic_type funct_pnt*/)
 {
+    // start timer
+    auto tick = clock();
+    auto best_tick = clock();
 
+    // initialize algorithm
+    //create root node and add it to the list
+    Node root;
+    root.state = initial_state;
+    tree.openlist.push(root);
+    tree.openlist_ref[root.state] = &root;
+
+    num_nodes_expanded = 0;
+
+    // call a* to get a solution
+    Node pre_result, best_solution;
+    //a_star_search_manhattan(initial_state, pre_result);
+    //a_star_search_misplaced_tile(initial_state, pre_result);
+    //unsigned L = pre_result.act_path_cost;
+    unsigned L = 35;//50;//UINT_MAX;
+    //std::cout << "L: " << L << std::endl;//debug
+
+    // loop while the openlist is non-empty
+    while(!tree.openlist.empty()){
+        //get top element
+        Node current = tree.openlist.top();
+        tree.openlist_ref.erase(tree.openlist.top().state);
+        tree.openlist.pop();
+        ++num_nodes_expanded;
+
+        if(tree.closedlist.find(current) != tree.closedlist.end()){
+            //continue;
+        }
+        std::cout << current.action << ", ";
+
+        //check if it is the goal, if so update L
+        if(goal_test(goal_state, current.state)){
+            std::cout << "dfb_n found the goal!!" << std::endl;
+            std::cout << "num_nodes_expanded" << num_nodes_expanded << std::endl;
+            // stop time
+//            std::cout << "optimal time: " << (static_cast<double>(tick) / 1000) << "ms" << std::endl;//add later
+
+            if(L > current.act_path_cost){
+                    L = current.act_path_cost;
+                    best_solution = current;
+                    best_tick = clock() - tick;
+                    std::cout << "optimal_time: " << (static_cast<double>(tick) / 1000) << "ms" << std::endl;//add later
+            }
+        }
+        else{
+            //  generate successors
+            auto successors = generate_successor(current, man_func);
+            for(auto child : successors){
+                if((child.act_path_cost + child.path_cost) <= L){
+                    tree.openlist.push(child);
+                    tree.openlist_ref[child.state] = &child;
+                }
+            }
+        }
+        tree.closedlist.insert(current);
+    }
+    // stop time
+    tick = clock() - tick;
+    std::cout << "time: " << (static_cast<double>(tick) / 1000) << "ms" << std::endl;//add later
 }
 /*
 {
