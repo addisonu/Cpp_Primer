@@ -12,6 +12,7 @@
 #include <unordered_map>
 #include <string>
 #include <climits>
+#include <map>//debug
 
 struct Node{
 
@@ -23,7 +24,8 @@ struct Node{
     // overloaded for set container
     bool operator<(const Node &rhs) const
     {
-        return this->path_cost < rhs.path_cost;
+        return this->state < rhs.state;
+      //  return this->path_cost < rhs.path_cost;
     }
 
     // DATA MEMBERS //
@@ -44,6 +46,10 @@ enum class MOVE{
 
 // Custom compare function for priority_queue
 struct CompareNode{
+    bool operator()(const Node lhs, const Node rhs) const{
+        return (lhs.path_cost + lhs.act_path_cost) > (rhs.path_cost + rhs.path_cost);//debug
+    }
+
     bool operator()(const Node *lhs, const Node *rhs) const{
         return (lhs->path_cost + lhs->act_path_cost) > (rhs->path_cost + rhs->path_cost);
     }
@@ -56,8 +62,10 @@ class SearchTree{
 
     // TYPE MEMBERS //
     using set_type = std::set<Node>;
+    using queue_type2 = std::priority_queue<Node, std::vector<Node>, CompareNode>;
     using queue_type = std::priority_queue<Node*, std::vector<Node*>, CompareNode>;
     using hash_type = std::unordered_map<std::string, Node*>;
+    using hash_type2 = std::set<Node>;
 
     // MEMBER FUNCTIONS //
     SearchTree() = default;
@@ -65,6 +73,9 @@ class SearchTree{
     queue_type* get_frontier_set() { return &frontier_set; }
     hash_type* get_explored_set() { return &explored_set; }
 
+    queue_type2 openlist;//debug
+    hash_type2 closedlist;//debug
+    std::map<std::string, Node*> openlist_ref;//debug
     private:
 
     // DATA MEMBERS //

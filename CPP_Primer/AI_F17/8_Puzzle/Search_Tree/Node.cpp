@@ -21,7 +21,7 @@ Node EightPuzzle::move(Node &node, MOVE move)
 {
     // create new node to hold new state
     Node new_node;
-    auto state = node.state;
+    std::string state = node.state;
 
     // get position of blank tile to move in puzzle
     auto blank_pos = state.find('b');
@@ -80,6 +80,8 @@ Node EightPuzzle::move(Node &node, MOVE move)
 
 bool EightPuzzle::goal_test(std::string goal_state, std::string test_state)
 {
+    //std::cout << "goal_state: " << goal_state << std::endl;
+    //std::cout << "test_state: " << test_state << std::endl;
     return goal_state == test_state;
 }
 
@@ -109,11 +111,20 @@ std::string EightPuzzle::get_goal_state()
 
 void EightPuzzle::print_node(Node &node)
 {
-    std::cout << "\nparent pointer: " << node.parent
-    << "\naction: " << node.action
-    << "\nstate: " << node.state
-    << "\npath_cost: " << node.path_cost
-    << "\nact_path_cost: " << node.act_path_cost << std::endl;
+    if(node.parent){
+
+        std::cout << "\nparent pointer: " << node.parent
+        << "\nparent state: " << node.parent->state << std::endl;
+    }
+    else{
+        std::cout << "\nparent pointer: " << "null"
+        << "\nparent state: " << "no state" << std::endl;
+    }
+        std::cout << "\npointer: " << &node
+        << "\naction: " << node.action
+        << "\nstate: " << node.state
+        << "\npath_cost: " << node.path_cost
+        << "\nact_path_cost: " << node.act_path_cost << std::endl;
 }
 
 std::vector<std::string> EightPuzzle::generate_action_sequence(Node &node)
@@ -190,6 +201,82 @@ unsigned EightPuzzle::misplaced_tile_heuristic(const std::string &node_state)
 // NOTE: need to generate actual g(n) not use from heuristic
 void EightPuzzle::a_star_search(const std::string &initial_state, Node &result, heuristic_type funct_pnt)
 {
+    //create root node and add it to the list
+    Node root;
+    root.state = initial_state;
+    tree.openlist.push(root);
+    tree.openlist_ref[root.state] = &root;
+
+    // loop through openlist
+    while(!tree.openlist.empty()){
+        Node current = tree.openlist.top();
+        tree.openlist_ref.erase(tree.openlist.top().state);
+        tree.openlist.pop();
+            
+        if(tree.closedlist.find(current) != tree.closedlist.end()){
+            continue;
+        }
+
+        // get sucessors
+        auto successors = generate_successor(current, funct_pnt);
+        for(auto child : successors){
+            if(goal_test(goal_state, child.state)){
+                std::cout << "goal found!!!" << std::endl;
+                return;
+            }
+            // check to see if node with state has been found
+            Node former_child;
+            bool found_former_ol_child(false);
+
+            //check openlist for child
+            for(auto ol_child : tree.openlist_ref){
+                if(ol_child.second->state == child.state){
+                    found_former_ol_child = true;
+                    former_child = *(ol_child.second);
+                    break;
+                }
+            }
+
+            bool found_former_cl_child(false);
+
+            //check closedlist for child
+            for(auto cl_child : tree.closedlist){
+                if(cl_child.state == child.state){
+                    found_former_cl_child = true;
+                    former_child = cl_child;
+                    break;
+                }
+            }
+/*
+            if(found_former_ol_child || found_former_cl_child){
+                std::cout << "found former child" << std::endl;
+                if((former_child.path_cost + former_child.act_path_cost) < (child.path_cost + child.act_path_cost) ){
+                    //do nothing
+                }
+                else{
+                    if(found_former_ol_child){
+                        former_child = child;
+                    }
+                    else if(found_former_cl_child){
+                        tree.closedlist.erase(former_child);
+                        tree.openlist.push(child);
+                        tree.openlist_ref[child.state];
+                    }
+                }
+            }
+            else{*/
+                // not found
+                tree.openlist.push(child);
+                tree.openlist_ref[child.state] = &child;
+                std::cout << "new_child.state: " << child.state << std::endl;
+  //          }
+        }
+        tree.closedlist.insert(current);
+    }
+}
+/*
+{
+
     // initialize root node
     Node root;
     root.state = initial_state;
@@ -198,55 +285,100 @@ void EightPuzzle::a_star_search(const std::string &initial_state, Node &result, 
 
     // add root to tree
     tree.get_all_nodes()->insert(root);
-    tree.get_frontier_set()->push(&root);
-
+    //tree.get_frontier_set()->push(&root);
+    tree.openlist.push(root);
     // loop while there are elements on the frontier and the goal hasn't been found
-    Node *current = &root;
+    Node *current = nullptr;//&root;
     // add code to check if root is trivial the goal
     
-    while(!tree.get_frontier_set()->empty() /*&& !goal_test(goal_state, current->state)*/){
-
+    auto cnt(0);// debugging
+    while(!tree.openlist.empty()){
+//    while(++cnt < 2 && !tree.get_frontier_set()->empty()!tree.openlist.empty() && !goal_test(goal_state, current->state)){
        // get next element and update the frontier
-        current = tree.get_frontier_set()->top();
-        tree.get_frontier_set()->pop();
+        //while(*tree.get_explored_set())[cu(){
+
+        //}
+        *current = tree.openlist.top();//tree.get_frontier_set()->top();
+        tree.openlist.pop();//tree.get_frontier_set()->pop();
+        //debug start
+        std::cout << std::string(20, '-') << std::endl;
+        print_node(*current);
+            //<< "\naction selected: " << current->action << std::endl;//debugging
+        //std::cout <<  "\nstate: " << current->state << '\n'
+        std::cout << std::string(20, '-') << std::endl;//debugging
+        //debug end
         ++num_nodes_expanded;
 
         // get the sucessors and check if they are the goal
         auto successor = generate_successor(*current, funct_pnt);
+        std::cout << "size of successor children" << successor.size() << std::endl;//debugging
         for(auto child : successor){
             print_node(child);// debug
             if(goal_test(goal_state, child.state)){
+                std::cout << "the goal has been found!!" << std::endl;//debugging
                 result = child;
                 action_sequence = generate_action_sequence(child);
                 return;
             }
             // check if the another child with equal state has been generated
             bool former_child_found(false);
+            Node *former_child_pnt = nullptr;
+
+            //auto lcnt(0);//debug
             for(auto former_child : *(tree.get_all_nodes())){
+              //  std::cout << ++lcnt << std::endl;//debug
                 if(former_child.state == child.state){
+                    former_child_pnt = &former_child;
                     former_child_found = true;
+                //    std::cout << "breaking" << std::endl;//debug
                     break;
                 }
             }
             if(former_child_found){
-                try{
-                    Node *former_child = nullptr;
-                    // if node is in explored + cost is less continue
-                    former_child = (*tree.get_explored_set())[child.state];
+                if((former_child_pnt->path_cost + former_child_pnt->act_path_cost) < (child.path_cost + child.act_path_cost))
+                {
+                    std::cout << "skip this child" << std::endl;
+                    //continue;
                 }
-                catch(const std::out_of_range& oor){
-                    // else if old_child is in frontier + cost is less continue
+                else{
+                    // *former_child_pnt = child;
+                  //  try{
+                        //(*tree.get_explored_set())[former_child_pnt->state];
+                   // }
+                    //catch(const std::out_of_range& oor){
 
+                    //}
                 }
             }
             else{
-            // ele add to tree and frontier
+            // else add to tree and frontier
+                std::cout << "add this child" << std::endl;
                 tree.get_all_nodes()->insert(child);
-                tree.get_frontier_set()->push(&child);
+                tree.openlist.push(child);//tree.get_frontier_set()->push(&child);
             }
         }
+        (*tree.get_explored_set())[current->state] = current;
     }
+    
+    // debug start
+    std::cout << "\nprinting frontier: " << std::endl;
+    while(!tree.get_frontier_set()->empty()){
+        //auto child = tree.get_frontier_set()->top();
+        //std::cout << "act_path_cost: " << tree.get_frontier_set()->top()->act_path_cost
+        //    << "\npath_cost: " << tree.get_frontier_set()->top()->path_cost << std::endl;
+        print_node(*(tree.get_frontier_set()->top()));
+        tree.get_frontier_set()->pop();
+    }
+    std::cout << "\nprinting all_nodes: " << std::endl;
+    for(auto child : (*tree.get_all_nodes()))
+    {
+        //std::cout << "act_path_cost: " << child.act_path_cost
+        //    << "\npath_cost: " << child.path_cost << std::endl;
+        print_node(child);
+    }
+    // debug end
 }
+*/
 /*
 {
     std::cout << "Starting A* search" << std::endl;//debug
