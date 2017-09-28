@@ -11,8 +11,8 @@
 #include <climits>
 #include <exception>
 #include <algorithm>
-#include <iostream> // debug
-#include <stdlib.h> // debug
+#include <iostream>
+#include <stdlib.h>
 #include <cmath>
 #include "Node.h"
 
@@ -37,7 +37,6 @@ Node EightPuzzle::move(Node &node, MOVE move)
         new_node.state = state;
         new_node.action = "left";
         new_node.act_path_cost = node.act_path_cost + 1;
-//        new_node.path_cost = manhattan_heuristic(state);
     }
     else if(move == MOVE::UP && (blank_pos != 0 && blank_pos != 1 && blank_pos != 2)){
         auto neighbor_tile = state[blank_pos - 3];
@@ -49,7 +48,6 @@ Node EightPuzzle::move(Node &node, MOVE move)
         new_node.state = state;
         new_node.action = "up";
         new_node.act_path_cost = node.act_path_cost + 1;
-  //      new_node.path_cost = manhattan_heuristic(state);
     }
     else if(move == MOVE::RIGHT && (blank_pos != 2 && blank_pos != 5 && blank_pos != 8)){
         auto neighbor_tile = state[blank_pos + 1];
@@ -61,7 +59,6 @@ Node EightPuzzle::move(Node &node, MOVE move)
         new_node.state = state;
         new_node.action = "right";
         new_node.act_path_cost = node.act_path_cost + 1;
-    //    new_node.path_cost = manhattan_heuristic(state);
     }
     else if(move == MOVE::DOWN && (blank_pos != 6 && blank_pos != 7 && blank_pos != 8)){
         auto neighbor_tile = state[blank_pos + 3];
@@ -73,15 +70,12 @@ Node EightPuzzle::move(Node &node, MOVE move)
         new_node.state = state;
         new_node.action = "down";
         new_node.act_path_cost = node.act_path_cost;
-      //  new_node.path_cost = manhattan_heuristic(state);
     }
     return new_node;
 }
 
 bool EightPuzzle::goal_test(std::string goal_state, std::string test_state)
 {
-    //std::cout << "goal_state: " << goal_state << std::endl;
-    //std::cout << "test_state: " << test_state << std::endl;
     return goal_state == test_state;
 }
 
@@ -89,7 +83,6 @@ std::vector<Node> EightPuzzle::generate_successor(Node &parent, heuristic_type f
 {
     std::vector<Node> successor;
     for(int i = 0; i != 4; ++i){// 4 is because there are four moves to generate a child: left, up, right, down
-        // add code to skip checking action equal to current node action
         auto new_child = move(parent, static_cast<MOVE>(i));
         if(new_child.action != "none"){
             new_child.path_cost = (this->*funct_pnt)(new_child.state);
@@ -127,37 +120,8 @@ void EightPuzzle::print_node(Node &node)
         << "\nact_path_cost: " << node.act_path_cost << std::endl;
 }
 
-std::vector<std::string> EightPuzzle::generate_action_sequence(Node &node)
-{
-    std::vector<std::string> sequence;
-    Node *parent = &node;
-
-    while(parent){
-        sequence.push_back(parent->action);
-        parent = parent->parent;
-    }
-    std::reverse(sequence.begin(), sequence.end());
-
-    return sequence;
-}
-/*void EightPuzzle::add_node(const std::string &key_state, const Node &val_node)
-{
-    std::string state(key_state);
-    Node node(val_node);
-    //std::pair<std::string, Node> pair = std::make_pair<std::string, Node>(std::string(state), Node(node));
-    tree.get_all_nodes()->insert(std::make_pair<std::string, Node>(std::string(state), Node(node)));
-}
-*/
-/*
-double EightPuzzle::search_time()
-{
-// use <ctime> clock function
-    return 0;
-}
-*/
 unsigned EightPuzzle::manhattan_heuristic(const std::string &node_state)
 {
-    //std::cout << "in manhattan!" << std::endl;//debug
     unsigned ver_dis(0);
     unsigned hor_dis(0);
 
@@ -185,7 +149,7 @@ unsigned EightPuzzle::manhattan_heuristic(const std::string &node_state)
             hor_dis += std::abs(static_cast<int>(goal_col - node_col));
         }
     }
-    return ver_dis + hor_dis;
+    return ver_dis + hor_dis;// return the sum of the horizontal and vertical moves
 }
 
 unsigned EightPuzzle::misplaced_tile_heuristic(const std::string &node_state)
@@ -208,6 +172,7 @@ void EightPuzzle::a_star_search(const std::string &initial_state, Node &result, 
     tree.openlist_ref[root.state] = &root;
 
     num_nodes_expanded = 0;
+
     // loop through openlist
     while(!tree.openlist.empty()){
         Node current = tree.openlist.top();
@@ -222,45 +187,44 @@ void EightPuzzle::a_star_search(const std::string &initial_state, Node &result, 
         auto successors = generate_successor(current, funct_pnt);
         for(auto child : successors){
             if(goal_test(goal_state, child.state)){
-                //std::cout << "goal found!!!" << std::endl;
                 result = child;
-                //action_sequence = generate_action_sequence(child);
-                //std::cout << "num_nodes_expanded" << num_nodes_expanded << std::endl;//add later
+                search_result[node_tag] = std::to_string(num_nodes_expanded);
                 return;
             }
 
             tree.openlist.push(child);
             tree.openlist_ref[child.state] = &child;
-            //std::cout << "new_child.state: " << child.state << std::endl;
-            //std::cout << child.action << ", ";//add later
+            search_result[action_tag] += child.action + ", ";
         }
         tree.closedlist.insert(current);
     }
-    //std::vector<std::string> empty_result;
-    //return empty_result;
 }
 
 void EightPuzzle::a_star_search_manhattan(const std::string &initial_state, Node &result)
 {
     // start timer
     auto tick = clock();
+
     a_star_search(initial_state, result, man_func);
+
     // stop time
     tick = clock() - tick;
-    //std::cout << "time: " << (static_cast<double>(tick) / 1000) << "ms" << std::endl;//add later
+    search_result[time_tag] = std::to_string(static_cast<double>(tick) / 1000) + "ms";
 }
 
 void EightPuzzle::a_star_search_misplaced_tile(const std::string &initial_state, Node &result)
 {
     // start timer
     auto tick = clock();
+
     a_star_search(initial_state, result, mis_tile_func);
+
     // stop time
     tick = clock() - tick;
-    //std::cout << "time: " << (static_cast<double>(tick) / 1000) << "ms" << std::endl;//add later
+    search_result[time_tag] = std::to_string(static_cast<double>(tick) / 1000) + "ms";
 }
 
-void EightPuzzle::ida_search(const std::string &initial_state, Node &result/*, heuristic_type funct_pnt*/)
+void EightPuzzle::ida_search(const std::string &initial_state, Node &result)
 {
     // start timer
     auto tick = clock();
@@ -278,34 +242,28 @@ void EightPuzzle::ida_search(const std::string &initial_state, Node &result/*, h
 
     unsigned L = root.act_path_cost + root.path_cost;
     unsigned min_f = L;
-    //std::cout << "L: " << L << std::endl;//debug
 
     // loop while the openlist is non-empty
     while(!tree.openlist.empty()){
+
         //get top element
         Node current = tree.openlist.top();
         tree.openlist_ref.erase(tree.openlist.top().state);
         tree.openlist.pop();
         ++num_nodes_expanded;
 
-        if(tree.closedlist.find(current) != tree.closedlist.end()){
-            //continue;
-        }
-        std::cout << current.action << ", ";
+        search_result[action_tag] += current.action + ", ";
 
         //check if it is the goal, if so update L
         if(goal_test(goal_state, current.state)){
-            std::cout << "ida found the goal!!" << std::endl;
-           // stop time
             best_tick = clock() - tick;
-           std::cout << "optimal time: " << (static_cast<double>(tick) / 1000) << "ms" << std::endl;//add later
- std::cout << "num_nodes_expanded" << num_nodes_expanded << std::endl;
+            search_result[time_tag] = std::to_string(static_cast<double>(tick) / 1000) + "ms";
+            search_result[node_tag] = std::to_string(num_nodes_expanded);
             return;
         }
         else{
             //  generate successors
             auto successors = generate_successor(current, man_func);// get children using Manhattan heuristic
-            
             for(auto child : successors){
                 if((child.act_path_cost + child.path_cost) <= L){
                     tree.openlist.push(child);
@@ -323,55 +281,9 @@ void EightPuzzle::ida_search(const std::string &initial_state, Node &result/*, h
         }
         tree.closedlist.insert(current);
     }
-    // stop time
-    tick = clock() - tick;
-    std::cout << "time: " << (static_cast<double>(tick) / 1000) << "ms" << std::endl;//add later
 }
-/*{
-    // create root node and add to tree
-    Node root;
-    root.state = initial_state;
-    tree.get_all_nodes()->insert(root);
-    tree.get_frontier_set()->push(&root);
 
-    // set score of best solution L, to max
-    decltype(root.path_cost) min_f(UINT_MAX);
-    unsigned L = min_f;
-
-    // loop until frontier_set is empty
-    Node current = *(tree.get_frontier_set()->top());
-
-    while(!tree.get_frontier_set()->empty()){
-
-        // get top element from frontier_set
-        // check if element is the goal
-        if(goal_test(goal_state, current.state)){
-            // yes => L = min(element.path_cost, L)
-            L = L <= current.path_cost ? L : current.path_cost;
-        }
-        else{
-            // no => generate sucessors
-            auto successor = generate_successor(current, funct_pnt);
-
-            for(auto &child : successor){
-                if(child.path_cost >= L){
-                    continue;
-                }
-                else{
-                    // sucessor.path_cost < L, add to tree and frontier
-                    tree.get_all_nodes()->insert(child);
-                    tree.get_frontier_set()->push(&child);
-                }
-                if(child.path_cost > L && child.path_cost < min_f){
-                    min_f = child.path_cost;
-                }
-            }
-        }
-        L = min_f;// update L to next contour
-    }
-}
-*/
-void EightPuzzle::df_branch_bound_search(const std::string &initial_state, Node &result/*, heuristic_type funct_pnt*/)
+void EightPuzzle::df_branch_bound_search(const std::string &initial_state, Node &result)
 {
     // start timer
     auto tick = clock();
@@ -388,37 +300,29 @@ void EightPuzzle::df_branch_bound_search(const std::string &initial_state, Node 
 
     // call a* to get a solution
     Node pre_result, best_solution;
-    //a_star_search_manhattan(initial_state, pre_result);
-    //a_star_search_misplaced_tile(initial_state, pre_result);
-    //unsigned L = pre_result.act_path_cost;
-    unsigned L = 35;//50;//UINT_MAX;
-    //std::cout << "L: " << L << std::endl;//debug
+
+    unsigned L = 35;//experiment with starting L values to find good performance
 
     // loop while the openlist is non-empty
     while(!tree.openlist.empty()){
+
         //get top element
         Node current = tree.openlist.top();
         tree.openlist_ref.erase(tree.openlist.top().state);
         tree.openlist.pop();
         ++num_nodes_expanded;
 
-        if(tree.closedlist.find(current) != tree.closedlist.end()){
-            //continue;
-        }
-        std::cout << current.action << ", ";
+        search_result[action_tag] += current.action + ", ";
 
         //check if it is the goal, if so update L
         if(goal_test(goal_state, current.state)){
-            std::cout << "dfb_n found the goal!!" << std::endl;
-            std::cout << "num_nodes_expanded" << num_nodes_expanded << std::endl;
-            // stop time
-//            std::cout << "optimal time: " << (static_cast<double>(tick) / 1000) << "ms" << std::endl;//add later
+            search_result[node_tag] = std::to_string(num_nodes_expanded);
 
             if(L > current.act_path_cost){
                     L = current.act_path_cost;
                     best_solution = current;
                     best_tick = clock() - tick;
-                    std::cout << "optimal_time: " << (static_cast<double>(tick) / 1000) << "ms" << std::endl;//add later
+                    search_result[time_tag] = std::to_string(static_cast<double>(tick) / 1000) + "ms";
             }
         }
         else{
@@ -435,45 +339,5 @@ void EightPuzzle::df_branch_bound_search(const std::string &initial_state, Node 
     }
     // stop time
     tick = clock() - tick;
-    std::cout << "time: " << (static_cast<double>(tick) / 1000) << "ms" << std::endl;//add later
+    search_result[opt_tag] = std::to_string(static_cast<double>(tick) / 1000) + "ms";
 }
-/*
-{
-    // create root node and add to tree
-    Node root;
-    root.state = initial_state;
-    tree.get_all_nodes()->insert(root);
-    tree.get_frontier_set()->push(&root);
-
-    // set score of best solution L, to max
-    unsigned L = UINT_MAX;
-
-    // loop until frontier_set is empty
-    Node current = *(tree.get_frontier_set()->top());
-
-    while(!tree.get_frontier_set()->empty()){
-
-        // get top element from frontier_set
-        // check if element is the goal
-        if(goal_test(goal_state, current.state)){
-            // yes => L = min(element.path_cost, L)
-            L = L <= current.path_cost ? L : current.path_cost;
-        }
-        else{
-            // no => generate sucessors
-            auto successor = generate_successor(current, man_func);
-
-            for(auto &child : successor){
-                if(child.path_cost >= L){
-                    continue;
-                }
-                else{
-                    // sucessor.path_cost < L, add to tree and frontier
-                    tree.get_all_nodes()->insert(child);
-                    tree.get_frontier_set()->push(&child);
-                }
-            }
-        }
-    }
-}
-*/

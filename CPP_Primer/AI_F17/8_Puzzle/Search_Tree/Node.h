@@ -12,7 +12,7 @@
 #include <unordered_map>
 #include <string>
 #include <climits>
-#include <map>//debug
+#include <map>
 
 struct Node{
 
@@ -25,15 +25,14 @@ struct Node{
     bool operator<(const Node &rhs) const
     {
         return this->state < rhs.state;
-      //  return this->path_cost < rhs.path_cost;
     }
 
     // DATA MEMBERS //
     Node *parent = nullptr;
     std::string state;
     std::string action = "none";
-    unsigned path_cost = UINT_MAX;// may change to g(n) and h(n)
-    unsigned act_path_cost = 0;
+    unsigned path_cost = UINT_MAX;// h(n)
+    unsigned act_path_cost = 0;// g(n)
 };
 
 // represent 8-puzzle actions
@@ -73,9 +72,9 @@ class SearchTree{
     queue_type* get_frontier_set() { return &frontier_set; }
     hash_type* get_explored_set() { return &explored_set; }
 
-    queue_type2 openlist;//debug
-    hash_type2 closedlist;//debug
-    std::map<std::string, Node*> openlist_ref;//debug
+    queue_type2 openlist;
+    hash_type2 closedlist;
+    std::map<std::string, Node*> openlist_ref;
     private:
 
     // DATA MEMBERS //
@@ -96,10 +95,16 @@ class EightPuzzle {
     EightPuzzle() = default;
     EightPuzzle(std::string goal_state_arg, std::string initial_state_arg) : goal_state(goal_state_arg), initial_state(initial_state_arg)
     {
+        // setup pointers to heuristic functions
         man_func = &EightPuzzle::manhattan_heuristic;
         mis_tile_func = &EightPuzzle::misplaced_tile_heuristic;
-    }
 
+        // initialize result container
+        search_result["Nodes Expanded"] = "";
+        search_result["Time"] = "";
+        search_result["Action Sequence"] = "";
+        search_result["Optimal Time"] = "";
+    }
     // helper functions
     SearchTree* get_tree() { return &tree; }
     Node move(Node &node, MOVE move);
@@ -107,11 +112,8 @@ class EightPuzzle {
     std::vector<Node> generate_successor(Node &parent, heuristic_type funct_pnt);
     void set_goal_state(std::string goal_arg);
     std::string get_goal_state();
-    std::vector<std::string> get_action_sequence() { return action_sequence; }// debug
-    void set_action_sequence(std::vector<std::string> seq) { action_sequence = seq; }// debug
     void print_node(Node &node);
-    std::vector<std::string> generate_action_sequence(Node &node); // will return sequence of actions to reach a node
-    //void add_node(Node &node);
+    std::map<std::string, std::string>* get_search_result(){ return &search_result; }
 
     // heuristic functions
 
@@ -124,8 +126,8 @@ class EightPuzzle {
     void a_star_search(const std::string &initial_state, Node &result, heuristic_type funct_pnt);
     void a_star_search_manhattan(const std::string &initial_state, Node &result);
     void a_star_search_misplaced_tile(const std::string &initial_state, Node &result);
-    void ida_search(const std::string &initial_state, Node &result/*, heuristic_type funct_pnt*/);
-    void df_branch_bound_search(const std::string &initial_state, Node &result/*, heuristic_type funct_pnt*/);
+    void ida_search(const std::string &initial_state, Node &result);
+    void df_branch_bound_search(const std::string &initial_state, Node &result);
 
     private:
 
@@ -135,8 +137,12 @@ class EightPuzzle {
     std::string initial_state;
     unsigned num_nodes_expanded = 0;
     std::vector<int> heuristic_table;
-    std::vector<std::pair<Node, clock_t> > search_result; // will hold goal state with search time for each algorithm
-    std::vector<std::string> action_sequence;//debugging
+    std::map<std::string, std::string> search_result; // will hold: number of nodes expanded, time, action sequence, optimal time
+    std::string node_tag = "Nodes Expanded";
+    std::string time_tag = "Time";
+    std::string action_tag = "Action Sequence";
+    std::string opt_tag = "Optimal Time";
+
     heuristic_type man_func;
     heuristic_type mis_tile_func;
 };
