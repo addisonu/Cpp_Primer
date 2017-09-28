@@ -137,6 +137,7 @@ std::vector<std::string> EightPuzzle::generate_action_sequence(Node &node)
         parent = parent->parent;
     }
     std::reverse(sequence.begin(), sequence.end());
+
     return sequence;
 }
 /*void EightPuzzle::add_node(const std::string &key_state, const Node &val_node)
@@ -206,40 +207,55 @@ void EightPuzzle::a_star_search(const std::string &initial_state, Node &result, 
     tree.openlist.push(root);
     tree.openlist_ref[root.state] = &root;
 
+    num_nodes_expanded = 0;
     // loop through openlist
     while(!tree.openlist.empty()){
         Node current = tree.openlist.top();
         tree.openlist_ref.erase(tree.openlist.top().state);
         tree.openlist.pop();
+        ++num_nodes_expanded;
 
         if(tree.closedlist.find(current) != tree.closedlist.end()){
             continue;
         }
-
         // get sucessors
         auto successors = generate_successor(current, funct_pnt);
         for(auto child : successors){
             if(goal_test(goal_state, child.state)){
                 std::cout << "goal found!!!" << std::endl;
+                result = child;
+                //action_sequence = generate_action_sequence(child);
+                std::cout << "num_nodes_expanded" << num_nodes_expanded << std::endl;
                 return;
             }
 
             tree.openlist.push(child);
             tree.openlist_ref[child.state] = &child;
-            std::cout << "new_child.state: " << child.state << std::endl;
+            //std::cout << "new_child.state: " << child.state << std::endl;
+            std::cout << child.action << ", ";
         }
         tree.closedlist.insert(current);
     }
+    //std::vector<std::string> empty_result;
+    //return empty_result;
 }
 
 void EightPuzzle::a_star_search_manhattan(const std::string &initial_state, Node &result)
 {
+    // start timer
+    auto tick = clock();
     a_star_search(initial_state, result, man_func);
+    // stop time
+    tick = clock() - tick;
+    std::cout << "time: " << (static_cast<double>(tick) / 1000) << "ms" << std::endl;
 }
 
 void EightPuzzle::a_star_search_misplaced_tile(const std::string &initial_state, Node &result)
 {
+    // start time
     a_star_search(initial_state, result, mis_tile_func);
+    // stop time
+    //std::cout << time << std::endl;
 }
 
 void EightPuzzle::ida_search(const std::string &initial_state, Node &result, heuristic_type funct_pnt)
