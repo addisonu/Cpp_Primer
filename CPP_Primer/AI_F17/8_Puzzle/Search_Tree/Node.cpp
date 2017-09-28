@@ -252,10 +252,12 @@ void EightPuzzle::a_star_search_manhattan(const std::string &initial_state, Node
 
 void EightPuzzle::a_star_search_misplaced_tile(const std::string &initial_state, Node &result)
 {
-    // start time
+    // start timer
+    auto tick = clock();
     a_star_search(initial_state, result, mis_tile_func);
     // stop time
-    //std::cout << time << std::endl;
+    tick = clock() - tick;
+    std::cout << "time: " << (static_cast<double>(tick) / 1000) << "ms" << std::endl;
 }
 
 void EightPuzzle::ida_search(const std::string &initial_state, Node &result, heuristic_type funct_pnt)
@@ -303,7 +305,11 @@ void EightPuzzle::ida_search(const std::string &initial_state, Node &result, heu
     }
 }
 
-void EightPuzzle::df_branch_bound_search(const std::string &initial_state, Node &result, heuristic_type funct_pnt)
+void EightPuzzle::df_branch_bound_search(const std::string &initial_state, Node &result/*, heuristic_type funct_pnt*/)
+{
+
+}
+/*
 {
     // create root node and add to tree
     Node root;
@@ -327,7 +333,7 @@ void EightPuzzle::df_branch_bound_search(const std::string &initial_state, Node 
         }
         else{
             // no => generate sucessors
-            auto successor = generate_successor(current, funct_pnt);
+            auto successor = generate_successor(current, man_func);
 
             for(auto &child : successor){
                 if(child.path_cost >= L){
@@ -342,4 +348,4 @@ void EightPuzzle::df_branch_bound_search(const std::string &initial_state, Node 
         }
     }
 }
-
+*/
